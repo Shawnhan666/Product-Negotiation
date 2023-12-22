@@ -1,0 +1,15 @@
+/* TableStyles.css */
+.styled-table {
+    width: 100%;
+    border-collapse: collapse; /* 移除单元格之间的空隙 */
+  }
+  
+  .styled-table th, .styled-table td {
+    border: 1px solid rgb(251, 248, 248); /* 为表格的每个单元格添加边框 */
+    padding: 8px; /* 添加一些内边距 */
+  }
+  
+  .styled-table thead tr {
+    background-color: rgb(255, 255, 255); /* 为表头设置背景色 */
+  }
+  

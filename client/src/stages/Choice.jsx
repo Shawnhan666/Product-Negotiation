@@ -1,8 +1,9 @@
-import { usePlayer } from "@empirica/core/player/classic/react";// 访问玩家对象
+import { usePlayer, useRound  } from "@empirica/core/player/classic/react";// 访问玩家对象
 import React from "react";
 import { Button } from "../components/Button";
-
+import './TableStyles.css';
 import { useState, useEffect} from 'react';
+
 
 const rolesData = {
     "Stellar_Cove": {
@@ -43,9 +44,20 @@ const rolesData = {
     },
 };
 
+const optionMappings = {
+  mix: { "1": "30:70", "2": "50:50", "3": "70:30" },
+  li: { "1": "6%", "2": "9%", "3": "12%", "4": "15%" },
+  green: { "1": "14 acres", "2": "16 acres", "3": "18 acres", "4": "20 acres" },
+  height: { "1": "400ft", "2": "500ft", "3": "600ft", "4": "700ft", "5": "800ft" },
+  venues: { "1": "0 venues", "2": "1 venue", "3": "2 venues", "4": "3 venues", "5": "4 venues" },
+};
+
 
 export function Choice() {
     const player = usePlayer();
+
+    const round = useRound();
+
     const [roleData, setRoleData] = useState({});
     const [points, setPoints] = useState({
       mix: '',
@@ -54,6 +66,13 @@ export function Choice() {
       height: '',
       venues: ''
     });
+
+    const [totalPoints, setTotalPoints] = useState(0); // total points
+
+    const [isSubmitted, setIsSubmitted] = useState(false);
+    
+    const [submittedPlayer, setSubmittedPlayer] = useState(null);
+    
   
     useEffect(() => {
       const role = player.get("role");
@@ -61,6 +80,11 @@ export function Choice() {
         setRoleData(rolesData[role]);
       }
     }, [player]);
+
+    useEffect(() => {
+      setTotalPoints(calculateTotal()); // 新增 useEffect 用于更新总分
+    }, [points, roleData]);
+
   
     const handleOptionChange = (event) => {
       const { name, value } = event.target;
@@ -78,15 +102,43 @@ export function Choice() {
       }, 0);
     };
   
-    const handleSubmit = (event) => {
-      event.preventDefault();
-      const totalPoints = calculateTotal();
-      console.log("Submitting: ", { ...points, totalPoints });
-      // TODO: 实现提交逻辑
+
+    const areAllIssuesSelected = () => {
+      // 检查每个字段是否有非空值
+      return Object.values(points).every(value => value !== '');
     };
 
-  // 继续 Choice 组件
 
+    const handleSubmit = (event) => {
+      event.preventDefault();
+      
+      // 检查是否所有 Issues 都被选中
+      if (!areAllIssuesSelected()) {
+        alert("Please make a selection for each issue.");
+        return;
+      }
+    
+      if (isSubmitted) {
+        return;
+      }
+    
+      const totalPoints = calculateTotal();
+      console.log("Submitting: ", { ...points, totalPoints });
+    
+      
+      // 转换 points 中的每个值为对应的文本描述
+      const choices = Object.keys(points).reduce((acc, key) => {
+        acc[key] = optionMappings[key][points[key]] || points[key];
+        return acc;
+      }, {});
+    
+      setIsSubmitted(true);
+      setSubmittedPlayer({
+        name: player.get("role"),
+        choices: choices
+      });
+    };
+    
   
     return (
       <div>
@@ -95,26 +147,51 @@ export function Choice() {
         <br /><br />
         As the representative for <strong>{player.get("role")}</strong>, your reservation price is <strong>{roleData.my_rp}</strong>.
         <br /><br />
+        <div className="total-points">
+           
+        </div>
+
         <form onSubmit={handleSubmit}>
           <div className="row">
             <div className="columnone">
-              <div id="calculator">
-                <table className="points">
-                  <tbody>
+              
+              <div id="calculator" style={{ width: '100%' }}>
+              <table className="styled-table">
+
+                <thead>
                     <tr>
+                      <th colSpan={7}></th> {/* 空白单元格，跨越到 "None" 列的位置 */}
+                      <th style={{ textAlign: 'center', fontSize: 'inherit' }}>Informal Proposals:</th>
+                    </tr>
+                    
+                    <tr style={{ backgroundColor: 'lightblue' }}>
+                    <th>Issues</th>
+                    <th colSpan={5}>Options</th>
+                    <th style={{ paddingRight: '60px' }}>Points</th> 
+                    <th>{isSubmitted ? submittedPlayer.name : "None"}</th> {/* 显示提交玩家的名字或 "None" */}
+                  </tr>
+                </thead>
+
+                  <tbody>
+
+                    {/* <tr>
                       <th>Issues</th>
                       <th colSpan={5}>Options</th>
                       <th>Points</th>
-                    </tr>
+                    </tr> */}
+
                     {/* Property Mix */}
                     <tr>
                       <td rowspan="2">Property mix (r:c)</td>
                       <td>30:70</td>
                       <td>50:50</td>
                       <td>70:30</td>
-                      <td rowspan="2"></td>
-                      <td rowspan="2"></td>
-                      <td rowspan="2"><output>{roleData[`mix_${points.mix}`]}</output></td>
+
+                      <td></td> {/* 新增加的空单元格 */}
+                      <td></td> {/* 新增加的空单元格 */}
+                      <td style={{ paddingRight: '60px' }}><output>{roleData[`mix_${points.mix}`]}</output></td>
+                      <td>{isSubmitted ? submittedPlayer.choices.mix : ""}</td>
+
                     </tr>
                     <tr>
                       <td><input type="radio" name="mix" value="1" onChange={handleOptionChange} /></td>
@@ -129,8 +206,9 @@ export function Choice() {
                     <td>9%</td>
                     <td>12%</td>
                     <td>15%</td>
-                    <td rowspan="2"></td>
-                    <td rowspan="2"><output>{roleData[`li_${points.li}`]}</output></td>
+                    <td></td> {/* 新增加的空单元格 */}
+                    <td style={{ paddingRight: '60px' }}><output>{roleData[`li_${points.li}`]}</output></td>
+                    <td>{isSubmitted ? submittedPlayer.choices.li : ""}</td> {/* 在每一行的末尾添加玩家的选择 */}
                   </tr>
                   <tr>
                     <td><input type="radio" name="li" value="1" onChange={handleOptionChange} /></td>
@@ -146,8 +224,9 @@ export function Choice() {
                     <td>16 acres</td>
                     <td>18 acres</td>
                     <td>20 acres</td>
-                    <td rowspan="2"></td>
-                    <td rowspan="2"><output>{roleData[`green_${points.green}`]}</output></td>
+                    <td></td> {/* 新增加的空单元格 */}
+                    <td style={{ paddingRight: '60px' }}><output>{roleData[`green_${points.green}`]}</output></td>
+                    <td>{isSubmitted ? submittedPlayer.choices.green : ""}</td> {/* 在每一行的末尾添加玩家的选择 */}
                   </tr>
                   <tr>
                     <td><input type="radio" name="green" value="1" onChange={handleOptionChange} /></td>
@@ -164,7 +243,8 @@ export function Choice() {
                     <td>600ft</td>
                     <td>700ft</td>
                     <td>800ft</td>
-                    <td rowspan="2"><output>{roleData[`height_${points.height}`]}</output></td>
+                    <td style={{ paddingRight: '60px' }}><output>{roleData[`height_${points.height}`]}</output></td>
+                    <td>{isSubmitted ? submittedPlayer.choices.height : ""}</td> {/* 在每一行的末尾添加玩家的选择 */}
                   </tr>
                   <tr>
                     <td><input type="radio" name="height" value="1" onChange={handleOptionChange} /></td>
@@ -182,7 +262,9 @@ export function Choice() {
                     <td>2 venues</td>
                     <td>3 venues</td>
                     <td>4 venues</td>
-                    <td rowspan="2"><output>{roleData[`venue_${points.venues}`]}</output></td>
+                    <td style={{ paddingRight: '60px' }}><output>{roleData[`venue_${points.venues}`]}</output></td>
+                    <td>{isSubmitted ? submittedPlayer.choices.venues : ""}</td> {/* 在每一行的末尾添加玩家的选择 */}
+
                   </tr>
                   <tr>
                     <td><input type="radio" name="venues" value="1" onChange={handleOptionChange} /></td>
@@ -193,8 +275,15 @@ export function Choice() {
                   </tr>
                 </tbody>
               </table>
-              <button type="submit">Submit</button>
             </div>
+
+            <div className="bottom-section" style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+                <div className="total-points" style={{ marginRight: '10px' }}>
+                  <strong>Total Points: {totalPoints}</strong>
+                </div>
+                <button type="submit" className="submit-button" onClick={handleSubmit} style={{ /* 添加按钮的样式 */ }}>Submit for Informal Vote</button>
+              </div>
+
           </div>
         </div>
       </form>
