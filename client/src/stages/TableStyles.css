@@ -12,4 +12,34 @@
   .styled-table thead tr {
     background-color: rgb(255, 255, 255); /* 为表头设置背景色 */
   }
+
+  /* 默认的提交按钮样式 */
+.submit-button {
+    background-color: lightblue;
+    color: white;
+    /* 添加其他样式，如 padding, border, etc. */
+  }
+  
+  /* 当按钮处于已提交状态的样式 */
+  .submit-button-disabled {
+    background-color: white;
+    color: black;
+    cursor: not-allowed;
+    /* 添加其他样式，如 padding, border, etc. */
+  }
+
+  
+  
+  .vote-button {
+    margin-right: 10px; /* 保持原来按钮之间的间距 */
+  }
+  .voting-section {
+    display: flex;         /* 启用 flexbox */
+    justify-content: flex-end; /* 将子元素对齐到容器的右侧 */
+    margin-top: 10px;      /* 根据需要调整上边距 */
+  }
+  
+  .voting-buttons-container, .voting-results-container {
+    margin-right: 10px; /* 为容器添加右边距 */
+  }
   

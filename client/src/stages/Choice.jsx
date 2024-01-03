@@ -67,9 +67,18 @@ export function Choice() {
       venues: ''
     });
     const [totalPoints, setTotalPoints] = useState(0); // total points
-    const [isSubmitted, setIsSubmitted] = useState(false);
+    //const [isSubmitted, setIsSubmitted] = useState(false);
+    const [isAnySubmitted, setIsAnySubmitted] = useState(false); // 新增状态来追踪是否有任何提交
+
     const submittedData = round.get("submittedData");
 
+    useEffect(() => {
+      // 检查轮次状态以确定是否有任何提交
+      const anySubmitted = round.get("anySubmitted");
+      if (anySubmitted) {
+        setIsAnySubmitted(true);
+      }
+    }, [round]);
     
   
     useEffect(() => {
@@ -114,32 +123,71 @@ export function Choice() {
       return submitter ? submitter.get("role") : "None";
     };
 
+  
+      // 直接从轮次状态中获取是否已有提交
+    const anySubmitted = round.get("anySubmitted");
+
+      // 动态决定按钮的类名
+    const buttonClassName = anySubmitted ? "submit-button-disabled" : "submit-button";
 
     const handleSubmit = (event) => {
+
       event.preventDefault();
-      // 检查是否所有 Issues 都被选中
+  
+  
+      if (anySubmitted) {
+        alert("A submission has already been made.");
+        return;
+      }
+    
       if (!areAllIssuesSelected()) {
         alert("Please make a selection for each issue.");
-        return;}
-      if (isSubmitted) {
-        return;}
-      // 转换 points 中的每个值为对应的文本描述
+        return;
+      }
+    
       const choices = Object.keys(points).reduce((acc, key) => {
         acc[key] = optionMappings[key][points[key]] || points[key];
         return acc;
       }, {});
-
-      const submitterRoleName = player.get("role"); // 获取提交者的角色名
-
-        // 存储提交的数据到游戏或轮次状态
+    
+      const submitterRoleName = player.get("role");
+    
       round.set("submittedData", {
         playerID: player._id,
         decisions: choices,
-        submitterRole: submitterRoleName // 存储提交者的角色名
+        submitterRole: submitterRoleName
       });
-      
-      setIsSubmitted(true);
+
+      round.set("anySubmitted", true);  // 设置轮次状态
+
     };
+
+    const handleVoteSubmit = (vote) => {
+      player.set("vote", vote); // 存储当前玩家的投票
+      round.append("votes", { id: player._id, vote: vote }); // 将投票结果存储到轮次状态中
+    };
+
+
+
+  // 检查是否所有玩家都已投票
+  const allVoted = players.every(p => p.get("vote"));
+
+  // 获取投了 'For' 和 'Against' 的玩家名单
+  const forVoters = players.filter(p => p.get("vote") === "For").map(p => p.get("role")).join(", ");
+  const againstVoters = players.filter(p => p.get("vote") === "Against").map(p => p.get("role")).join(", ");
+
+  // 当前玩家的投票结果
+  const currentVote = player.get("vote");
+
+
+
+    
+
+
+
+
+
+
 
 
     
@@ -174,7 +222,7 @@ export function Choice() {
                       <th colSpan={5}>Options</th>
                       <th style={{ paddingRight: '60px' }}>Points</th> 
                       <th>{submittedData ? submittedData.submitterRole : "None"}</th> {/* 使用存储的角色名 */}
-                      {/* <th>{getSubmitterRoleName()}</th> 显示提交者的角色名 */}
+            
                     </tr>
 
                   </thead>
@@ -287,17 +335,54 @@ export function Choice() {
               </table>
             </div>
 
-            <div className="bottom-section" style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-                <div className="total-points" style={{ marginRight: '10px' }}>
-                  <strong>Total Points: {totalPoints}</strong>
-                </div>
-                <button type="submit" className="submit-button" onClick={handleSubmit} style={{ /* 添加按钮的样式 */ }}>Submit for Informal Vote</button>
-              </div>
+   {/* “Total Points” 和提交按钮的新布局 */}
+   
+   <div className="total-points-and-submit">
+          <div className="total-points">
+            <strong>Total Points: {totalPoints}</strong>
+          </div>
+          <button 
+            type="submit" 
+            className={buttonClassName}
+            onClick={handleSubmit} 
+            disabled={anySubmitted}>
+            Submit for Informal Vote
+          </button>
+        </div>
 
           </div>
         </div>
-      </form>
+     
+  
+        
+  </form>
+
+  <div className="voting-section">
+  {round.get("anySubmitted") && !currentVote && !allVoted && (
+    <div className="voting-buttons-container">
+      <button className="vote-button" onClick={() => handleVoteSubmit("For")}>For</button>
+      <button className="vote-button" onClick={() => handleVoteSubmit("Against")}>Against</button>
     </div>
+      )}
+
+        {currentVote === "For" && !allVoted && <div>You voted IN FAVOR of this informal proposal. Waiting for other votes.</div>}
+        {currentVote === "Against" && !allVoted && <div>You voted AGAINST this informal proposal. Waiting for other votes.</div>}
+
+        {allVoted && (
+          // 所有玩家都投票后显示投票结果
+          <div className="voting-results-container">
+            <div><strong>For Voters:</strong> {forVoters}</div>
+            <div><strong>Against Voters:</strong> {againstVoters}</div>
+          </div>
+        )}
+
+
+  </div>
+
+  
+    </div>
+
+
   );
 
 }
