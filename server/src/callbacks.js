@@ -1,3 +1,4 @@
+//callbacks.js
 import { ClassicListenersCollector } from "@empirica/core/admin/classic";
 export const Empirica = new ClassicListenersCollector();
 
@@ -10,10 +11,12 @@ Empirica.onGameStart(({ game }) => {
   const round = game.addRound({
     name:'Round',
  });
-  round.addStage({name:"choice", duration: 10000})
-  round.addStage({name:"result", duration: 10000})
-  //这里可以添加提交的stage，把上面的choice改为选择投票，这里就是不同的阶段
-  //然后 choice 和 result需要和客户端src里创建的jsx名字相同（不用完全一致），我们在这里做的是服务器上的，让empirica知道该干什么
+  round.addStage({name:"Informal Submit", duration: 15})
+  round.addStage({name:"Formal Submit", duration: 12000})
+  round.addStage({name:"Formal Vote", duration: 15000})
+  round.addStage({name:"Result", duration: 2000})
+ 
+
 
   // 为每个玩家分配角色
   game.players.forEach((player, index) => {
@@ -33,3 +36,5 @@ Empirica.onStageEnded(({ stage }) => {});
 Empirica.onRoundEnded(({ round }) => {});
 
 Empirica.onGameEnded(({ game }) => {});
+
+

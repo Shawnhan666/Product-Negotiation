@@ -42,4 +42,10 @@
   .voting-buttons-container, .voting-results-container {
     margin-right: 10px; /* 为容器添加右边距 */
   }
+
+
+.button-spacing {
+  margin-right: 10px;
+}
+
   

@@ -1,3 +1,4 @@
+//FormalSubmit.jsx
 import { usePlayer, useRound  } from "@empirica/core/player/classic/react";
 import { usePlayers } from "@empirica/core/player/classic/react";
 import React from "react";
@@ -7,55 +8,56 @@ import { useState, useEffect} from 'react';
 
 
 const rolesData = {
-    "Stellar_Cove": {
-      mix_1: 23, mix_2: 9, mix_3: 0, li_1: 11, li_2: 8, li_3: 4, li_4: 0,
-      green_1: 17, green_2: 11, green_3: 8, green_4: 0,
-      height_1: 0, height_2: 0, height_3: 10, height_4: 20, height_5: 30,
-      venues_1: 0, venues_2: 5, venues_3: 11, venues_4: 14, venues_5: 19
-    },
-    "Green_Living": {
-      mix_1: 0, mix_2: 10, mix_3: 20, li_1: 0, li_2: 5, li_3: 20, li_4: 25,
-      green_1: 0, green_2: 10, green_3: 15, green_4: 35,
-      height_1: 15, height_2: 10, height_3: 5, height_4: 0, height_5: 0,
-      venues_1: 5, venues_2: 5, venues_3: 5, venues_4: 0, venues_5: 0
-    },
-    "Illium": {
-      mix_1: 0, mix_2: 5, mix_3: 10, li_1: 0, li_2: 5, li_3: 10, li_4: 15,
-      green_1: 0, green_2: 4, green_3: 10, green_4: 15,
-      height_1: 25, height_2: 15, height_3: 10, height_4: 5, height_5: 0,
-      venues_1: 35, venues_2: 20, venues_3: 20, venues_4: 0, venues_5: 0
-    },
-    "Mayor_Gabriel": {
-        mix_1: 21, mix_2: 10, mix_3: 0, li_1: 0, li_2: 2, li_3: 4, li_4: 10,
-        green_1: 30, green_2: 20, green_3: 9, green_4: 0,
-        height_1: 0, height_2: 5, height_3: 10, height_4: 15, height_5: 25,
-        venues_1: 0, venues_2: 5, venues_3: 6, venues_4: 9, venues_5: 14
-    },
-    "Our_Backyards": {
-        mix_1: 0, mix_2: 13, mix_3: 6, li_1: 9, li_2: 6, li_3: 3, li_4: 0,
-        green_1: 0, green_2: 8, green_3: 16, green_4: 24,
-        height_1: 38, height_2: 20, height_3: 10, height_4: 0, height_5: 0,
-        venues_1: 4, venues_2: 12, venues_3: 16, venues_4: 8, venues_5: 0
-    },
-    "Planning_Commission": {
-        mix_1: 0, mix_2: 20, mix_3: 10, li_1: 0, li_2: 15, li_3: 15, li_4: 0,
-        green_1: 0, green_2: 20, green_3: 30, green_4: 0,
-        height_1: 0, height_2: 20, height_3: 15, height_4: 5, height_5: 5,
-        venues_1: 0, venues_2: 15, venues_3: 15, venues_4: 15, venues_5: 0
-    },
+  "Stellar_Cove": {
+    mix_1: 23, mix_2: 9, mix_3: 0, li_1: 11, li_2: 8, li_3: 4, li_4: 0,
+    green_1: 17, green_2: 11, green_3: 8, green_4: 0,
+    height_1: 0, height_2: 0, height_3: 10, height_4: 20, height_5: 30,
+    venues_1: 0, venues_2: 5, venues_3: 11, venues_4: 14, venues_5: 19
+  },
+  "Green_Living": {
+    mix_1: 0, mix_2: 10, mix_3: 20, li_1: 0, li_2: 5, li_3: 20, li_4: 25,
+    green_1: 0, green_2: 10, green_3: 15, green_4: 35,
+    height_1: 15, height_2: 10, height_3: 5, height_4: 0, height_5: 0,
+    venues_1: 5, venues_2: 5, venues_3: 5, venues_4: 0, venues_5: 0
+  },
+  "Illium": {
+    mix_1: 0, mix_2: 5, mix_3: 10, li_1: 0, li_2: 5, li_3: 10, li_4: 15,
+    green_1: 0, green_2: 4, green_3: 10, green_4: 15,
+    height_1: 25, height_2: 15, height_3: 10, height_4: 5, height_5: 0,
+    venues_1: 35, venues_2: 20, venues_3: 20, venues_4: 0, venues_5: 0
+  },
+  "Mayor_Gabriel": {
+      mix_1: 21, mix_2: 10, mix_3: 0, li_1: 0, li_2: 2, li_3: 4, li_4: 10,
+      green_1: 30, green_2: 20, green_3: 9, green_4: 0,
+      height_1: 0, height_2: 5, height_3: 10, height_4: 15, height_5: 25,
+      venues_1: 0, venues_2: 5, venues_3: 6, venues_4: 9, venues_5: 14
+  },
+  "Our_Backyards": {
+      mix_1: 0, mix_2: 13, mix_3: 6, li_1: 9, li_2: 6, li_3: 3, li_4: 0,
+      green_1: 0, green_2: 8, green_3: 16, green_4: 24,
+      height_1: 38, height_2: 20, height_3: 10, height_4: 0, height_5: 0,
+      venues_1: 4, venues_2: 12, venues_3: 16, venues_4: 8, venues_5: 0
+  },
+  "Planning_Commission": {
+      mix_1: 0, mix_2: 20, mix_3: 10, li_1: 0, li_2: 15, li_3: 15, li_4: 0,
+      green_1: 0, green_2: 20, green_3: 30, green_4: 0,
+      height_1: 0, height_2: 20, height_3: 15, height_4: 5, height_5: 5,
+      venues_1: 0, venues_2: 15, venues_3: 15, venues_4: 15, venues_5: 0
+  },
 };
 
 const optionMappings = {
-  mix: { "1": "30:70", "2": "50:50", "3": "70:30" },
-  li: { "1": "6%", "2": "9%", "3": "12%", "4": "15%" },
-  green: { "1": "14 acres", "2": "16 acres", "3": "18 acres", "4": "20 acres" },
-  height: { "1": "400ft", "2": "500ft", "3": "600ft", "4": "700ft", "5": "800ft" },
-  venues: { "1": "0 venues", "2": "1 venues", "3": "2 venues", "4": "3 venues", "5": "4 venues" },
+mix: { "1": "30:70", "2": "50:50", "3": "70:30" },
+li: { "1": "6%", "2": "9%", "3": "12%", "4": "15%" },
+green: { "1": "14 acres", "2": "16 acres", "3": "18 acres", "4": "20 acres" },
+height: { "1": "400ft", "2": "500ft", "3": "600ft", "4": "700ft", "5": "800ft" },
+venues: { "1": "0 venues", "2": "1 venues", "3": "2 venues", "4": "3 venues", "5": "4 venues" },
 };
 
+export function FormalSubmit() {
 
-export function Choice() {
-    const player = usePlayer();
+
+  const player = usePlayer();
     const players = usePlayers();
     const round = useRound();
     const [roleData, setRoleData] = useState({});
@@ -67,8 +69,11 @@ export function Choice() {
       venues: ''
     });
     const [totalPoints, setTotalPoints] = useState(0); // total points
-    //const [isSubmitted, setIsSubmitted] = useState(false);
-    const [isAnySubmitted, setIsAnySubmitted] = useState(false); // 新增状态来追踪是否有任何提交
+
+    const hasSubmitted = round.get("hasSubmitted");
+    const [isSubmitted, setIsSubmitted] = useState(false);
+
+
 
     const submittedData = round.get("submittedData");
 
@@ -116,30 +121,11 @@ export function Choice() {
     };
 
 
-    const getSubmitterRoleName = () => {
-      if (!submittedData) return "None";
-    
-      const submitter = players.find(p => p._id === submittedData.playerID);
-      return submitter ? submitter.get("role") : "None";
-    };
-
-  
-      // 直接从轮次状态中获取是否已有提交
-    const anySubmitted = round.get("anySubmitted");
-
-      // 动态决定按钮的类名
-    const buttonClassName = anySubmitted ? "submit-button-disabled" : "submit-button";
-
-    const handleSubmit = (event) => {
+/// Submit////
+    const handleSubmit2 = (event) => {
 
       event.preventDefault();
-  
-  
-      if (anySubmitted) {
-        alert("A submission has already been made.");
-        return;
-      }
-    
+ ////   ///
       if (!areAllIssuesSelected()) {
         alert("Please make a selection for each issue.");
         return;
@@ -157,16 +143,21 @@ export function Choice() {
         decisions: choices,
         submitterRole: submitterRoleName
       });
+//////////
+      round.set("StellarCoveSubmitted", true);
 
-      round.set("anySubmitted", true);  // 设置轮次状态
 
+      // 设置标志表示 "Stellar_Cove" 已提交
+     // 更新玩家的决策到 round 对象
+    // 例如：player.round.set("decision", playerDecision);
+
+    // 提交阶段
+    player.stage.set("submit", true);
+    setIsSubmitted(true); // 添加这一行
+
+
+    
     };
-
-    const handleVoteSubmit = (vote) => {
-      player.set("vote", vote); // 存储当前玩家的投票
-      round.append("votes", { id: player._id, vote: vote }); // 将投票结果存储到轮次状态中
-    };
-
 
 
   // 检查是否所有玩家都已投票
@@ -179,57 +170,47 @@ export function Choice() {
   // 当前玩家的投票结果
   const currentVote = player.get("vote");
 
-
-
-    
-
-
-
-
-
-
-
-
-    
-    
-  
+  // 检查当前玩家的角色
+  if (player.get("role") === "Stellar_Cove") {
+    if (isSubmitted) {
+      return (
+        <div>
+          Other parties are still voting. Once votes are in and tallied, the results will be shown.
+        </div>
+      );
+    }
     return (
+
       <div>
-        <h6>Once the countdown is complete, Stellar Cove will have 3 minutes to submit a formal proposal.</h6>
-        <strong>Use this calculator to understand your interests in this negotiation.</strong>
+        <h6>As the representative of <strong>Stellar Cove</strong>, you need to submit a proposal for consideration. Select an option for each of the five issues using the table below.</h6>
         <br /><br />
-        As the representative for <strong>{player.get("role")}</strong>, your reservation price is <strong>{roleData.my_rp}</strong>.
+        <h6>Note that you will not be able to change the options after submitting. Please select carefully!</h6>
         <br /><br />
+        Remember that your reservation price is <strong>32</strong>.
+        <br /><br />
+
         <div className="total-points">
            
         </div>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit2}>
           <div className="row">
             <div className="columnone">
               
               <div id="calculator" style={{ width: '100%' }}>
               <table className="styled-table">
 
-                    <thead>
-                    <tr>
-                      <th colSpan={7}></th> {/* 空白单元格，跨越到 "Informal Proposals" 列的位置 */}
-                      <th style={{ textAlign: 'center', fontSize: 'inherit' }}>Informal Proposals:</th>
-                    </tr>
 
+              <thead>
                     <tr style={{ backgroundColor: 'lightblue' }}>
                       <th>Issues</th>
                       <th colSpan={5}>Options</th>
-                      <th style={{ paddingRight: '60px' }}>Points</th> 
-                      <th>{submittedData ? submittedData.submitterRole : "None"}</th> {/* 使用存储的角色名 */}
-            
+                      <th style={{ paddingRight: '60px' }}>Points</th>
                     </tr>
+              </thead>
 
-                  </thead>
-
+       
                   <tbody>
-
-
                     {/* Property Mix */}
                     <tr>
                       <td rowspan="2">Property mix (r:c)</td>
@@ -240,7 +221,7 @@ export function Choice() {
                       <td></td> {/* 新增加的空单元格 */}
                   
                       <td style={{ paddingRight: '60px' }}><output>{roleData[`mix_${points.mix}`]}</output></td>
-                      <td>{submittedData ? submittedData.decisions["mix"] : "None"}</td>
+  
               
 
                     </tr>
@@ -260,7 +241,7 @@ export function Choice() {
                     <td></td> {/* 新增加的空单元格 */}
                     <td style={{ paddingRight: '60px' }}><output>{roleData[`li_${points.li}`]}</output></td>
                  
-                    <td>{submittedData ? submittedData.decisions["li"] : "None"}</td>
+       
 
                   </tr>
                   <tr>
@@ -280,7 +261,7 @@ export function Choice() {
                   
                     <td></td> {/* 新增加的空单元格 */}
                     <td style={{ paddingRight: '60px' }}><output>{roleData[`green_${points.green}`]}</output></td>
-                    <td>{submittedData ? submittedData.decisions["green"] : "None"}</td>
+             
          
                   </tr>
                   <tr>
@@ -300,7 +281,6 @@ export function Choice() {
                     <td>800ft</td>
                     <td style={{ paddingRight: '60px' }}><output>{roleData[`height_${points.height}`]}</output></td>
                
-                    <td>{submittedData ? submittedData.decisions["height"] : "None"}</td>
 
                   </tr>
                   <tr>
@@ -315,12 +295,12 @@ export function Choice() {
                   <tr>
                     <td rowspan="2">Entertainment Complex</td>
                     <td>0 venues</td>
-                    <td>1 venues_$</td>
+                    <td>1 venues</td>
                     <td>2 venues</td>
                     <td>3 venues</td>
                     <td>4 venues</td>
                     <td style={{ paddingRight: '60px' }}><output>{roleData[`venues_${points.venues}`]}</output></td>
-                    <td>{submittedData ? submittedData.decisions["venues"] : "None"}</td>
+                
            
 
                   </tr>
@@ -343,46 +323,32 @@ export function Choice() {
           </div>
           <button 
             type="submit" 
-            className={buttonClassName}
-            onClick={handleSubmit} 
-            disabled={anySubmitted}>
-            Submit for Informal Vote
+            //className={buttonClassName}
+            onClick={handleSubmit2}>
+            Submit for Vote
           </button>
         </div>
 
-          </div>
+        </div>
         </div>
      
-   
   </form>
-
-  <div className="voting-section">
-  {round.get("anySubmitted") && !currentVote && !allVoted && (
-    <div className="voting-buttons-container">
-      <button className="vote-button" onClick={() => handleVoteSubmit("For")}>For</button>
-      <button className="vote-button" onClick={() => handleVoteSubmit("Against")}>Against</button>
-    </div>
-      )}
-
-        {currentVote === "For" && !allVoted && <div>You voted IN FAVOR of this informal proposal. Waiting for other votes.</div>}
-        {currentVote === "Against" && !allVoted && <div>You voted AGAINST this informal proposal. Waiting for other votes.</div>}
-
-        {allVoted && (
-          // 所有玩家都投票后显示投票结果
-          <div className="voting-results-container">
-            <div><strong>For Voters:</strong> {forVoters}</div>
-            <div><strong>Against Voters:</strong> {againstVoters}</div>
-          </div>
-        )}
-
 
   </div>
 
-    </div>
 
 
-  );
 
+    )
+
+  } else {
+    // 如果是其他角色，显示等待信息
+    return (
+      <div>
+        Please wait while Stellar Cove enters a proposal for you to vote on.
+      </div>
+    );
+  }
 }
 
-export default Choice;
+export default FormalSubmit;
