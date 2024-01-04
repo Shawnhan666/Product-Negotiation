@@ -10,7 +10,10 @@ import { Loading } from "@empirica/core/player/react";
 import React from "react";
 import { Choice } from "./stages/Choice";
 import { FormalSubmit } from "./stages/FormalSubmit";
+import { FormalVote } from "./stages/FormalVote";
 import { Result } from "./stages/Result";
+
+
 
 
 export function Stage() {
@@ -26,11 +29,21 @@ export function Stage() {
     case "Informal Submit":
       return <Choice />;
   
-    case "Formal Submit":
+  case "Formal Submit":
+    if (round.get("isSubmitted")) {
+      // 如果 "is、Submitted" 为 true，渲染 FormalVote 组件
+      return <FormalVote />;
+    } else {
+      // 否则，渲染 FormalSubmit 组件
       return <FormalSubmit />;
+    }
+
+    case "Formal Vote":
+      return <FormalVote />;
   
     case "Result":
       return <Result />;
+
 
     default:
       return <Loading />;

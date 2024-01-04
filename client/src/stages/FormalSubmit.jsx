@@ -77,13 +77,13 @@ export function FormalSubmit() {
 
     const submittedData = round.get("submittedData");
 
-    useEffect(() => {
-      // 检查轮次状态以确定是否有任何提交
-      const anySubmitted = round.get("anySubmitted");
-      if (anySubmitted) {
-        setIsAnySubmitted(true);
-      }
-    }, [round]);
+    // useEffect(() => {
+    //   // 检查轮次状态以确定是否有任何提交
+    //   const anySubmitted = round.get("anySubmitted");
+    //   if (anySubmitted) {
+    //     setIsAnySubmitted(true);
+    //   }
+    // }, [round]);
     
   
     useEffect(() => {
@@ -144,16 +144,13 @@ export function FormalSubmit() {
         submitterRole: submitterRoleName
       });
 //////////
-      round.set("StellarCoveSubmitted", true);
 
-
-      // 设置标志表示 "Stellar_Cove" 已提交
-     // 更新玩家的决策到 round 对象
-    // 例如：player.round.set("decision", playerDecision);
 
     // 提交阶段
     player.stage.set("submit", true);
     setIsSubmitted(true); // 添加这一行
+
+    round.set("isSubmitted", true);
 
 
     
@@ -172,13 +169,14 @@ export function FormalSubmit() {
 
   // 检查当前玩家的角色
   if (player.get("role") === "Stellar_Cove") {
-    if (isSubmitted) {
+    if (isSubmitted || round.get("isSubmitted")) {
       return (
         <div>
           Other parties are still voting. Once votes are in and tallied, the results will be shown.
         </div>
       );
     }
+
     return (
 
       <div>
