@@ -12,6 +12,7 @@ import { Choice } from "./stages/Choice";
 import { FormalSubmit } from "./stages/FormalSubmit";
 import { FormalVote } from "./stages/FormalVote";
 import { Result } from "./stages/Result";
+import { useEffect} from 'react';
 
 
 
@@ -23,6 +24,21 @@ export function Stage() {
   const round = useRound();
   const stage = useStage();
  
+  useEffect(() => {
+    console.log("Current stage: ", stage.get("name"));
+    console.log("allVoted status in Stage: ", round.get("allVoted"));
+  }, [stage, round]);
+
+
+
+
+  // if (player.stage.get("submitt")) {
+ 
+
+  //   return <Result />;
+
+  // }
+
 
   
   switch (stage.get("name")) {
@@ -38,14 +54,19 @@ export function Stage() {
       return <FormalSubmit />;
     }
 
-    case "Formal Vote":
-      return <FormalVote />;
-  
-    case "Result":
+  case "Formal Vote":
+    if (round.get("allVoted")) {
+      // 如果所有玩家都已投票，切换到 Result 页面
       return <Result />;
+    } else {
+      return <FormalVote />;
+    }
+  
+  case "Result":
+    return <Result />;
 
 
-    default:
-      return <Loading />;
+  default:
+    return <Loading />;
   }
 }
