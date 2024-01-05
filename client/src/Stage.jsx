@@ -41,22 +41,23 @@ export function Stage() {
 
 
   
+ 
   switch (stage.get("name")) {
     case "Informal Submit":
       return <Choice />;
   
   case "Formal Submit":
     if (round.get("isSubmitted")) {
-      // 如果 "is、Submitted" 为 true，渲染 FormalVote 组件
+ 
       return <FormalVote />;
     } else {
-      // 否则，渲染 FormalSubmit 组件
+
       return <FormalSubmit />;
     }
 
   case "Formal Vote":
     if (round.get("allVoted")) {
-      // 如果所有玩家都已投票，切换到 Result 页面
+     
       return <Result />;
     } else {
       return <FormalVote />;

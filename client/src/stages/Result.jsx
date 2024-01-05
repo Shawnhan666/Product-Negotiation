@@ -31,7 +31,7 @@ export function Result() {
 
   const handleButtonClick = () => {
     if (stage && stage.submit) {
-      stage.submit();  // 确保 stage 和 stage.submit 存在
+      stage.submit();  
     } else {
       console.error("Stage or stage.submit is not available.");
     }
@@ -44,20 +44,13 @@ export function Result() {
       <p>TO be continued</p>
 
 
-        <Button className="m-5" handleClick={() => onClick("silentt")}>
-          🤐 Keep silent
-        </Button>
-        <Button className="m-5" handleClick={() => onClick("testifyy")}>
-          📣 Testify
-        </Button>
-
       {/* <Button handleClick={handleButtonClick}>
         Continue
       </Button> */}
 
-      {/* <Button handleClick={() => player.stage.set("submit", true)}>
+      <Button handleClick={() => player.stage.set("submit", true)}>
         Continue
-      </Button> */}
+      </Button>
     </div>
   );
 }

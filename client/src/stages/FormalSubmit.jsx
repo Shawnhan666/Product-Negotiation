@@ -69,21 +69,11 @@ export function FormalSubmit() {
       venues: ''
     });
     const [totalPoints, setTotalPoints] = useState(0); // total points
-
     const hasSubmitted = round.get("hasSubmitted");
     const [isSubmitted, setIsSubmitted] = useState(false);
-
-
-
     const submittedData = round.get("submittedData");
 
-    // useEffect(() => {
-    //   // 检查轮次状态以确定是否有任何提交
-    //   const anySubmitted = round.get("anySubmitted");
-    //   if (anySubmitted) {
-    //     setIsAnySubmitted(true);
-    //   }
-    // }, [round]);
+
     
   
     useEffect(() => {
@@ -94,7 +84,7 @@ export function FormalSubmit() {
     }, [player]);
 
     useEffect(() => {
-      setTotalPoints(calculateTotal()); // 新增 useEffect 用于更新总分
+      setTotalPoints(calculateTotal()); // update total point
     }, [points, roleData]);
 
   
@@ -107,7 +97,7 @@ export function FormalSubmit() {
     };
   
     const calculateTotal = () => {
-      // 假设每个选项的分数都已经在 roleData 中定义
+     
       return Object.keys(points).reduce((total, key) => {
         const pointKey = key + "_" + points[key];
         return total + (roleData[pointKey] || 0);
@@ -116,7 +106,7 @@ export function FormalSubmit() {
   
 
     const areAllIssuesSelected = () => {
-      // 检查每个字段是否有非空值
+   
       return Object.values(points).every(value => value !== '');
     };
 
@@ -146,7 +136,7 @@ export function FormalSubmit() {
 //////////
 
 
-    // 提交阶段
+    // Submit///////
     player.stage.set("submit", true);
     setIsSubmitted(true); // 添加这一行
 
@@ -157,17 +147,17 @@ export function FormalSubmit() {
     };
 
 
-  // 检查是否所有玩家都已投票
+  // check if all players voted
   const allVoted = players.every(p => p.get("vote"));
 
-  // 获取投了 'For' 和 'Against' 的玩家名单
+  // get vote 'For' 和 'Against' players
   const forVoters = players.filter(p => p.get("vote") === "For").map(p => p.get("role")).join(", ");
   const againstVoters = players.filter(p => p.get("vote") === "Against").map(p => p.get("role")).join(", ");
 
-  // 当前玩家的投票结果
+  // current vote result
   const currentVote = player.get("vote");
 
-  // 检查当前玩家的角色
+  // 
   if (player.get("role") === "Stellar_Cove") {
     if (isSubmitted || round.get("isSubmitted")) {
       return (
