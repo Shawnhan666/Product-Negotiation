@@ -5,6 +5,8 @@ import React from "react";
 import { Button } from "../components/Button";
 import './TableStyles.css';
 import { useState, useEffect} from 'react';
+import { useGame } from "@empirica/core/player/classic/react";
+
 
 
 const rolesData = {
@@ -72,6 +74,9 @@ export function FormalSubmit() {
     const hasSubmitted = round.get("hasSubmitted");
     const [isSubmitted, setIsSubmitted] = useState(false);
     const submittedData = round.get("submittedData");
+    const game = useGame(); // 在组件内部调用 useGame
+
+
 
 
     
@@ -87,6 +92,14 @@ export function FormalSubmit() {
       setTotalPoints(calculateTotal()); // update total point
     }, [points, roleData]);
 
+//       // 使用 useEffect 监控 isSubmitted 状态的变化---------------------------------------
+//     useEffect(() => {
+//       if (isSubmitted && player.get("role") === "Stellar_Cove") {
+//         game.set("submitCount", game.get("submitCount") + 1);
+//         console.log("Stellar_Cove submit count:", game.get("submitCount"));
+//       }
+//     }, [isSubmitted, game, player]);
+// //-------------------------------------------------
   
     const handleOptionChange = (event) => {
       const { name, value } = event.target;
@@ -115,7 +128,10 @@ export function FormalSubmit() {
     const handleSubmit2 = (event) => {
 
       event.preventDefault();
- ////   ///
+ /////////
+
+
+
       if (!areAllIssuesSelected()) {
         alert("Please make a selection for each issue.");
         return;
@@ -133,27 +149,35 @@ export function FormalSubmit() {
         decisions: choices,
         submitterRole: submitterRoleName
       });
-//////////
 
-
-    // Submit///////
-    player.stage.set("submit", true);
-    setIsSubmitted(true); // 添加这一行
-
+  
+    setIsSubmitted(true); 
     round.set("isSubmitted", true);
+    //-------------
 
-
+  // 检查是否是 Stellar_Cove 角色并更新提交计数和存储提交内容
+    if (submitterRoleName === "Stellar_Cove") {
+      const currentCount = game.get("submitCount") || 0;
+      game.set("submitCount", currentCount + 1);
+      const submissions = game.get("submissions") || [];
+      submissions.push({
+        submitter: submitterRoleName,
+        choices,
+        count: currentCount + 1
+      });
+      game.set("submissions", submissions);
+      console.log(`Submission #${currentCount + 1}:`, choices);
+    }
+    //------------------------
     
     };
 
 
   // check if all players voted
   const allVoted = players.every(p => p.get("vote"));
-
   // get vote 'For' 和 'Against' players
   const forVoters = players.filter(p => p.get("vote") === "For").map(p => p.get("role")).join(", ");
   const againstVoters = players.filter(p => p.get("vote") === "Against").map(p => p.get("role")).join(", ");
-
   // current vote result
   const currentVote = player.get("vote");
 
@@ -162,7 +186,7 @@ export function FormalSubmit() {
     if (isSubmitted || round.get("isSubmitted")) {
       return (
         <div>
-          Other parties are still voting. Once votes are in and tallied, the results will be shown.
+          (FormalSubmit)Other parties are still voting. Once votes are in and tallied, the results will be shown.
         </div>
       );
     }
@@ -333,7 +357,7 @@ export function FormalSubmit() {
     // 如果是其他角色，显示等待信息
     return (
       <div>
-        Please wait while Stellar Cove enters a proposal for you to vote on.
+        (formalsubmitpage)Please wait while Stellar Cove enters a proposal for you to vote on.
       </div>
     );
   }

@@ -27,47 +27,52 @@ export function Stage() {
   useEffect(() => {
     console.log("Current stage: ", stage.get("name"));
     console.log("allVoted status in Stage: ", round.get("allVoted"));
+
   }, [stage, round]);
 
+  if (player.stage.get("submit")) {
+    if (players.length !== 6) {
+      return <Loading />;
+    }
+
+    return (
+      <div className="text-center text-gray-400 pointer-events-none">
+        Please wait for other player(s).
+      </div>
+    );
+  }
 
 
-
-  // if (player.stage.get("submitt")) {
- 
-
-  //   return <Result />;
-
-  // }
-
-
-  
- 
   switch (stage.get("name")) {
     case "Informal Submit":
       return <Choice />;
   
-  case "Formal Submit":
-    if (round.get("isSubmitted")) {
- 
-      return <FormalVote />;
-    } else {
+    case "Formal Submit":
+      if (player.stage.get("submit")) {
+        return <Result />;
+      }
+      if (round.get("isSubmitted")) {
+        return <FormalVote />;
+      } else {
+        return <FormalSubmit />;
+      }
 
-      return <FormalSubmit />;
+
+    // case "Formal Vote":
+    //   if (player.stage.get("submit")) {
+    //     return <Result />;
+    //   } else {
+    //     return <FormalVote />;
+    //   }
+
+    case "Result":
+      if (player.stage.get("submit")) {
+        return <FormalVote />;
+      } else {
+        return <Result />;
+      }
+
+    default:
+      return <Loading />;
     }
-
-  case "Formal Vote":
-    if (round.get("allVoted")) {
-     
-      return <Result />;
-    } else {
-      return <FormalVote />;
-    }
-  
-  case "Result":
-    return <Result />;
-
-
-  default:
-    return <Loading />;
-  }
 }
