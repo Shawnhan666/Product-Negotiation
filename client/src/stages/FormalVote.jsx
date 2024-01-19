@@ -8,6 +8,8 @@ import { useState, useEffect} from 'react';
 import { useStage } from "@empirica/core/player/classic/react";
 import { Button } from "../components/Button";
 
+const MAX_FAIL_ATTEMPTS = 4;
+
 
 
   export function FormalVote() {
@@ -17,13 +19,41 @@ import { Button } from "../components/Button";
     const [submittedData, setSubmittedData] = useState(null);
     const stage = useStage();
     const game = useGame();
-    const [roundData, setRoundData] = useState({});
+    //const [roundData, setRoundData] = useState({});
 
 
+    useEffect(() => {
+      // 初始化计数器，如果还没有的话
+      if (!round.get("failAttempts")) {
+        round.set("failAttempts", 0);
+      }
+    }, []);
 
-  
 
- 
+    const [hasIncremented, setHasIncremented] = useState(false);
+
+    useEffect(() => {
+      console.log(`useEffect triggered. allVoted: ${round.get("allVoted")}, hasIncremented: ${hasIncremented}`);
+    
+      const allVoted = round.get("allVoted");
+      const proposalPassed = players.filter(p => p.get("vote") === "For").length === players.length;
+    
+      if (allVoted === true && !proposalPassed && !hasIncremented) {
+        const currentFailAttempts = round.get("failAttempts");
+        round.set("failAttempts", currentFailAttempts + 1);
+        setHasIncremented(true); // 标记已经处理过未通过的情况
+        console.log(`Proposal failed, incrementing failAttempts counter to ${currentFailAttempts + 1}`);
+      } else if (allVoted === false && hasIncremented) {
+        setHasIncremented(false); // 重置标记
+        console.log(`Resetting hasIncremented to false`);
+      }
+    }, [round.get("allVoted")]);
+    //这里有点奇怪，每次都会多一个failAttempts的值，所以我把MAX_FAIL_ATTEMPTS = 4设为了4.
+    
+
+    
+
+
   // get submitted data from Stella
     useEffect(() => {
       console.log("Current allVoted status: ", round.get("allVoted"));
@@ -66,15 +96,14 @@ import { Button } from "../components/Button";
     };
 
       const handleRevote = () => {
-        // 重置相关状态以便重新开始投票
         players.forEach(player => {
-            player.set("vote", null); // 重置玩家的投票状态
+            player.set("vote", null); 
         });
-        round.set("allVoted", false); // 重置全体投票状态
-        round.set("submittedData", null); // 重置提交的数据
-        round.set("isSubmitted", false); // 允许重新提交提案
+        round.set("allVoted", false); 
+        round.set("submittedData", null); 
+        round.set("isSubmitted", false); 
+        setHasIncremented(false); // 重置 hasIncremented 标记
     };
-
 
       const displayResults = () => {
         const forVotes = players.filter(p => p.get("vote") === "For").length;
@@ -82,25 +111,8 @@ import { Button } from "../components/Button";
         const totalForVotes = forVotes + 1; // Include "Stellar Cove"
         const totalAgainstVotes = againstVotes;
         const proposalPassed = totalAgainstVotes === 0;
+        const failAttempts = round.get("failAttempts");
 
-        // 输出调试信息
-        console.log("For Votes:", totalForVotes);
-        console.log("Against Votes:", againstVotes);
-        console.log("Proposal Passed:", proposalPassed);
-        //--------------------
-        // 更新游戏状态，保存提案是否通过的结果
-        const roundResults = game.get("roundResults") || [];
-        // 仅当当前轮次的结果尚未记录时才更新
-        if (roundResults.length < round.index + 1) {
-          roundResults.push(proposalPassed);
-          game.set("roundResults", roundResults);
-
-        }
-
-
-        //--------------------
-
-      
 
         if (proposalPassed) {
           return (
@@ -114,18 +126,44 @@ import { Button } from "../components/Button";
               <Button handleClick={() => player.stage.set("submit", true)}>
                Continue
               </Button>
-
             </div>
           );
         }
+      
+              // 检查失败尝试是否达到3次
+        if (failAttempts >= MAX_FAIL_ATTEMPTS) {
+          return (
+            <div>
+              <strong>Voting Results</strong>
+              <br /><br />
+              <p>The Proposal did not pass. {totalForVotes} parties voted for, {totalAgainstVotes} voted against the proposal.</p>
+              <br /><br />
+              <p>The maximum number of 3 formal votes has been reached, please click "Continue" to go to the results page.</p>
+              <Button handleClick={() => player.stage.set("submit", true)}>
+                Continue
+              </Button>
+            </div>
+          );
+        }
+
+
+        
+        else {
+          // 提案未通过的逻辑
+          
+    
+          
      
         return (
+
+          
           <div>
           <strong>Voting Results</strong>
           <p>The Proposal did not pass. {totalForVotes} parties voted for, {totalAgainstVotes} voted against the proposal.</p>
           <button onClick={handleRevote}>Revote</button>  
       </div>
   );
+}
       };
 
       if (round.get("allVoted")) {

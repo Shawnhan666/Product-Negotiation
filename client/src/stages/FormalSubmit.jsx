@@ -92,14 +92,8 @@ export function FormalSubmit() {
       setTotalPoints(calculateTotal()); // update total point
     }, [points, roleData]);
 
-//       // 使用 useEffect 监控 isSubmitted 状态的变化---------------------------------------
-//     useEffect(() => {
-//       if (isSubmitted && player.get("role") === "Stellar_Cove") {
-//         game.set("submitCount", game.get("submitCount") + 1);
-//         console.log("Stellar_Cove submit count:", game.get("submitCount"));
-//       }
-//     }, [isSubmitted, game, player]);
-// //-------------------------------------------------
+
+    
   
     const handleOptionChange = (event) => {
       const { name, value } = event.target;
