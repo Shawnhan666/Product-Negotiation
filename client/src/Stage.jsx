@@ -5,7 +5,6 @@ import {
   useRound,
   useStage,
 } from "@empirica/core/player/classic/react";
-
 import { Loading } from "@empirica/core/player/react";
 import React from "react";
 import { Choice } from "./stages/Choice";
@@ -18,7 +17,7 @@ import { useEffect} from 'react';
 
 
 export function Stage() {
-  //here we call the hook to gain access to the stage object
+
   const player = usePlayer();
   const players = usePlayers();
   const round = useRound();
@@ -57,13 +56,6 @@ export function Stage() {
         return <FormalSubmit />;
       }
 
-
-    // case "Formal Vote":
-    //   if (player.stage.get("submit")) {
-    //     return <Result />;
-    //   } else {
-    //     return <FormalVote />;
-    //   }
 
     case "Result":
       if (player.stage.get("submit")) {

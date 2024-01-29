@@ -1,23 +1,33 @@
 factors:
-    - name: playerCount
-      desc: playerCount determines the number of Players are in a Game.
-      values:
-        - value: 1
-        - value: 2
-        - value: 3
-        - value: 5
-        - value: 8
-        - value: 13
-        - value: 6
+  - desc: playerCount determines the number of Players are in a Game.
+    name: playerCount
+    values:
+      - value: 6
+
+  - desc: How many times participants will make a choice
+    name: numRounds
+    values:
+      - value: 1
+      - value: 2
+      - value: 3
+      - value: 4
+      - value: 5
+      
 treatments:
-    - name: Solo
-      desc: Single-player Game
-      factors:
-        playerCount: 1
-    - name: Two Players
-      desc: Two-player Game
-      factors:
-        playerCount: 2
-    - name: 6 players
-      factors:
-        playerCount: 6
+  - desc: 3 rounds game
+    factors:
+      playerCount: 6
+      numRounds: 3
+    name: 3 rounds game
+
+  - desc: 4 round game 
+    factors:
+      playerCount: 6
+      numRounds: 4
+    name: 4 rounds game
+
+  - desc: 5 rounds game 
+    factors:
+      playerCount: 6
+      numRounds: 5
+    name: 5 rounds game

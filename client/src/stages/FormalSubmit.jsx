@@ -9,6 +9,8 @@ import { useGame } from "@empirica/core/player/classic/react";
 
 
 
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//表格
 const rolesData = {
   "Stellar_Cove": {
     mix_1: 23, mix_2: 9, mix_3: 0, li_1: 11, li_2: 8, li_3: 4, li_4: 0,
@@ -58,79 +60,68 @@ venues: { "1": "0 venues", "2": "1 venues", "3": "2 venues", "4": "3 venues", "5
 
 export function FormalSubmit() {
 
-
   const player = usePlayer();
-    const players = usePlayers();
-    const round = useRound();
-    const [roleData, setRoleData] = useState({});
-    const [points, setPoints] = useState({
-      mix: '',
-      li: '',
-      green: '',
-      height: '',
-      venues: ''
-    });
-    const [totalPoints, setTotalPoints] = useState(0); // total points
-    const hasSubmitted = round.get("hasSubmitted");
-    const [isSubmitted, setIsSubmitted] = useState(false);
-    const submittedData = round.get("submittedData");
-    const game = useGame(); // 在组件内部调用 useGame
-
-
-
-
-    
-  
-    useEffect(() => {
-      const role = player.get("role");
-      if (role in rolesData) {
-        setRoleData(rolesData[role]);
-      }
-    }, [player]);
-
-    useEffect(() => {
-      setTotalPoints(calculateTotal()); // update total point
-    }, [points, roleData]);
-
-
-    
-  
-    const handleOptionChange = (event) => {
-      const { name, value } = event.target;
-      setPoints((prevPoints) => ({
-        ...prevPoints,
-        [name]: value
-      }));
-    };
-  
-    const calculateTotal = () => {
-     
-      return Object.keys(points).reduce((total, key) => {
-        const pointKey = key + "_" + points[key];
-        return total + (roleData[pointKey] || 0);
-      }, 0);
-    };
+  const players = usePlayers();
+  const round = useRound();
+  const game = useGame();
+  const [roleData, setRoleData] = useState({});
+  const [points, setPoints] = useState({
+    mix: '',
+    li: '',
+    green: '',
+    height: '',
+    venues: ''
+  });
+  const [totalPoints, setTotalPoints] = useState(0); 
+ 
   
 
-    const areAllIssuesSelected = () => {
-   
-      return Object.values(points).every(value => value !== '');
-    };
+  useEffect(() => {
+    const role = player.get("role");
+    if (role in rolesData) {
+      setRoleData(rolesData[role]);
+    }
+  }, [player]);
 
+  useEffect(() => {
+    setTotalPoints(calculateTotal()); 
+  }, [points, roleData]);
 
-/// Submit////
+  const handleOptionChange = (event) => {
+    const { name, value } = event.target;
+    setPoints((prevPoints) => ({
+      ...prevPoints,
+      [name]: value
+    }));
+  };
+
+  const calculateTotal = () => {
+
+    return Object.keys(points).reduce((total, key) => {
+      const pointKey = key + "_" + points[key];
+      return total + (roleData[pointKey] || 0);
+    }, 0);
+  };
+
+  const areAllIssuesSelected = () => {
+
+    return Object.values(points).every(value => value !== '');
+  };
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//Submit button for Stella 
+
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
     const handleSubmit2 = (event) => {
-
       event.preventDefault();
- /////////
-
-
 
       if (!areAllIssuesSelected()) {
         alert("Please make a selection for each issue.");
         return;
       }
-    
+
       const choices = Object.keys(points).reduce((acc, key) => {
         acc[key] = optionMappings[key][points[key]] || points[key];
         return acc;
@@ -143,11 +134,11 @@ export function FormalSubmit() {
         decisions: choices,
         submitterRole: submitterRoleName
       });
-
+ 
   
     setIsSubmitted(true); 
     round.set("isSubmitted", true);
-    //-------------
+  
 
   // 检查是否是 Stellar_Cove 角色并更新提交计数和存储提交内容
     if (submitterRoleName === "Stellar_Cove") {
@@ -162,31 +153,27 @@ export function FormalSubmit() {
       game.set("submissions", submissions);
       console.log(`Submission #${currentCount + 1}:`, choices);
     }
-    //------------------------
-    
+ 
     };
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-  // check if all players voted
-  const allVoted = players.every(p => p.get("vote"));
-  // get vote 'For' 和 'Against' players
-  const forVoters = players.filter(p => p.get("vote") === "For").map(p => p.get("role")).join(", ");
-  const againstVoters = players.filter(p => p.get("vote") === "Against").map(p => p.get("role")).join(", ");
-  // current vote result
-  const currentVote = player.get("vote");
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//Stella stage after submmit 在提交后的状态
 
   // 
   if (player.get("role") === "Stellar_Cove") {
-    if (isSubmitted || round.get("isSubmitted")) {
+      if (isSubmitted || round.get("isSubmitted")) {
       return (
         <div>
           (FormalSubmit)Other parties are still voting. Once votes are in and tallied, the results will be shown.
         </div>
       );
     }
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//Stella 选择的页面 Stella choose page
     return (
-
       <div>
         <h6>As the representative of <strong>Stellar Cove</strong>, you need to submit a proposal for consideration. Select an option for each of the five issues using the table below.</h6>
         <br /><br />
@@ -194,19 +181,13 @@ export function FormalSubmit() {
         <br /><br />
         Remember that your reservation price is <strong>32</strong>.
         <br /><br />
-
         <div className="total-points">
-           
         </div>
-
         <form onSubmit={handleSubmit2}>
           <div className="row">
-            <div className="columnone">
-              
+            <div className="columnone">           
               <div id="calculator" style={{ width: '100%' }}>
               <table className="styled-table">
-
-
               <thead>
                     <tr style={{ backgroundColor: 'lightblue' }}>
                       <th>Issues</th>
@@ -214,8 +195,6 @@ export function FormalSubmit() {
                       <th style={{ paddingRight: '60px' }}>Points</th>
                     </tr>
               </thead>
-
-       
                   <tbody>
                     {/* Property Mix */}
                     <tr>
@@ -225,18 +204,13 @@ export function FormalSubmit() {
                       <td>70:30</td>
                       <td></td> {/* 新增加的空单元格 */}
                       <td></td> {/* 新增加的空单元格 */}
-                  
                       <td style={{ paddingRight: '60px' }}><output>{roleData[`mix_${points.mix}`]}</output></td>
-  
-              
-
                     </tr>
                     <tr>
                       <td><input type="radio" name="mix" value="1" onChange={handleOptionChange} /></td>
                       <td><input type="radio" name="mix" value="2" onChange={handleOptionChange} /></td>
                       <td><input type="radio" name="mix" value="3" onChange={handleOptionChange} /></td>
                     </tr>
-
                   {/* Low-income Residential */}
                   <tr>
                     <td rowspan="2">Low-income residential</td>
@@ -244,11 +218,8 @@ export function FormalSubmit() {
                     <td>9%</td>
                     <td>12%</td>
                     <td>15%</td>
-                    <td></td> {/* 新增加的空单元格 */}
+                    <td></td> 
                     <td style={{ paddingRight: '60px' }}><output>{roleData[`li_${points.li}`]}</output></td>
-                 
-       
-
                   </tr>
                   <tr>
                     <td><input type="radio" name="li" value="1" onChange={handleOptionChange} /></td>
@@ -256,7 +227,6 @@ export function FormalSubmit() {
                     <td><input type="radio" name="li" value="3" onChange={handleOptionChange} /></td>
                     <td><input type="radio" name="li" value="4" onChange={handleOptionChange} /></td>
                   </tr>
-                  
                   {/* Green Space */}
                   <tr>
                     <td rowspan="2">Green Space</td>
@@ -264,11 +234,8 @@ export function FormalSubmit() {
                     <td>16 acres</td>
                     <td>18 acres</td>
                     <td>20 acres</td>
-                  
-                    <td></td> {/* 新增加的空单元格 */}
+                    <td></td> 
                     <td style={{ paddingRight: '60px' }}><output>{roleData[`green_${points.green}`]}</output></td>
-             
-         
                   </tr>
                   <tr>
                     <td><input type="radio" name="green" value="1" onChange={handleOptionChange} /></td>
@@ -276,7 +243,6 @@ export function FormalSubmit() {
                     <td><input type="radio" name="green" value="3" onChange={handleOptionChange} /></td>
                     <td><input type="radio" name="green" value="4" onChange={handleOptionChange} /></td>
                   </tr>
-
                   {/* Max Building Height */}
                   <tr>
                     <td rowspan="2">Max Building Height</td>
@@ -286,8 +252,6 @@ export function FormalSubmit() {
                     <td>700ft</td>
                     <td>800ft</td>
                     <td style={{ paddingRight: '60px' }}><output>{roleData[`height_${points.height}`]}</output></td>
-               
-
                   </tr>
                   <tr>
                     <td><input type="radio" name="height" value="1" onChange={handleOptionChange} /></td>
@@ -296,7 +260,6 @@ export function FormalSubmit() {
                     <td><input type="radio" name="height" value="4" onChange={handleOptionChange} /></td>
                     <td><input type="radio" name="height" value="5" onChange={handleOptionChange} /></td>
                   </tr>
-
                   {/* Entertainment Complex */}
                   <tr>
                     <td rowspan="2">Entertainment Complex</td>
@@ -306,9 +269,6 @@ export function FormalSubmit() {
                     <td>3 venues</td>
                     <td>4 venues</td>
                     <td style={{ paddingRight: '60px' }}><output>{roleData[`venues_${points.venues}`]}</output></td>
-                
-           
-
                   </tr>
                   <tr>
                     <td><input type="radio" name="venues" value="1" onChange={handleOptionChange} /></td>
@@ -320,35 +280,29 @@ export function FormalSubmit() {
                 </tbody>
               </table>
             </div>
-
-   {/* “Total Points” 和提交按钮的新布局 */}
-   
+   {/* “Total Points”  */}
    <div className="total-points-and-submit">
           <div className="total-points">
             <strong>Total Points: {totalPoints}</strong>
           </div>
           <button 
             type="submit" 
-            //className={buttonClassName}
             onClick={handleSubmit2}>
             Submit for Vote
           </button>
         </div>
-
         </div>
         </div>
-     
   </form>
-
   </div>
+  )
+} 
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-
-
-    )
-
-  } else {
-    // 如果是其他角色，显示等待信息
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//如果不是Stella的页面 the page which is not stella
+  else {
+     
     return (
       <div>
         (formalsubmitpage)Please wait while Stellar Cove enters a proposal for you to vote on.
@@ -356,5 +310,6 @@ export function FormalSubmit() {
     );
   }
 }
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 export default FormalSubmit;
