@@ -315,7 +315,7 @@ export function Choice() {
                   <tr>
                     <td rowspan="2">Entertainment Complex</td>
                     <td>0 venues</td>
-                    <td>1 venues_$</td>
+                    <td>1 venues</td>
                     <td>2 venues</td>
                     <td>3 venues</td>
                     <td>4 venues</td>

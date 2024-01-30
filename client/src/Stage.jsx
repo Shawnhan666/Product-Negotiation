@@ -27,6 +27,7 @@ export function Stage() {
     console.log("Current stage: ", stage.get("name"));
     console.log("allVoted status in Stage: ", round.get("allVoted"));
 
+
   }, [stage, round]);
 
   if (player.stage.get("submit")) {

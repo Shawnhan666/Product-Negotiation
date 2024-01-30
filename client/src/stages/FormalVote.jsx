@@ -13,6 +13,11 @@ export function FormalVote() {
   const players = usePlayers();
   const round = useRound();
   const [submittedData, setSubmittedData] = useState(null);
+  const stage = useStage();
+  const game = useGame();
+  
+  const pass = players.filter(p => p.get("role") !== "Stellar_Cove").every(p => p.get("vote") === "For");
+   
 
   useEffect(() => {
     // 当轮次改变时重置所有玩家的投票状态
@@ -35,24 +40,25 @@ export function FormalVote() {
   }, [round]);
 
   // 处理投票逻辑
+  
+
   const handleVote = (vote) => {
-
-
-
-
-
     
     player.set("vote", vote);
     player.stage.set("submit", true);
     console.log( player.get("vote"));
+
     // 检查是否所有其他玩家都已经投票
     const allPlayersVoted = players.every(p => p.get("vote") || p.get("role") === "Stellar_Cove");
     if (allPlayersVoted) {
       round.set("allVoted", true);
+
+  
+
+      round.set("pass", pass);  // 保存这轮是否通
+      console.log(`Round result: ${pass ? 'Passed' : 'Did Not Pass'}`);
     }
-
   };
-
 
 
   if (!submittedData) {
@@ -79,8 +85,12 @@ export function FormalVote() {
       <p>Green Space: {submittedData?.decisions.green}</p>
       <p>Maximum Building Height: {submittedData?.decisions.height}</p>
       <p>Entertainment Venues: {submittedData?.decisions.venues}</p>
+      <br/>
       <div>
         <Button handleClick={() => handleVote("For")}>Vote For</Button>
+        </div>
+        <br/>
+        <div>
         <Button handleClick={() => handleVote("Against")}>Vote Against</Button>
       </div>
     </div>

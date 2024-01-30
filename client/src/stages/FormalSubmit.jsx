@@ -96,7 +96,6 @@ export function FormalSubmit() {
   };
 
   const calculateTotal = () => {
-
     return Object.keys(points).reduce((total, key) => {
       const pointKey = key + "_" + points[key];
       return total + (roleData[pointKey] || 0);
@@ -104,7 +103,6 @@ export function FormalSubmit() {
   };
 
   const areAllIssuesSelected = () => {
-
     return Object.values(points).every(value => value !== '');
   };
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -285,11 +283,11 @@ export function FormalSubmit() {
           <div className="total-points">
             <strong>Total Points: {totalPoints}</strong>
           </div>
-          <button 
+          <Button 
             type="submit" 
             onClick={handleSubmit2}>
             Submit for Vote
-          </button>
+          </Button> 
         </div>
         </div>
         </div>

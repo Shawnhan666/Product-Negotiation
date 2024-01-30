@@ -12,7 +12,7 @@ Empirica.onGameStart(({ game }) => {
 
   for (let i = 0; i < numRounds; i++) {
     const round = game.addRound({
-      name: `Round ${i}`,
+      name: `Round ${i+1}`,
     });
     round.addStage({name:"Informal Submit", duration: 5})
     round.addStage({name:"Formal Submit", duration: 12000})
