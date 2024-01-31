@@ -20,7 +20,7 @@ export function Result() {
         <h4>Voting Results:</h4>
         <p>Votes For: {forVotes}</p>
         <p>Votes Against: {againstVotes}</p>
-        <p>The vote did not pass. Please click the button to try again.</p>
+        <p>The vote did not pass. Please click the button to try again. If this is the last round, you will go to Exit-Sruvey page.</p>
         <Button handleClick={() => player.stage.set("submit", true)}>Continue</Button>
       </div>
     );
