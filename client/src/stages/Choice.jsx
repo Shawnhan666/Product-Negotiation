@@ -67,18 +67,57 @@ export function Choice() {
       venues: ''
     });
     const [totalPoints, setTotalPoints] = useState(0); // total points
-    //const [isSubmitted, setIsSubmitted] = useState(false);
-    const [isAnySubmitted, setIsAnySubmitted] = useState(false); // 新增状态来追踪是否有任何提交
+   
+    const anySubmitted = round.get("anySubmitted");
 
-    const submittedData = round.get("submittedData");
+    const submittedData_informal = round.get("submittedData_informal");
+
+    const nextClicked = round.get("nextClicked");
+
 
     useEffect(() => {
-      // 检查轮次状态以确定是否有任何提交
-      const anySubmitted = round.get("anySubmitted");
-      if (anySubmitted) {
-        setIsAnySubmitted(true);
+      if (nextClicked) {
+        // 重置轮次相关的状态
+        round.set("votingCompleted", false);
+        round.set("anySubmitted", false);
+        round.set("submittedData_informal", null);
+
+    
+        // 重置每个玩家的投票状态
+        players.forEach(player => {
+          player.set("vote", null);
+        });
+    
+        // 重置Next点击状态，以便下次可以再次触发
+        round.set("anySubmitted", false);
+        round.set("nextClicked", false);
+      
       }
-    }, [round]);
+    }, [nextClicked, players, round]); // 当nextClicked, players或round变化时触发
+    
+
+    useEffect(() => {
+      // 当轮次开始或页面加载时重置状态
+      const handleReset = () => {
+        // 重置轮次相关的状态
+        round.set("votingCompleted", false);
+        round.set("anySubmitted", false);
+        round.set("submittedData_informal", null);
+    
+        // 重置每个玩家的投票状态
+        players.forEach(player => {
+          player.set("vote", null);
+        });
+      };
+    
+      // 调用重置函数
+      handleReset();
+    
+      // 你可以在这里加入其他依赖项，比如round._id，以确保每次轮次改变时重置状态
+    }, [ nextClicked, round]); // 当players或round变化时触发
+
+    
+  
     
   
     useEffect(() => {
@@ -92,6 +131,61 @@ export function Choice() {
       setTotalPoints(calculateTotal()); // 新增 useEffect 用于更新总分
     }, [points, roleData]);
 
+
+        // 在 useEffect 中，添加逻辑来检查所有玩家是否都已投票
+    useEffect(() => {
+        const allVoted = players.every(player => player.get("vote"));
+
+        // 打印以监控每个玩家的投票状态和allVoted的结果
+        console.log("vote stage:", players.map(player => ({ id: player.id, vote: player.get("vote") })));
+        console.log("all voted？", allVoted);
+
+        if (allVoted) {
+            round.set("votingCompleted", true);
+            console.log("all voted，set votingCompleted为true");
+        }
+    }, [players, round]); // 当players或round变化时触发
+
+
+
+    
+
+
+    const votingCompleted = round.get("votingCompleted");
+
+
+
+   
+
+    
+
+    const handleNext = () => {
+      // 重置轮次相关的状态
+      round.set("nextClicked", true);
+      round.set("votingCompleted", false);
+      round.set("anySubmitted", false);
+      round.set("submittedData_informal", null);
+      round.set("allVoted", false)
+
+      // 重置每个玩家的投票状态
+      players.forEach(player => {
+          player.set("vote", null);
+          player.set("currentVote", null); // 如果你有这个状态的话
+          player.set("allVoted", false)
+          console.log(`Reset vote for player ${player.id}`);
+      });
+  
+      // 可以在这里添加任何其他需要在点击Next时执行的逻辑
+  
+      // 可选：如果你需要在状态重置后强制刷新页面
+      // window.location.reload();
+  };
+  
+
+
+
+
+    
   
     const handleOptionChange = (event) => {
       const { name, value } = event.target;
@@ -117,18 +211,30 @@ export function Choice() {
 
 
     const getSubmitterRoleName = () => {
-      if (!submittedData) return "None";
+      if (!submittedData_informal) return "None";
     
-      const submitter = players.find(p => p._id === submittedData.playerID);
+      const submitter = players.find(p => p._id === submittedData_informal.playerID);
       return submitter ? submitter.get("role") : "None";
     };
 
-  
-      // 直接从轮次状态中获取是否已有提交
-    const anySubmitted = round.get("anySubmitted");
 
-      // 动态决定按钮的类名
-    const buttonClassName = anySubmitted ? "submit-button-disabled" : "submit-button";
+
+
+    
+
+
+    // 动态决定“Submit for Informal Vote”按钮的类名
+    const submitButtonClassName = anySubmitted ? "submit-button-disabled" : "submit-button";
+
+         // 动态决定“Next”按钮的类名
+    const nextButtonClassName = votingCompleted ? "next-button" : "next-button-disabled";
+     
+
+    
+
+
+
+
 
     const handleSubmit = (event) => {
 
@@ -152,7 +258,7 @@ export function Choice() {
     
       const submitterRoleName = player.get("role");
     
-      round.set("submittedData", {
+      round.set("submittedData_informal", {
         playerID: player._id,
         decisions: choices,
         submitterRole: submitterRoleName
@@ -163,6 +269,7 @@ export function Choice() {
     };
 
     const handleVoteSubmit = (vote) => {
+
       player.set("vote", vote); // 存储当前玩家的投票
       round.append("votes", { id: player._id, vote: vote }); // 将投票结果存储到轮次状态中
     };
@@ -221,7 +328,7 @@ export function Choice() {
                       <th>Issues</th>
                       <th colSpan={5}>Options</th>
                       <th style={{ paddingRight: '60px' }}>Points</th> 
-                      <th>{submittedData ? submittedData.submitterRole : "None"}</th> {/* 使用存储的角色名 */}
+                      <th>{submittedData_informal ? submittedData_informal.submitterRole : "None"}</th> {/* 使用存储的角色名 */}
             
                     </tr>
 
@@ -240,7 +347,7 @@ export function Choice() {
                       <td></td> {/* 新增加的空单元格 */}
                   
                       <td style={{ paddingRight: '60px' }}><output>{roleData[`mix_${points.mix}`]}</output></td>
-                      <td>{submittedData ? submittedData.decisions["mix"] : "None"}</td>
+                      <td>{submittedData_informal ? submittedData_informal.decisions["mix"] : "None"}</td>
               
 
                     </tr>
@@ -260,7 +367,7 @@ export function Choice() {
                     <td></td> {/* 新增加的空单元格 */}
                     <td style={{ paddingRight: '60px' }}><output>{roleData[`li_${points.li}`]}</output></td>
                  
-                    <td>{submittedData ? submittedData.decisions["li"] : "None"}</td>
+                    <td>{submittedData_informal ? submittedData_informal.decisions["li"] : "None"}</td>
 
                   </tr>
                   <tr>
@@ -280,7 +387,7 @@ export function Choice() {
                   
                     <td></td> {/* 新增加的空单元格 */}
                     <td style={{ paddingRight: '60px' }}><output>{roleData[`green_${points.green}`]}</output></td>
-                    <td>{submittedData ? submittedData.decisions["green"] : "None"}</td>
+                    <td>{submittedData_informal ? submittedData_informal.decisions["green"] : "None"}</td>
          
                   </tr>
                   <tr>
@@ -300,7 +407,7 @@ export function Choice() {
                     <td>800ft</td>
                     <td style={{ paddingRight: '60px' }}><output>{roleData[`height_${points.height}`]}</output></td>
                
-                    <td>{submittedData ? submittedData.decisions["height"] : "None"}</td>
+                    <td>{submittedData_informal ? submittedData_informal.decisions["height"] : "None"}</td>
 
                   </tr>
                   <tr>
@@ -320,7 +427,7 @@ export function Choice() {
                     <td>3 venues</td>
                     <td>4 venues</td>
                     <td style={{ paddingRight: '60px' }}><output>{roleData[`venues_${points.venues}`]}</output></td>
-                    <td>{submittedData ? submittedData.decisions["venues"] : "None"}</td>
+                    <td>{submittedData_informal ? submittedData_informal.decisions["venues"] : "None"}</td>
            
 
                   </tr>
@@ -341,13 +448,13 @@ export function Choice() {
           <div className="total-points">
             <strong>Total Points: {totalPoints}</strong>
           </div>
-          <button 
+          <Button
             type="submit" 
-            className={buttonClassName}
-            onClick={handleSubmit} 
+            className={submitButtonClassName}
+            handleClick={handleSubmit} 
             disabled={anySubmitted}>
             Submit for Informal Vote
-          </button>
+          </Button>
         </div>
 
           </div>
@@ -357,31 +464,35 @@ export function Choice() {
   </form>
 
   <div className="voting-section">
-  {round.get("anySubmitted") && !currentVote && !allVoted && (
-    <div className="voting-buttons-container">
-      <button className="vote-button" onClick={() => handleVoteSubmit("For")}>For</button>
-      <button className="vote-button" onClick={() => handleVoteSubmit("Against")}>Against</button>
-    </div>
+      {round.get("anySubmitted") && !currentVote && !allVoted && (
+        <div className="voting-buttons-container">
+          <Button className="vote-button" handleClick={() => handleVoteSubmit("For")}>For</Button>
+          <Button className="vote-button" handleClick={() => handleVoteSubmit("Against")}>Against</Button>
+        </div>
       )}
 
-        {currentVote === "For" && !allVoted && <div>You voted IN FAVOR of this informal proposal. Waiting for other votes.</div>}
-        {currentVote === "Against" && !allVoted && <div>You voted AGAINST this informal proposal. Waiting for other votes.</div>}
+      {currentVote && !allVoted && (
+        <div>
+          {currentVote === "For" && <div>You voted IN FAVOR of this informal proposal. Waiting for other votes.</div>}
+          {currentVote === "Against" && <div>You voted AGAINST this informal proposal. Waiting for other votes.</div>}
+        </div>
+      )}
 
-        {allVoted && (
-          // 所有玩家都投票后显示投票结果
-          <div className="voting-results-container">
-            <div><strong>For Voters:</strong> {forVoters}</div>
-            <div><strong>Against Voters:</strong> {againstVoters}</div>
-          </div>
-        )}
-
-
-  </div>
-
+      {votingCompleted && (
+        <div className="voting-results-container">
+          <div><strong>For Voters:</strong> {forVoters}</div>
+          <div><strong>Against Voters:</strong> {againstVoters}</div>
+          <Button 
+            className="next-button" 
+            handleClick={handleNext} 
+            disabled={!votingCompleted}>
+            Next Informal Submit
+          </Button>
+        </div>
+      )}
     </div>
-
-
-  );
+  </div>
+);
 
 }
 

@@ -15,8 +15,8 @@
 
   /* 默认的提交按钮样式 */
 .submit-button {
-    background-color: lightblue;
-    color: white;
+    background-color: rgb(20, 186, 242);
+    color: rgb(251, 248, 248);
     /* 添加其他样式，如 padding, border, etc. */
   }
   

@@ -12,22 +12,53 @@ factors:
       - value: 3
       - value: 4
       - value: 5
+  
+  - desc: Duration of the Formal Submit stage in seconds
+    name: formalSubmitDuration
+    values:
+      - value: 300
+      - value: 600
+      - value: 1200
+
+  - desc: Duration of the Informal Submit stage in seconds
+    name: informalSubmitDuration
+    values:
+      - value: 5
+      - value: 180
+      - value: 300
+
       
 treatments:
-  - desc: 3 rounds game
-    factors:
-      playerCount: 6
-      numRounds: 3
-    name: 3 rounds game
 
-  - desc: 4 round game 
+
+  - desc: 4 rounds game with 180s informal submit and 600s formal submit
     factors:
       playerCount: 6
       numRounds: 4
-    name: 4 rounds game
+      informalSubmitDuration: 180
+      formalSubmitDuration: 600
+    name: 4 rounds game (180s Informal, 600s Formal)
 
-  - desc: 5 rounds game 
+  - desc: 5 rounds game with 300s informal submit and 1200s formal submit
     factors:
       playerCount: 6
       numRounds: 5
-    name: 5 rounds game
+      informalSubmitDuration: 300
+      formalSubmitDuration: 1200
+    name: 5 rounds game (300s Informal, 1200s Formal)
+
+  - desc: 3 rounds game with 180s informal submit and 1200s formal submit
+    factors:
+      playerCount: 6
+      numRounds: 3
+      informalSubmitDuration: 180
+      formalSubmitDuration: 1200
+    name: 3 rounds game (180s Informal, 1200s Formal)
+
+  - desc: 5 rounds game with 5s informal submit and 600s formal submit
+    factors:
+      playerCount: 6
+      numRounds: 5
+      informalSubmitDuration: 5
+      formalSubmitDuration: 600
+    name: 5 rounds game (5s Informal, 600s Formal)

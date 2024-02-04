@@ -8,15 +8,16 @@ const roles = ["Stellar_Cove", "Green_Living", "Illium", "Mayor_Gabriel", "Our_B
 Empirica.onGameStart(({ game }) => {
 
   const treatment = game.get("treatment");
-  const { numRounds } = treatment;
+  const { numRounds, informalSubmitDuration, formalSubmitDuration } = treatment;
 
   for (let i = 0; i < numRounds; i++) {
     const round = game.addRound({
       name: `Round ${i+1}`,
     });
-    round.addStage({name:"Informal Submit", duration: 5})
-    round.addStage({name:"Formal Submit", duration: 12000})
-    round.addStage({name:"Result", duration: 2000})
+    round.addStage({ name: "Informal Submit", duration: informalSubmitDuration });
+    // round.addStage({ name: "Informal Submit", duration: 5000 });
+    round.addStage({ name: "Formal Submit", duration: formalSubmitDuration });
+    round.addStage({name:"Result", duration: 600})
   }
 
 
@@ -40,7 +41,34 @@ Empirica.onRoundStart(({ round }) => {});
 
  
 
-Empirica.onStageStart(({ stage }) => {});
+Empirica.onStageStart(({ stage }) => {
+
+  if (stage.get("name") === "Informal Submit") {
+    console.log("start of informal submit");
+    const players = stage.currentGame.players;
+    
+    for (const player of players) {
+      player.set("vote", null);
+      player.set("currentVote", null); // 如果你有这个状态的话
+      player.set("allVoted", false)
+         // 重置与投票相关的轮次状态
+    stage.set("anySubmitted", false);
+    stage.set("votingCompleted", false);
+    stage.set("submittedData_informal", null);
+    stage.set("allVoted", false)
+      console.log(`Reset vote for player ${player.id}`);
+    }
+ 
+   
+
+   
+  }
+});
+
+
+
+
+
 
 Empirica.onStageEnded(({ stage, game }) => {
   if (stage.get("name") === "Result") {
