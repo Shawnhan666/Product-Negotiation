@@ -1,8 +1,16 @@
 //callbacks.js
 import { ClassicListenersCollector } from "@empirica/core/admin/classic";
-export const Empirica = new ClassicListenersCollector();
+import { roles } from '../../AAA';
 
-const roles = ["Stellar_Cove", "Green_Living", "Illium", "Mayor_Gabriel", "Our_Backyards", "Planning_Commission"];
+
+
+
+
+
+//const roles = ["Stellar_Cove", "Green_Living", "Illium", "Mayor_Gabriel", "Our_Backyards", "Planning_Commission"];
+
+
+export const Empirica = new ClassicListenersCollector();
 
 
 Empirica.onGameStart(({ game }) => {
@@ -59,9 +67,6 @@ Empirica.onStageStart(({ stage }) => {
       console.log(`Reset vote for player ${player.id}`);
     }
  
-   
-
-   
   }
 });
 
