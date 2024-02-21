@@ -1,5 +1,48 @@
 /* TableStyles.css */
+
+.task-brief {
+  margin-top: 90px; /* 添加一些顶部边距 */
+  padding: 15px; /* 内边距 */
+  background-color: #f0f0f0; /* 背景颜色 */
+  border-radius: 5px; /* 圆角边框 */
+
+}
+
+.task-brief ul {
+  list-style-type: disc; /* 使用实心圆点作为列表项的标记 */
+  padding-left: 20px; /* 给列表添加左内边距，确保点不会和文本挨太近 */
+}
+
+.task-brief li {
+  margin-bottom: 10px; /* 给列表项之间增加一些间隙 */
+}
+
+
+.task-brief-title {
+  text-align: center; /* 仅将这个标题的文本居中 */
+}
+
+
+.container {
+ 
+ 
+  max-height: 850px; /* 或者根据您页面的实际高度来调整 */
+  overflow-y: auto; /* 添加垂直滚动条 */
+
+
+}
+
+.tttest {
+  /* 移除 margin-top: 500px; 改为自适应 */
+  margin-top: 400px; /* 添加一些顶部边距 */
+  margin-bottom: 20px;
+  padding: 10px;
+}
+
+
+
 .styled-table {
+  margin-top: 20px; /* 添加一些顶部边距 */
     width: 100%;
     border-collapse: collapse; /* 移除单元格之间的空隙 */
   }

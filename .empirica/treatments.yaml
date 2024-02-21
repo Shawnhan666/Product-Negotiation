@@ -2,7 +2,7 @@ factors:
   - desc: playerCount determines the number of Players are in a Game.
     name: playerCount
     values:
-      - value: 6
+      - value: 3
 
   - desc: How many times participants will make a choice
     name: numRounds
@@ -33,7 +33,7 @@ treatments:
 
   - desc: 4 rounds game with 180s informal submit and 600s formal submit
     factors:
-      playerCount: 6
+      playerCount: 3
       numRounds: 4
       informalSubmitDuration: 180
       formalSubmitDuration: 600
@@ -41,7 +41,7 @@ treatments:
 
   - desc: 5 rounds game with 300s informal submit and 1200s formal submit
     factors:
-      playerCount: 6
+      playerCount: 3
       numRounds: 5
       informalSubmitDuration: 300
       formalSubmitDuration: 1200
@@ -49,7 +49,7 @@ treatments:
 
   - desc: 3 rounds game with 180s informal submit and 1200s formal submit
     factors:
-      playerCount: 6
+      playerCount: 3
       numRounds: 3
       informalSubmitDuration: 180
       formalSubmitDuration: 1200
@@ -57,7 +57,7 @@ treatments:
 
   - desc: 5 rounds game with 5s informal submit and 600s formal submit
     factors:
-      playerCount: 6
+      playerCount: 3
       numRounds: 5
       informalSubmitDuration: 5
       formalSubmitDuration: 600

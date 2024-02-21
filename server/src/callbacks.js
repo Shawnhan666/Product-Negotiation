@@ -2,11 +2,6 @@
 import { ClassicListenersCollector } from "@empirica/core/admin/classic";
 import { roles } from '../../AAA';
 
-
-
-
-
-
 //const roles = ["Stellar_Cove", "Green_Living", "Illium", "Mayor_Gabriel", "Our_Backyards", "Planning_Commission"];
 
 
@@ -22,8 +17,8 @@ Empirica.onGameStart(({ game }) => {
     const round = game.addRound({
       name: `Round ${i+1}`,
     });
-    round.addStage({ name: "Informal Submit", duration: informalSubmitDuration });
-    // round.addStage({ name: "Informal Submit", duration: 5000 });
+    //round.addStage({ name: "Informal Submit", duration: informalSubmitDuration });
+    round.addStage({ name: "Informal Submit", duration: 8000 });
     round.addStage({ name: "Formal Submit", duration: formalSubmitDuration });
     round.addStage({name:"Result", duration: 600})
   }

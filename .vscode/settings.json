@@ -1,5 +1,6 @@
 {
     "search.exclude": {
+        "": true,
         "**/*.code-search": false,
         "**/bower_components": false,
         "**/node_modules": false
@@ -13,5 +14,6 @@
         "**/Thumbs.db": false
     },
     "search.useGlobalIgnoreFiles": false,
-    "search.useIgnoreFiles": false
+    "search.useIgnoreFiles": true,
+    "search.useParentIgnoreFiles": true
 }

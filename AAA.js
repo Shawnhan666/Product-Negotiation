@@ -1,7 +1,8 @@
-export const roles = ["Stellar_Cove", "Green_Living", "Illium", "Mayor_Gabriel", "Our_Backyards", "Planning_Commission"];
+export const roles = ["CEO", "Department_Head_A", "Department_Head_B"];
+
 
 export const rolesData = {
-    "Stellar_Cove": {
+    "CEO": {
       mix_1: 23, mix_2: 9, mix_3: 0, li_1: 11, li_2: 8, li_3: 4, li_4: 0,
       green_1: 17, green_2: 11, green_3: 8, green_4: 0,
       height_1: 0, height_2: 0, height_3: 10, height_4: 20, height_5: 30,

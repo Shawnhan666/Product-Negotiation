@@ -18,7 +18,7 @@ export function Game() {
       </div>
 
       {playerCount > 1 && (
-        <div className="h-full w-128 border-l flex justify-center items-center">
+        <div className="h-full w-256 border-l flex justify-center items-center">
           <Chat scope={game} attribute="chat" />
         </div>
       )}
