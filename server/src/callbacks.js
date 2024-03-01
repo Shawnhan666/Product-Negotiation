@@ -1,14 +1,17 @@
 //callbacks.js
 import { ClassicListenersCollector } from "@empirica/core/admin/classic";
 import { roles } from '../../AAA';
-
-//const roles = ["Stellar_Cove", "Green_Living", "Illium", "Mayor_Gabriel", "Our_Backyards", "Planning_Commission"];
+ 
 
 
 export const Empirica = new ClassicListenersCollector();
 
 
 Empirica.onGameStart(({ game }) => {
+
+
+ 
+
 
   const treatment = game.get("treatment");
   const { numRounds, informalSubmitDuration, formalSubmitDuration } = treatment;
@@ -18,8 +21,9 @@ Empirica.onGameStart(({ game }) => {
       name: `Round ${i+1}`,
     });
     //round.addStage({ name: "Informal Submit", duration: informalSubmitDuration });
-    round.addStage({ name: "Informal Submit", duration: 8000 });
-    round.addStage({ name: "Formal Submit", duration: formalSubmitDuration });
+    round.addStage({ name: "Informal Submit", duration: 5 });
+    // round.addStage({ name: "Formal Submit", duration: formalSubmitDuration });
+    round.addStage({ name: "Formal Submit", duration: 2000 });
     round.addStage({name:"Result", duration: 600})
   }
 
@@ -28,7 +32,9 @@ Empirica.onGameStart(({ game }) => {
 
   game.players.forEach((player, index) => {
     const roleIndex = index % roles.length;
+    const roleName = roles[roleIndex]; // 获取角色名
     player.set("role", roles[roleIndex]);
+    player.set("name", roleName); 
   });
 
 
@@ -68,8 +74,6 @@ Empirica.onStageStart(({ stage }) => {
 
 
 
-
-
 Empirica.onStageEnded(({ stage, game }) => {
   if (stage.get("name") === "Result") {
     console.log("End of Result stage");
@@ -100,4 +104,36 @@ Empirica.onRoundEnded(({ round }) => {});
 
 Empirica.onGameEnded(({ game }) => {});
 
+ 
 
+// Empirica.on("round", "submittedInformalVote", (ctx, round, submittedInformalVote) => {
+//   console.log("Handling 'submittedInformalVote' change:", submittedInformalVote);
+//   console.log("Current round:", ctx.currentRound); // 示例使用ctx参数
+
+//   // 检查是否已处理过提交，避免重复发送消息
+//   if (!submittedInformalVote) {
+//     console.log("No new submission. Exiting callback.");
+//     return;
+//   }
+
+//   console.log("New submission detected. Sending system message.");
+//   // 假设您已经有了一个处理消息的函数
+//   sendSystemMessage(game, "Hello, Someone just submitted an informal vote.");
+// });
+
+// function sendSystemMessage(game, text) {
+//   console.log("Fetching current messages from the game.");
+//   const currentMessages = game.get("messages") || [];
+//   console.log("Current messages:", currentMessages);
+
+//   const newMessage = {
+//     text: text,
+//     sender: "System",
+//     createdAt: new Date().toISOString(),
+//   };
+
+//   console.log("Adding new message:", newMessage);
+//   const updatedMessages = [...currentMessages, newMessage];
+//   game.set("messages", updatedMessages);
+//   console.log("Updated messages have been set.");
+// }

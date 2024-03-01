@@ -4,7 +4,7 @@ import React from "react";
 import { Button } from "../components/Button";
 import './TableStyles.css';
 import { useState, useEffect} from 'react';
-
+import { useGame } from "@empirica/core/player/classic/react";
 
 const features = [
   { name: "Touchscreen", bonus: { CEO: 1, Department_Head_A: -0.5, Department_Head_B: 1 } },
@@ -21,16 +21,18 @@ export function Choice() {
   const player = usePlayer();
   const players = usePlayers();
   const round = useRound();
+  const game = useGame();
   const [selectedFeatures, setSelectedFeatures] = useState({});
   const [totalPoints, setTotalPoints] = useState(0);
 
   const [proposalSubmitted, setProposalSubmitted] = useState(false);
   const [votes, setVotes] = useState({});
   const anySubmitted = round.get("anySubmitted");
+  
   const submittedData_informal = round.get("submittedData_informal");
   const nextClicked = round.get("nextClicked");
   const votingCompleted = round.get("votingCompleted");
-
+  const submittedInformalVote = round.get("submittedInformalVote")
 
   const getSubmitterRoleName = () => {
     return submittedData_informal ? submittedData_informal.submitterRole : "None";
@@ -120,6 +122,8 @@ const handleNext = () => {
   round.set("anySubmitted", false);
   round.set("submittedData_informal", null);
   round.set("allVoted", false)
+  round.set("selectedFeaturesForInformalVote", null);
+  round.set("submittedInformalVote", false)
 
   // 重置每个玩家的投票状态
   players.forEach(player => {
@@ -165,11 +169,19 @@ const handleOptionChange = featureName => {
     }, {});
   };
 
+
+
+
   const handleSubmitProposal = (event) => {
     event.preventDefault();
 
     const submitterRoleName = player.get("role");
     const choices = saveChoices();
+
+    // 新增：把选择的特性名称保存到round属性中
+    const selectedFeatureNames = Object.keys(selectedFeatures).filter(feature => selectedFeatures[feature]);
+    round.set("selectedFeaturesForInformalVote", selectedFeatureNames);
+
 
     round.set("anySubmitted", true);  // 设置轮次状态
     setProposalSubmitted(true);
@@ -179,6 +191,12 @@ const handleOptionChange = featureName => {
       decisions: choices,
       submitterRole: submitterRoleName
     });
+
+    // 触发回调
+    round.set("submittedInformalVote", true); //  Chat.jsx
+    console.log("Handling 'submittedInformalVote' change:", submittedInformalVote);
+
+
   };
 
   const handleVoteSubmit = (vote) => {
@@ -190,7 +208,9 @@ const handleOptionChange = featureName => {
    // 获取投了 'For' 和 'Against' 的玩家名单
    const forVoters = players.filter(p => p.get("vote") === "For").map(p => p.get("role")).join(", ");
    const againstVoters = players.filter(p => p.get("vote") === "Against").map(p => p.get("role")).join(", ");
- 
+   const forVotersCount = players.filter(p => p.get("vote") === "For").length;
+   const againstVotersCount = players.filter(p => p.get("vote") === "Against").length;
+   
    // 当前玩家的投票结果
    const currentVote = player.get("vote");
  
@@ -204,6 +224,7 @@ const handleOptionChange = featureName => {
 
  
   const submittedDatainformal = round.get("submittedData_informal");
+  
 
   // 根据提交的数据计算并获取相关信息
   const getSubmittedFeaturesAndBonuses = () => {
@@ -239,60 +260,70 @@ const handleOptionChange = featureName => {
         <h6>You may scroll to the bottom of the page to review the task brief.</h6>
         <br />
         <h6>For this product design deliberation, your role is: <strong>{player.get("role")}</strong>.</h6>
-        <h6>The product under negotiation is: <strong>Laptop</strong>.</h6>
-        <h6>You "desired features" are: <strong>Touchscreen, Fingerprint Reader, 4K Display, Thunderbolt 4 Ports, Al-Enhanced Performance,</strong></h6>
-        <h6><strong>Ultra-Light Design, High-speed WiFi 6E, Long Battery Life.</strong></h6>
+        <h6>The product under deliberation is: <strong>Laptop</strong>.</h6>
+        <h6>You "desired features" are: <strong>{
+        round.get("selectedFeaturesForInformalVote")?.join(", ") || " "
+        }</strong></h6>
       </div>
 
 
-      <div className="table-container">
-      <table className="styled-table">
-        <thead>
-        <tr style={{ backgroundColor: 'lightblue' }}>
-            <th>Product Features</th>
-            <th>Include</th>
-            <th>Bonus</th>
-          </tr>
-        </thead>
-        <tbody>
-          {features.map((feature, index) => (
-            <tr key={index}>
-              <td>{feature.name}</td>
-              <td>
-                <input
-                  type="checkbox"
-                  checked={selectedFeatures[feature.name] || false}
-                  onChange={() => handleOptionChange(feature.name)}
-                />
-              </td>
-              <td>{selectedFeatures[feature.name] ? feature.bonus[player.get("role")] : 0}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+
+    <div className="table-container">
+      <div className="table-wrapper">
       <br />
-        <div className="total-points-display">
-          Total Bonus: {totalPoints}
-        </div>
-      </div>
-  
-      {!anySubmitted && (
-        <div className="button-container">
-              <br />
-          <button onClick={handleSubmitProposal} className="submit-button">
-            Submit for Informal Vote
-          </button>
-        </div>
-      )}
+            <table className="styled-table">
+           
+                <thead>
+                  <tr style={{ backgroundColor: 'lightblue' }}>
+                    <th>Product Features</th>
+                    <th>Include</th>
+                    <th>Bonus</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {features.map((feature, index) => {
+                    const isSelectedForVote = round.get("selectedFeaturesForInformalVote")?.includes(feature.name);
+                    return (
+                      <tr key={index}>
+                        <td className={isSelectedForVote ? "selected-feature" : ""}>{feature.name}</td>
+                        <td>
+                          <input
+                            type="checkbox"
+                            checked={selectedFeatures[feature.name] || false}
+                            onChange={() => handleOptionChange(feature.name)}
+                          />
+                        </td>
+                        <td>{selectedFeatures[feature.name] ? feature.bonus[player.get("role")] : 0}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
 
-{submittedData_informal && (
-  <table className="styled-table" style={{ marginTop: '20px'}}>
+              {/* "Total" 部分显示在表格下方 */}
+              <div className="total-points-display">
+                Total Bonus: ${totalPoints}
+              </div>
+              {/* 移动提交按钮到 "Total" 部分下方 */}
+              {!anySubmitted && (
+                <div className="button-container">
+                  <button onClick={handleSubmitProposal} className={anySubmitted ? "submit-button-disabled" : "submit-button"}>
+                    Submit for Informal Vote
+                  </button>
+                  </div>
+              )}
+             </div>
+  
+         {submittedData_informal && (
+           <div className="second-styled-table thead th">
+            <br />
+            <table className="styled-table"  >
     <thead>
-    <tr style={{ backgroundColor: 'green' }}>
+    <tr  >
         <th colSpan="2">Informal Submission Details: Submitted by {getSubmitterRoleName()}</th>
       </tr>
       
-      <tr style={{ backgroundColor: 'green' }}>
+      <tr  >
         <th>Product Features</th>
         <th>Bonus</th>
       </tr>
@@ -310,13 +341,18 @@ const handleOptionChange = featureName => {
       </tr>
     </tbody>
   </table>
-)}
+          </div>
+        )}
+
+</div>
+
+
 
 <div className="voting-section">
       {round.get("anySubmitted") && !currentVote && !allVoted && (
         <div className="voting-buttons-container">
-          <Button className="vote-button" handleClick={() => handleVoteSubmit("For")}>For</Button>
-          <Button className="vote-button" handleClick={() => handleVoteSubmit("Against")}>Against</Button>
+          <Button className="vote-button" handleClick={() => handleVoteSubmit("For")}>Accept</Button>
+          <Button className="vote-button" handleClick={() => handleVoteSubmit("Against")}>Reject</Button>
         </div>
       )}
 
@@ -329,15 +365,16 @@ const handleOptionChange = featureName => {
 
       {votingCompleted && (
         <div className="voting-results-container">
-          <div><strong>For Voters:</strong> {forVoters}</div>
-          <div><strong>Against Voters:</strong> {againstVoters}</div>
-          <Button 
-            className="next-button" 
-            handleClick={handleNext} 
-            disabled={!votingCompleted}>
-            Next Informal Submit
-          </Button>
-        </div>
+        <div><strong>Accept :</strong> {forVotersCount} {forVotersCount === 1 ? 'vote' : 'votes'}</div>
+        <div><strong>Reject :</strong> {againstVotersCount} {againstVotersCount === 1 ? 'vote' : 'votes'}</div>
+        <Button 
+          className="next-button" 
+          handleClick={handleNext} 
+          disabled={!votingCompleted}>
+          Next Informal Submit
+        </Button>
+      </div>
+    
       )}
           </div>
  
@@ -366,11 +403,6 @@ const handleOptionChange = featureName => {
       <p>You can see your role and priority features at the bottom of the main negotiations page.</p>
     </div>
   
-
-
-
-
-
 
 
 
