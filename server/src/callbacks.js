@@ -21,7 +21,7 @@ Empirica.onGameStart(({ game }) => {
       name: `Round ${i+1}`,
     });
     //round.addStage({ name: "Informal Submit", duration: informalSubmitDuration });
-    round.addStage({ name: "Informal Submit", duration: 5 });
+    round.addStage({ name: "Informal Submit", duration: 500 });
     // round.addStage({ name: "Formal Submit", duration: formalSubmitDuration });
     round.addStage({ name: "Formal Submit", duration: 2000 });
     round.addStage({name:"Result", duration: 600})

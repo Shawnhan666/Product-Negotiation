@@ -254,7 +254,8 @@ const handleOptionChange = featureName => {
   
   return (
     <div className="container">
-      <div >
+        <div className="informal-text-brief-wrapper">
+       <div className="informal-text-brief">
         <h6>Once the countdown is complete, the CEO will have 1 minute to submit a formal proposal.</h6>
         <h6>Toggle the checkboxes below to calculate your bonus and include features for an informal proposal.</h6>
         <h6>You may scroll to the bottom of the page to review the task brief.</h6>
@@ -264,8 +265,9 @@ const handleOptionChange = featureName => {
         <h6>You "desired features" are: <strong>{
         round.get("selectedFeaturesForInformalVote")?.join(", ") || " "
         }</strong></h6>
-      </div>
 
+      </div>
+      </div>
 
 
     <div className="table-container">
@@ -336,11 +338,13 @@ const handleOptionChange = featureName => {
         </tr>
       ))}
       <tr>
-        <td style={{ fontWeight: 'bold' }}>Total Bonus</td>
-        <td>{submissionInfo && submissionInfo.totalBonus}</td>
+      {/* <td style={{ fontWeight: 'bold' }}>Your bonus</td>
+        <td>{submissionInfo && submissionInfo.totalBonus}</td> */}
       </tr>
     </tbody>
   </table>
+  <div style={{ marginLeft: "360px" }}>Your bonus: ${submissionInfo && submissionInfo.totalBonus}</div>
+
           </div>
         )}
 
@@ -358,8 +362,8 @@ const handleOptionChange = featureName => {
 
       {currentVote && !allVoted && (
         <div>
-          {currentVote === "For" && <div>You voted IN FAVOR of this informal proposal. Waiting for other votes.</div>}
-          {currentVote === "Against" && <div>You voted AGAINST this informal proposal. Waiting for other votes.</div>}
+          {currentVote === "For" && <div>You voted Accept of this informal proposal. Waiting for other votes.</div>}
+          {currentVote === "Against" && <div>You voted Reject of this informal proposal. Waiting for other votes.</div>}
         </div>
       )}
 

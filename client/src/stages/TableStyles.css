@@ -24,12 +24,7 @@
 
 
 .container {
- 
-
   max-height: 1050px; /* 或者根据您页面的实际高度来调整 */
-  
- 
-
 }
 
  
@@ -45,7 +40,6 @@
   width: 100%; /* 或根据您的设计需求调整 */
   /* 其他样式不变 */
 }
-
 
 .styled-table th, .styled-table td {
   border: 1px solid #606060;
@@ -91,6 +85,19 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: adds a subtle shadow */
   transition: background-color 0.3s ease; /* Smooth transition for hover effect */
 }
+
+.submit-button-orange {
+  background-color: #f39a2d; /* Adjust this color to match your theme */
+  color: rgb(255, 255, 255);
+  border: none;
+  padding: 8px 12px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 20px; /* This creates the smooth edges */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: adds a subtle shadow */
+  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
 
 .submit-button:hover {
   background-color: #54b1ee; /* A slightly darker shade for hover effect */
@@ -146,7 +153,13 @@
   bottom: 0; /* 距离容器底部0 */
   right: 0; /* 距离容器右边0 */
 }
- 
+
+.buttons-container-vote{
+  display: flex; /* 使用flex布局让子元素并排 */
+  justify-content: center; /* 水平居中对齐子元素 */
+  gap: 20px; /* 在按钮之间添加一些间隙 */
+}
+
 
  
  
@@ -170,4 +183,81 @@
  
   background-color: #0c4f92; /* 深蓝色 */
   color: white;
+}
+
+
+/* 为.task-brief添加外层包装器样式 */
+.text-brief-wrapper {
+  display: flex;
+  justify-content: center; /* 使.task-brief整体居中 */
+  width: 100%; /* 占满父容器宽度 */
+}
+.text-brief {
+  width: 80%; /* 根据需要调整宽度，确保文本左对齐 */
+  text-align: left;
+  margin-top: 9px;
+  padding: 15px;
+  background-color: #f39a2d;
+  border-radius: 5px;
+}
+
+/* 为.task-brief添加外层包装器样式 */
+.informal-text-brief-wrapper {
+  display: flex;
+  justify-content: center; /* 使.task-brief整体居中 */
+  width: 100%; /* 占满父容器宽度 */
+}
+.informal-text-brief {
+  width: 80%; /* 根据需要调整宽度，确保文本左对齐 */
+  text-align: left;
+  margin-top: 59px;
+  padding: 15px;
+  background-color: #ffffff;
+  border-radius: 5px;
+}
+
+
+
+
+
+/* 橙色表格样式 */
+
+.styled-table-orange {
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%; /* 或根据您的设计需求调整 */
+  /* 其他样式不变 */
+}
+
+.styled-table-orange th, .styled-table-orange td {
+  border: 1px solid #606060;
+  padding: 4px;
+  text-align: center; /* 文本居中对齐 */
+}
+
+/* 设置特定列的宽度 */
+.styled-table-orange thead th:nth-child(1),
+.styled-table-orange tbody td:nth-child(1) {
+  width: 40%; /* 第一列宽度，调整为所需的百分比 */
+}
+
+.styled-table-orange thead th {
+  background-color: #f39a2d; /* Ensure this matches the button color */
+  color: rgb(255, 255, 255);
+  /* Other styling properties */
+}
+
+
+.sstyled-table-orange thead th:nth-child(2),
+.styled-table-orangetbody td:nth-child(2) {
+  width: 20%; /* 第二列宽度 */
+}
+
+.styled-table-orange thead th:nth-child(3),
+.styled-table-orange tbody td:nth-child(3) {
+  width: 20%; /* 第三列宽度 */
+}
+
+.styled-table-orange thead tr {
+  background-color: rgb(255, 255, 255);
 }

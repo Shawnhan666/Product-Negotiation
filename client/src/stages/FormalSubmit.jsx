@@ -29,16 +29,28 @@ export function FormalSubmit() {
   const [hasSubmittedProposal, setHasSubmittedProposal] = useState(false);
   const [selectedFeatures, setSelectedFeatures] = useState({});
   const [totalPoints, setTotalPoints] = useState(0);
-  const getSubmitterRoleName = () => {
-    return submittedData_formal ? submittedData_formal.submitterRole : "None";
-  };
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [roleData, setRoleData] = useState({});
+  const submitterRoleName = player.get("role");
+
+
+
   const submittedData_formal = round.get("submittedData_formal");
  
+
+  useEffect(() => {
+    const role = player.get("role");
+    if (role in roleData) {
+      setRoleData(roleData[role]);
+    }
+  }, [player]);
 
   useEffect(() => {
     setTotalPoints(calculateTotal());
   }, [selectedFeatures, player]);
 
+
+ 
   const handleOptionChange = featureName => {
     setSelectedFeatures(prev => ({
       ...prev,
@@ -64,19 +76,9 @@ export function FormalSubmit() {
   const submissionInfo = getSubmittedFeaturesAndBonuses();
 
 
-    const Savechoice2 = () => {
-      const role = player.get("role");
-      return features.reduce((choices, feature) => {
-        if (selectedFeatures[feature.name]) {
-          choices[feature.name] = feature.bonus[role];
-        }
-        return choices;
-      }, {});
-    };
+  const handleSubmitProposal = (event) => {
+    event.preventDefault();
 
-
-
-  const handleSubmitProposal = () => {
     // 假设的保存选择逻辑
     const choices = Object.entries(selectedFeatures).reduce((acc, [feature, isSelected]) => {
       if (isSelected) acc[feature] = features.find(f => f.name === feature).bonus[player.get("role")];
@@ -88,116 +90,112 @@ export function FormalSubmit() {
       decisions: choices,
       submitterRole: player.get("role")
     });
-  
-     
-
-
+    setIsSubmitted(true); 
+    round.set("isSubmitted", true);
     setHasSubmittedProposal(true);
-  };
+    round.set("isVoting", true);  
+    round.set("totalPoints", totalPoints); // 存储totalPoints到round
 
+
+  // 检查是否是 Stellar_Cove 角色并更新提交计数和存储提交内容
+  if (submitterRoleName === "CEO") {
+    const currentCount = game.get("submitCount") || 0;
+    game.set("submitCount", currentCount + 1);
+    const submissions = game.get("submissions") || [];
+    submissions.push({
+      submitter: submitterRoleName,
+      choices,
+      count: currentCount + 1
+    });
+    game.set("submissions", submissions);
+    console.log(`Submission #${currentCount + 1}:`, choices);
+  }
+  };
+ 
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//Stella stage after submmit 在提交后的状态
+  // 
+  if (player.get("role") === "CEO") {
+    if (isSubmitted || round.get("isSubmitted")) {
+    return (
+      <div>
+        (FormalSubmit)Other parties are still voting. Once votes are in and tallied, the results will be shown.
+      </div>
+    );
+  }
+}
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+///////////////////////----------------------------
   if (player.get("role") === "CEO") {
     return (
-
       <div className="container">
-        <div >
+        <div className="text-brief-wrapper">
+       <div className="text-brief">
         <h6>TIME IS UP. As the CEO, you have 1 minute to offer an official proposal. You may continue chatting while waiting.</h6>
-      </div>
-
-   <br />
-
-
+       </div>
+       </div>
+       <br />
       {/* 第一个表格始终显示 */}
       <div className="table-container">
       <div className="table-wrapper">
       <br />
-    
+                        <table className="styled-table-orange">
+                          <thead>
+                          <tr >
+                              <th>Feature</th>
+                              <th>Include</th>
+                              <th>Bonus</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {features.map((feature, index) => (
+                              <tr key={index}>
+                                <td>{feature.name}</td>
+                                <td>
+                                  <input
+                                    type="checkbox"
+                                    checked={!!selectedFeatures[feature.name]}
+                                    onChange={() => handleOptionChange(feature.name)}
+                                  />
+                                </td>
+                                <td>
+                                  {selectedFeatures[feature.name] ? feature.bonus[player.get("role")] : 0}
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
 
-      <table className="styled-table">
-        <thead>
-        <tr style={{ backgroundColor: 'lightblue' }}>
-            <th>Feature</th>
-            <th>Include</th>
-            <th>Bonus</th>
-          </tr>
-        </thead>
-        <tbody>
-          {features.map((feature, index) => (
-            <tr key={index}>
-              <td>{feature.name}</td>
-              <td>
-                <input
-                  type="checkbox"
-                  checked={!!selectedFeatures[feature.name]}
-                  onChange={() => handleOptionChange(feature.name)}
-                />
-              </td>
-              <td>
-                {selectedFeatures[feature.name] ? feature.bonus[player.get("role")] : 0}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      <div>Total Bonus: {totalPoints}</div>
-      {!hasSubmittedProposal && (
-
-
-              <div className="button-container">
-                  <button onClick={handleSubmitProposal} className={ "submit-button"}>
-                    Submit for Formal Vote
-                  </button>
-                  </div>
-        
-      )}
-  </div>
-  
-      {/* 当提交后，显示第二个表格 */}
-      {hasSubmittedProposal && (
-        <div className="second-styled-table thead th">
-        <br />
-        <table className="styled-table"  >
-
-        
-            <thead>
-              <tr>
-                <th>Feature</th>
-                <th>Selected</th>
-                <th>Bonus</th>
-              </tr>
-            </thead>
-            <tbody>
-              {Object.entries(selectedFeatures).map(([featureName, isSelected], index) => (
-                <tr key={index}>
-                  <td>{featureName}</td>
-                  <td>{isSelected ? "Yes" : "No"}</td>
-                  <td>
-                    {isSelected ? features.find(f => f.name === featureName).bonus[player.get("role")] : 0}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-    </div>
-    
-    );
-    </div>
-    
-    )
-
-
+                <div>Total bonus: ${totalPoints}</div>
+                {!hasSubmittedProposal && (
+                        <div className="button-container">
+                            <button onClick={handleSubmitProposal} className={ "submit-button-orange"}>
+                              Submit for Formal Vote
+                            </button>
+                            </div>
+                                )}
+                                </div>
+                                  </div>
+                                  );
+                                  </div> 
+                                  )
 
   } else {
     return (
       <div className="waiting-section">
-        <h2>Please Wait</h2>
         <p>Please wait while the CEO enters a proposal for you to vote on.</p>
       </div>
     );
   }
 }
+
+
+
+
+
+
 // export function FormalSubmit() {
 //   const player = usePlayer();
 //   const players = usePlayers();
@@ -210,11 +208,6 @@ export function FormalSubmit() {
 //   const [selectedFeatures, setSelectedFeatures] = useState({});
 //   const [totalPoints, setTotalPoints] = useState(0); 
 
-
- 
-
-
-  
 
 
   

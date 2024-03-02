@@ -31,7 +31,7 @@ export function Stage() {
   }, [stage, round]);
 
   if (player.stage.get("submit")) {
-    if (players.length !== 6) {
+    if (players.length !== 3) {
       return <Loading />;
     }
 
