@@ -6,6 +6,8 @@ import './TableStyles.css';
 import { useState, useEffect} from 'react';
 import { useGame } from "@empirica/core/player/classic/react";
 
+import { useChat } from '../ChatContext'; 
+
 const features = [
   { name: "Touchscreen", bonus: { CEO: 1, Department_Head_A: -0.5, Department_Head_B: 1 } },
   { name: "Fingerprint Reader", bonus: { CEO: -0.5, Department_Head_A: 1, Department_Head_B: 1 } },
@@ -22,6 +24,11 @@ export function Choice() {
   const players = usePlayers();
   const round = useRound();
   const game = useGame();
+
+  //const { appendMessage } = useChat();////chat use
+  const { appendSystemMessage } = useChat();
+
+  
   const [selectedFeatures, setSelectedFeatures] = useState({});
   const [totalPoints, setTotalPoints] = useState(0);
 
@@ -37,13 +44,6 @@ export function Choice() {
   const getSubmitterRoleName = () => {
     return submittedData_informal ? submittedData_informal.submitterRole : "None";
   };
-
-  
-
-  
-  
-
-
 
   useEffect(() => {
     setTotalPoints(calculateTotal());
@@ -97,8 +97,6 @@ export function Choice() {
 
 
 //---------------------------------------------------------------------------------------------------------重制状态
-
-
 
 
 
@@ -173,36 +171,60 @@ const handleOptionChange = featureName => {
 
 
   const handleSubmitProposal = (event) => {
+    console.log("handleSubmitProposal called"); // 添加此行来检查函数是否被调用
     event.preventDefault();
-
     const submitterRoleName = player.get("role");
     const choices = saveChoices();
-
     // 新增：把选择的特性名称保存到round属性中
     const selectedFeatureNames = Object.keys(selectedFeatures).filter(feature => selectedFeatures[feature]);
     round.set("selectedFeaturesForInformalVote", selectedFeatureNames);
-
-
     round.set("anySubmitted", true);  // 设置轮次状态
     setProposalSubmitted(true);
-
     round.set("submittedData_informal", {
       playerID: player._id,
       decisions: choices,
       submitterRole: submitterRoleName
     });
-
     // 触发回调
     round.set("submittedInformalVote", true); //  Chat.jsx
     console.log("Handling 'submittedInformalVote' change:", submittedInformalVote);
 
+    const messageText = `${submitterRoleName} initiated an Informal Vote. Features Included are: ${selectedFeatureNames.join(", ")}`;
 
+    appendSystemMessage({
+      id: Date.now(), // 生成一个唯一ID，例如使用当前时间戳
+      text: messageText,
+      sender: {
+        id: "system",
+        name: "System",
+        avatar: "", // 如果有系统用户的头像可以在这里设置
+        role: "system", // 标识这是一个系统消息
+      }
+    });
+  
   };
+
+
+
+
 
   const handleVoteSubmit = (vote) => {
     player.set("vote", vote); // 存储当前玩家的投票
     round.append("votes", { id: player._id, vote: vote }); // 将投票结果存储到轮次状态中
+
+
+
+
+
+
+
   };
+
+
+
+
+
+
   // 检查是否所有玩家都已投票
   const allVoted = players.every(p => p.get("vote"));
    // 获取投了 'For' 和 'Against' 的玩家名单

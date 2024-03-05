@@ -21,7 +21,7 @@ Empirica.onGameStart(({ game }) => {
       name: `Round ${i+1}`,
     });
     //round.addStage({ name: "Informal Submit", duration: informalSubmitDuration });
-    round.addStage({ name: "Informal Submit", duration: 500 });
+    round.addStage({ name: "Informal Submit", duration: 3000 });
     // round.addStage({ name: "Formal Submit", duration: formalSubmitDuration });
     round.addStage({ name: "Formal Submit", duration: 2000 });
     round.addStage({name:"Result", duration: 600})
@@ -121,7 +121,7 @@ Empirica.onGameEnded(({ game }) => {});
 //   sendSystemMessage(game, "Hello, Someone just submitted an informal vote.");
 // });
 
-// function sendSystemMessage(game, text) {
+// function sendSystemMessage(game, text) {    //// test!!!!!!!!
 //   console.log("Fetching current messages from the game.");
 //   const currentMessages = game.get("messages") || [];
 //   console.log("Current messages:", currentMessages);

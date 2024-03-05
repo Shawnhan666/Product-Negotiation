@@ -6,6 +6,14 @@ import { Game } from "./Game";
 import { ExitSurvey } from "./intro-exit/ExitSurvey";
 import { Introduction } from "./intro-exit/Introduction";
 
+
+import { ChatProvider } from "./ChatContext"; // 更新这里的路径以指向你的 ChatProvider
+
+// 其他导入...
+
+
+
+
 export default function App() {
   const urlParams = new URLSearchParams(window.location.search);
   const playerKey = urlParams.get("participantKey") || "";
@@ -23,6 +31,7 @@ export default function App() {
 
   return (
     <EmpiricaParticipant url={url} ns={playerKey} modeFunc={EmpiricaClassic}>
+      <ChatProvider> {/* 添加 ChatProvider 在这里 */}
       <div className="h-screen relative">
         <EmpiricaMenu position="bottom-left" />
         <div className="h-full overflow-auto">
@@ -31,6 +40,7 @@ export default function App() {
           </EmpiricaContext>
         </div>
       </div>
+      </ChatProvider> {/* 结束 ChatProvider */}
     </EmpiricaParticipant>
   );
 }

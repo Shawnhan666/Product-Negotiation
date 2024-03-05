@@ -1,3 +1,5 @@
+
+
 import React, {
   useEffect,
   useRef,
@@ -5,8 +7,7 @@ import React, {
 } from "react";
 import { usePlayer } from "@empirica/core/player/classic/react";
 import { Loading } from "@empirica/core/player/react";
-
-
+import { useChat } from './ChatContext';
 
 export function Chat({
   scope,
@@ -16,11 +17,38 @@ export function Chat({
   const player = usePlayer();
   const playerRole = player.get("role"); // 获取当前玩家的角色
 
+  const { systemMessages } = useChat();
+  const playerMessages = scope.getAttribute(attribute)?.items || [];
+ 
+
+ 
+
+  useEffect(() => {
+    // 遍历 systemMessages 数组，并对每个消息调用 displaySystemMessage
+    systemMessages.forEach((systemMessage) => {
+      displaySystemMessage(systemMessage.text);
+    });
+  }, [systemMessages]); // 依赖项数组中包含 systemMessages，以确保每当 systemMessages 更新时都会触发这个效果
+  
+
+
+    const displaySystemMessage = (text) => {
+    scope.append(attribute, {
+      text,
+      sender: {
+        id: "system", // 使用 "system" 标识符来表示这是一个系统消息
+        name: "System",
+        role: "system", // 可以使用特殊的角色名称来标识系统消息
+      },
+    });
+  };
+
+
+
 
   if (!scope || !player) {
     return <LoadingComp />;
   }
-
   const handleNewMessage = (text) => {
     scope.append(attribute, {
       text,
@@ -33,24 +61,23 @@ export function Chat({
     });
   };
 
-  const msgs = scope.getAttribute(attribute)?.items || [];
-
   return (
-    <div className="h-full w-full flex flex-col">
-      <Messages msgs={msgs} playerRole={playerRole} />
+<div className="h-full w-full flex flex-col">
+      <Messages msgs={playerMessages } playerRole={playerRole}  />
       <Input onNewMessage={handleNewMessage} playerRole={player.get("role")} />
+    </div> 
 
-      {/* <Input onNewMessage={handleNewMessage}  /> */}
-    </div>
   );
 }
 
+
+
+
 // function Messages(props) {
-  function Messages({ props, msgs, playerRole }) {
-   
-  //const { msgs } = props;
+  function Messages({ props, msgs, playerRole,  }) {
   const scroller = useRef(null);
   const [msgCount, setMsgCount] = useState(0);
+
 
   useEffect(() => {
     if (!scroller.current) {
@@ -75,9 +102,7 @@ export function Chat({
               <path d="M123.6 391.3c12.9-9.4 29.6-11.8 44.6-6.4c26.5 9.6 56.2 15.1 87.8 15.1c124.7 0 208-80.5 208-160s-83.3-160-208-160S48 160.5 48 240c0 32 12.4 62.8 35.7 89.2c8.6 9.7 12.8 22.5 11.8 35.5c-1.4 18.1-5.7 34.7-11.3 49.4c17-7.9 31.1-16.7 39.4-22.7zM21.2 431.9c1.8-2.7 3.5-5.4 5.1-8.1c10-16.6 19.5-38.4 21.4-62.9C17.7 326.8 0 285.1 0 240C0 125.1 114.6 32 256 32s256 93.1 256 208s-114.6 208-256 208c-37.1 0-72.3-6.4-104.1-17.9c-11.9 8.7-31.3 20.6-54.3 30.6c-15.1 6.6-32.3 12.6-50.1 16.1c-.8 .2-1.6 .3-2.4 .5c-4.4 .8-8.7 1.5-13.2 1.9c-.2 0-.5 .1-.7 .1c-5.1 .5-10.2 .8-15.3 .8c-6.5 0-12.3-3.9-14.8-9.9c-2.5-6-1.1-12.8 3.4-17.4c4.1-4.2 7.8-8.7 11.3-13.5c1.7-2.3 3.3-4.6 4.8-6.9c.1-.2 .2-.3 .3-.5z" />
             </svg>
           </div>
-
           <h4 className="text-gray-700 font-semibold">No chat yet</h4>
-
           <p className="text-gray-500 text-center">
             Send a message to start the conversation.
           </p>
@@ -85,37 +110,36 @@ export function Chat({
       </div>
     );
   }
-
   return (
     <div className="h-full overflow-auto pl-2 pr-4 pb-2" ref={scroller}>
       {msgs.map((msg) => (
-        <MessageComp key={msg.id} attribute={msg} playerRole={playerRole} />
-      ))}
+  <MessageComp key={msg.id} attribute={msg} playerRole={playerRole} />
+))}
     </div>
- 
-
   );
 }
+
+
+function MessageComp({ attribute }) {
 
 const roleColors = {
   CEO:  "#4CAF50", // 绿色
   Department_Head_A: "#00008B", // 深蓝色
   Department_Head_B: "#000000", // 黑色
 };
-
-
-function MessageComp({ attribute, showSenderInfo  }) {
   const msg = attribute.value;
-  const ts = attribute.createdAt;
-
   
-  const textColor = roleColors[msg.sender.role] || "#000000";
+  // 声明并初始化 isSystemMessage 变量
+  const isSystemMessage = msg.sender && msg.sender.role === "system";
+  const ts = attribute.createdAt;
+  const textColor = isSystemMessage ? "#FF4500" : roleColors[msg.sender.role] || "#000000";
+ 
+
 
   let avatar = msg.sender.avatar;
   if (!avatar) {
     avatar = `https://avatars.dicebear.com/api/identicon/${msg.sender.id}.svg`;
   }
-
   let avatarImage = (
     <img
       className="inline-block h-9 w-9 rounded-full"
@@ -123,7 +147,6 @@ function MessageComp({ attribute, showSenderInfo  }) {
       alt={msg.sender.id}
     />
   );
-
   if (!avatar.startsWith("http")) {
     avatarImage = (
       <div className="inline-block h-9 w-9 rounded-full">{avatar}</div>
@@ -150,46 +173,53 @@ function MessageComp({ attribute, showSenderInfo  }) {
   );
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function Input({ onNewMessage }) {
   const [text, setText] = useState("");
-
   const resize = (e) => {
     const target = e.target;
     target.style.height = "inherit";
     target.style.height = `${Math.min(target.scrollHeight, 200)}px`;
   };
-
   const handleSubmit = (e) => {
     e.preventDefault();
-
     const txt = text.trim();
     if (txt === "") {
       return;
     }
-
     if (txt.length > 1024) {
       e.preventDefault();
-
       alert("Max message length is 1024");
-
       return;
     }
-
     onNewMessage(txt);
     setText("");
   };
-
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && e.shiftKey === false) {
       handleSubmit(e);
       resize(e);
     }
   };
-
   const handleKeyUp = (e) => {
     resize(e);
   };
-
   return (
     <form
       className="p-2 flex items-strech gap-2 border-t"
