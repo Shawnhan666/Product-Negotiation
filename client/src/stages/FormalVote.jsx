@@ -1,3 +1,6 @@
+// // //formalvote.jsx
+
+
 // //formalvote.jsx
 import React, { useEffect, useState } from "react";
 import { useGame,usePlayer, usePlayers, useRound } from "@empirica/core/player/classic/react";
@@ -286,3 +289,177 @@ export function FormalVote() {
 
 
  
+
+
+
+// import React, { useEffect, useState } from "react";
+// import { usePlayer, usePlayers, useRound } from "@empirica/core/player/classic/react";
+// import './TableStyles.css';
+// import { Button } from "../components/Button";
+// import { useGame } from "@empirica/core/player/classic/react";
+// import { useChat } from '../ChatContext'; 
+
+// const features = [
+//   { name: "Touchscreen", bonus: { CEO: 1, Department_Head_A: -0.5, Department_Head_B: 1 } },
+//   { name: "Fingerprint Reader", bonus: { CEO: -0.5, Department_Head_A: 1, Department_Head_B: 1 } },
+//   { name: "4K Display", bonus: { CEO: 1, Department_Head_A: 1, Department_Head_B: 1 } },
+//   { name: "Thunderbolt 4 Ports", bonus: { CEO: -0.5, Department_Head_A: 1, Department_Head_B: -0.5 } },
+//   { name: "AI-Enhanced Performance", bonus: { CEO: 1, Department_Head_A: 1, Department_Head_B: 1 } },
+//   { name: "Ultra-Light Design", bonus: { CEO: 1, Department_Head_A: -0.5, Department_Head_B: 1 } },
+//   { name: "High-speed WiFi 6E", bonus: { CEO: -0.5, Department_Head_A: -0.5, Department_Head_B: -0.5 } },
+//   { name: "Long Battery Life", bonus: { CEO: 1, Department_Head_A: -0.5, Department_Head_B: -0.5 } },
+// ];
+
+
+// export function FormalVote() {
+//   const game = useGame();
+//   const { appendSystemMessage } = useChat();
+//   const player = usePlayer();
+//   const players = usePlayers();
+//   const round = useRound();
+//   const [submittedData, setSubmittedData] = useState(null);
+//   const isVoting = round.get("isVoting");
+//   const submittedData_formal = round.get("submittedData_formal");
+//   const pass = players.filter(p => p.get("role") !== "CEO").every(p => p.get("vote") === "For");
+//   const totalPoints = round.get("totalPoints");
+//   const generateUniqueId = () => `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
+
+
+//   // 在组件加载时获取提案数据和投票状态
+//   useEffect(() => {
+//     const dataFormal = round.get("submittedData_formal");
+//     if (dataFormal) {
+//       setSubmittedData(dataFormal);
+//     }
+//   }, [round]);
+
+//   useEffect(() => {
+//     // 当轮次改变时重置所有玩家的投票状态
+//     players.forEach(p => {
+//       p.set("vote", null);
+//     });
+//     round.set("allVoted", false);
+
+//   }, [players, round]);
+
+
+//   // useEffect(() => {
+//   //   // 检查除CEO外的所有玩家是否已投票
+   
+//   //   if (allPlayersVoted) {
+//   //     const acceptVotes = players.filter(p => p.get("vote") === "For").length;
+//   //     const rejectVotes = players.filter(p => p.get("vote") === "Against").length;
+//   //     const pass = players.filter(p => p.get("role") !== "CEO").every(p => p.get("vote") === "For");
+//   //     //生成系统消息
+//   //     const messageText = `Formal proposal voting completed. Result: ${pass ? 'Passed' : 'Did Not Pass'}. Accept: ${acceptVotes}, Reject: ${rejectVotes}.`;
+//   //     // 发送系统消息
+//   //     appendSystemMessage({
+//   //       id: generateUniqueId(),
+//   //       text: messageText,
+//   //       sender: {
+//   //         id: Date.now(),
+//   //         name: "System",
+//   //         avatar: "",
+//   //         role: "system",
+//   //       }
+//   //     });
+//   //     // 更新轮次状态以反映投票已完成
+//   //   }
+//   // }, [ players, player, round, appendSystemMessage]);
+
+  
+
+
+//   const handleVote = (vote) => {
+//     player.set("vote", vote);
+//     player.stage.set("submit", true);
+//     console.log( player.get("vote"));
+
+//     // 检查是否所有玩家都已经投票
+
+//     const allPlayersVoted = players.every(p => p.get("vote") || p.get("role") === "Stellar_Cove");
+
+//     if (allPlayersVoted) {
+//       round.set("allVoted", true);
+//       round.set("pass", pass);  // 保存这轮是否通
+//       console.log(`Round result: ${pass ? 'Passed' : 'Did Not Pass'}`);
+//   };
+//   };
+
+
+//   // 如果所有玩家都已投票
+//   if (round.get("allVoted")) {
+//     player.stage.set("submit", true); // 这里假设 "submit" 是进入结果页面的正确阶段键
+//     return <div>Transferring to the results page...</div>;
+//   }
+
+//    // 如果当前玩家已经投票，或者玩家是 "Stellar_Cove"，则显示等待
+//    if (player.get("vote") || player.get("role") === "CEO") {
+//     return <div>Other parties are still voting. Once votes are in and tallied, the results will be shown.</div>;
+//   }
+
+//   const decisionsMap = submittedData_formal.decisions
+//   ? Object.entries(submittedData_formal.decisions).reduce((acc, [feature, isSelected]) => {
+//       acc[feature] = isSelected;
+//       return acc;
+//     }, {})
+//   : {};
+
+//   // 展示提案详情和投票选项
+  
+//   return (
+
+//     <div>
+//       <div className="text-brief-wrapper">
+//        <div className="text-brief">
+//     <h5>The CEO has made their final proposal.  Cast your vote!</h5>
+//     </div>
+//     </div>
+//     <br />
+
+//       <div className="table-container">
+//         <div className="table-wrapper">
+//           <table className="styled-table-orange">
+//             <thead>
+//               <tr>
+//                 <th>Feature</th>
+//                 <th>Include</th>
+//                 <th>Bonus</th>
+//               </tr>
+//             </thead>
+//             <tbody>
+//               {features.map((feature, index) => {
+//                 const isSelected = decisionsMap[feature.name];
+//                 return (
+//                   <tr key={index}>
+//                     <td>{feature.name}</td>
+//                     <td>
+//                       <input
+//                         type="checkbox"
+//                         checked={!!isSelected} // 根据decisionsMap来确定是否选中
+//                         disabled // 禁用复选框，以防止修改
+//                       />
+//                     </td>
+//                     <td>
+//                       {isSelected ? feature.bonus[submittedData_formal.submitterRole] : 0} 
+//                     </td>
+//                   </tr>
+//                 );
+//               })}
+//           </tbody>
+//         </table>
+//         <div>Your bonus: ${totalPoints}</div>
+//       </div>
+//     </div>
+//     <br/>
+//     <div className="buttons-container-vote">
+//   <Button handleClick={() => handleVote("For")}>Accept</Button>
+//   <Button handleClick={() => handleVote("Against")}>Reject</Button>
+// </div>
+
+//   </div>
+// );
+// };
+
+

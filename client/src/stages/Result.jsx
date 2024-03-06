@@ -4,11 +4,14 @@ import { useGame, usePlayer, usePlayers, useRound } from "@empirica/core/player/
 
 import { Button } from "../components/Button";
 
+import { useChat } from '../ChatContext'; 
 export function Result() {
 
   const player = usePlayer();
   const game = useGame();
   const round = useRound();
+  const { appendSystemMessage } = useChat();
+  
   const players = usePlayers();
   const forVotes = players.filter(p => p.get("vote") === "For").length;
   const againstVotes = players.filter(p => p.get("vote") === "Against").length;

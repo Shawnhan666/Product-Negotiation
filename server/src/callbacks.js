@@ -10,8 +10,6 @@ export const Empirica = new ClassicListenersCollector();
 Empirica.onGameStart(({ game }) => {
 
 
- 
-
 
   const treatment = game.get("treatment");
   const { numRounds, informalSubmitDuration, formalSubmitDuration } = treatment;
@@ -21,8 +19,8 @@ Empirica.onGameStart(({ game }) => {
       name: `Round ${i+1}`,
     });
     //round.addStage({ name: "Informal Submit", duration: informalSubmitDuration });
-    round.addStage({ name: "Informal Submit", duration: 3000 });
-    // round.addStage({ name: "Formal Submit", duration: formalSubmitDuration });
+    round.addStage({ name: "Informal Submit", duration: 5000 });
+
     round.addStage({ name: "Formal Submit", duration: 2000 });
     round.addStage({name:"Result", duration: 600})
   }
@@ -46,8 +44,11 @@ Empirica.onGameStart(({ game }) => {
 });
 
 
-Empirica.onRoundStart(({ round }) => {});
-
+Empirica.onRoundStart(({ round }) => { 
+  // 假设系统消息存储在round的一个名为'systemMessages'的属性中
+  // 您需要根据实际情况调整属性名
+  round.set("systemMessages", []); // 重置为一个空数组
+});
  
 
 Empirica.onStageStart(({ stage }) => {

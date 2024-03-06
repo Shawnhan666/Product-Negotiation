@@ -1,5 +1,3 @@
-
-
 import React, {
   useEffect,
   useRef,
@@ -14,41 +12,58 @@ export function Chat({
   attribute = "messages",
   loading: LoadingComp = Loading,
 }) {
+
   const player = usePlayer();
   const playerRole = player.get("role"); // 获取当前玩家的角色
-
   const { systemMessages } = useChat();
   const playerMessages = scope.getAttribute(attribute)?.items || [];
- 
-
- 
-
-  useEffect(() => {
-    // 遍历 systemMessages 数组，并对每个消息调用 displaySystemMessage
-    systemMessages.forEach((systemMessage) => {
-      displaySystemMessage(systemMessage.text);
-    });
-  }, [systemMessages]); // 依赖项数组中包含 systemMessages，以确保每当 systemMessages 更新时都会触发这个效果
+    // 用于跟踪已显示消息的状态
+    const [displayedMessages, setDisplayedMessages] = useState({});
   
+    const [lastMessageId, setLastMessageId] = useState(null); // 存储最后一条消息的ID
+    const systemMessagesLengthRef = useRef(systemMessages.length); // 使用ref来跟踪消息数组长度
 
 
-    const displaySystemMessage = (text) => {
+
+
+
+    
+  const displaySystemMessage = (text, id) => {
+    console.log(`Displaying system message: ${text} with ID: ${id}`);
+    // 显示消息的逻辑
     scope.append(attribute, {
       text,
       sender: {
-        id: "system", // 使用 "system" 标识符来表示这是一个系统消息
+        id: Date.now(), 
         name: "System",
-        role: "system", // 可以使用特殊的角色名称来标识系统消息
+        role: "system", 
       },
     });
   };
+  
 
+  useEffect(() => {
+    const currentLength = systemMessages.length;
+    // 检查消息数组长度是否发生变化
+    if (currentLength !== systemMessagesLengthRef.current && currentLength > 0) {
+      const latestMessage = systemMessages[currentLength - 1];
+      const messageId = latestMessage.id || Date.now().toString();
+      // 防止因为stage切换时的重复处理
+      if (messageId !== lastMessageId) {
+        displaySystemMessage(latestMessage.text, messageId);
+        setLastMessageId(messageId); // 更新最后处理的消息ID
+      }
+    }
+    // 更新ref为当前的长度，用于下次比较
+    systemMessagesLengthRef.current = currentLength;
+  }, [systemMessages.length]); // 依赖于systemMessages数组长度的变化
 
-
+  
 
   if (!scope || !player) {
     return <LoadingComp />;
   }
+
   const handleNewMessage = (text) => {
     scope.append(attribute, {
       text,
@@ -56,20 +71,21 @@ export function Chat({
         id: player.id,
         name: player.get("name") || player.id,
         avatar: player.get("avatar"),
-        role: player.get("role"), // 确保消息包含发送者的角色信息
+        role: player.get("role"), 
       },
     });
   };
 
+  
   return (
-<div className="h-full w-full flex flex-col">
-      <Messages msgs={playerMessages } playerRole={playerRole}  />
+<div className="h-full w-full flex flex-col">  
+
+
+      <Messages msgs={playerMessages } playerRole={player.get("role")}  />
       <Input onNewMessage={handleNewMessage} playerRole={player.get("role")} />
     </div> 
-
   );
 }
-
 
 
 
@@ -162,7 +178,6 @@ const roleColors = {
           <span className="font-semibold" style={{ color: textColor }}>
             {msg.sender.name}
           </span>
-
           <span className="pl-2 text-gray-400">{ts && relTime(ts)}</span>
         </p>
         <p style={{ color: textColor }}>{msg.text}</p>
@@ -172,21 +187,6 @@ const roleColors = {
     </div>
   );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -265,8 +265,5 @@ function relTime(date) {
 
   return `${formattedMinutes}:${formattedSeconds} ago`;
 }
-
-
- 
 
 export default Chat;

@@ -7,8 +7,7 @@ import { Button } from "../components/Button";
 import './TableStyles.css';
 import { useState, useEffect} from 'react';
 import { useGame } from "@empirica/core/player/classic/react";
-
-
+import { useChat } from '../ChatContext'; 
 
 const features = [
   { name: "Touchscreen", bonus: { CEO: 1, Department_Head_A: -0.5, Department_Head_B: 1 } },
@@ -25,6 +24,8 @@ export function FormalSubmit() {
   const player = usePlayer();
   const players = usePlayers();
   const round = useRound();
+  const game = useGame();
+  const { appendSystemMessage } = useChat();
 
   const [hasSubmittedProposal, setHasSubmittedProposal] = useState(false);
   const [selectedFeatures, setSelectedFeatures] = useState({});
@@ -74,11 +75,11 @@ export function FormalSubmit() {
       }
   };
   const submissionInfo = getSubmittedFeaturesAndBonuses();
+  const generateUniqueId = () => `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
 
 
   const handleSubmitProposal = (event) => {
     event.preventDefault();
-
     // 假设的保存选择逻辑
     const choices = Object.entries(selectedFeatures).reduce((acc, [feature, isSelected]) => {
       if (isSelected) acc[feature] = features.find(f => f.name === feature).bonus[player.get("role")];
@@ -110,6 +111,19 @@ export function FormalSubmit() {
     game.set("submissions", submissions);
     console.log(`Submission #${currentCount + 1}:`, choices);
   }
+
+  const selectedFeatureNames = Object.entries(selectedFeatures).filter(([_, isSelected]) => isSelected).map(([featureName]) => featureName);
+   const formalmessageText = `CEO has submitted a formal proposal. Features Included are: ${selectedFeatureNames.join(", ")}.`;
+   appendSystemMessage({
+     id: generateUniqueId(), // 使用生成的唯一ID
+     text: formalmessageText,
+     sender: {
+       id: Date.now(),
+       name: "System",
+       avatar: "",
+       role: "system",
+     }
+   });
   };
  
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -125,7 +139,6 @@ export function FormalSubmit() {
   }
 }
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
 
 ///////////////////////----------------------------
   if (player.get("role") === "CEO") {

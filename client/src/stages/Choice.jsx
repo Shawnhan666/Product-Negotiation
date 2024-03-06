@@ -5,8 +5,8 @@ import { Button } from "../components/Button";
 import './TableStyles.css';
 import { useState, useEffect} from 'react';
 import { useGame } from "@empirica/core/player/classic/react";
-
 import { useChat } from '../ChatContext'; 
+
 
 const features = [
   { name: "Touchscreen", bonus: { CEO: 1, Department_Head_A: -0.5, Department_Head_B: 1 } },
@@ -25,10 +25,11 @@ export function Choice() {
   const round = useRound();
   const game = useGame();
 
-  //const { appendMessage } = useChat();////chat use
+
   const { appendSystemMessage } = useChat();
 
-  
+
+  const generateUniqueId = () => `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
   const [selectedFeatures, setSelectedFeatures] = useState({});
   const [totalPoints, setTotalPoints] = useState(0);
 
@@ -45,6 +46,8 @@ export function Choice() {
     return submittedData_informal ? submittedData_informal.submitterRole : "None";
   };
 
+
+
   useEffect(() => {
     setTotalPoints(calculateTotal());
   }, [selectedFeatures, player]);
@@ -52,8 +55,7 @@ export function Choice() {
 
 //-------------
 
-
- //---------------------------------------------------------------------------------------------------------重制状态
+ //--------------------------------------------------------------------------------------------------------重制状态
   useEffect(() => {
     if (nextClicked) {
       // 重置轮次相关的状态
@@ -73,7 +75,7 @@ export function Choice() {
     
     }
   }, [nextClicked, players, round]); // 当nextClicked, players或round变化时触发
-  
+
 
   useEffect(() => {
     // 当轮次开始或页面加载时重置状态
@@ -82,7 +84,6 @@ export function Choice() {
       round.set("votingCompleted", false);
       round.set("anySubmitted", false);
       round.set("submittedData_informal", null);
-  
       // 重置每个玩家的投票状态
       players.forEach(player => {
         player.set("vote", null);
@@ -113,6 +114,36 @@ useEffect(() => {
 }, [players, round]); // 当players或round变化时触发
 
 
+
+//---------------------------------------------------------------------------------------------------------
+
+useEffect(() => {
+  const role = player.get("role");
+ if (votingCompleted && role === "CEO") {
+    const acceptVotes = players.filter(p => p.get("vote") === "For").length;
+    const rejectVotes = players.filter(p => p.get("vote") === "Against").length;
+
+    // 构建结果消息
+    const resultsMessage = `Informal Vote Results: ${acceptVotes} accept, ${rejectVotes} reject.`;
+    // 发送系统消息
+    appendSystemMessage({
+      id: generateUniqueId(), // 使用生成的唯一ID
+      text: resultsMessage,
+      sender: {
+        id: Date.now(),
+        name: "System",
+        avatar: "",
+        role: "system",
+      }
+    });
+    console.log(resultsMessage);
+  }
+}, [votingCompleted,players,players]); // 移除 appendSystemMessage 作为依赖项
+
+
+
+//----------------------------------------------------------------------------------------------
+
 const handleNext = () => {
   // 重置轮次相关的状态
   round.set("nextClicked", true);
@@ -122,6 +153,9 @@ const handleNext = () => {
   round.set("allVoted", false)
   round.set("selectedFeaturesForInformalVote", null);
   round.set("submittedInformalVote", false)
+  
+  
+  
 
   // 重置每个玩家的投票状态
   players.forEach(player => {
@@ -139,7 +173,7 @@ const handleNext = () => {
 
 
 
-//---
+//
 
 const handleOptionChange = featureName => {
   setSelectedFeatures(prev => {
@@ -168,8 +202,6 @@ const handleOptionChange = featureName => {
   };
 
 
-
-
   const handleSubmitProposal = (event) => {
     console.log("handleSubmitProposal called"); // 添加此行来检查函数是否被调用
     event.preventDefault();
@@ -187,46 +219,29 @@ const handleOptionChange = featureName => {
     });
     // 触发回调
     round.set("submittedInformalVote", true); //  Chat.jsx
-    console.log("Handling 'submittedInformalVote' change:", submittedInformalVote);
 
-    const messageText = `${submitterRoleName} initiated an Informal Vote. Features Included are: ${selectedFeatureNames.join(", ")}`;
+    const messageText = `${submitterRoleName} initiated an Informal Vote. Features Included are: ${selectedFeatureNames.join(", ")}.`;
+
+ 
 
     appendSystemMessage({
-      id: Date.now(), // 生成一个唯一ID，例如使用当前时间戳
+      id: generateUniqueId(), // 使用生成的唯一ID
       text: messageText,
       sender: {
-        id: "system",
+        id: Date.now(),
         name: "System",
         avatar: "", // 如果有系统用户的头像可以在这里设置
         role: "system", // 标识这是一个系统消息
       }
     });
-  
-  };
-
-
-
-
-
-  const handleVoteSubmit = (vote) => {
-    player.set("vote", vote); // 存储当前玩家的投票
-    round.append("votes", { id: player._id, vote: vote }); // 将投票结果存储到轮次状态中
-
-
-
-
-
 
 
   };
 
 
+ 
 
-
-
-
-  // 检查是否所有玩家都已投票
-  const allVoted = players.every(p => p.get("vote"));
+  const allVoted = players.every(player => player.get("vote"));
    // 获取投了 'For' 和 'Against' 的玩家名单
    const forVoters = players.filter(p => p.get("vote") === "For").map(p => p.get("role")).join(", ");
    const againstVoters = players.filter(p => p.get("vote") === "Against").map(p => p.get("role")).join(", ");
@@ -236,6 +251,19 @@ const handleOptionChange = featureName => {
    // 当前玩家的投票结果
    const currentVote = player.get("vote");
  
+  const handleVoteSubmit = (vote) => {
+  
+    player.set("vote", vote); // 存储当前玩家的投票
+    round.append("votes", { id: player._id, vote: vote }); // 将投票结果存储到轮次状态中
+  
+  };
+  
+
+
+
+
+
+
 
     // 动态决定“Submit for Informal Vote”按钮的类名
   const submitButtonClassName = anySubmitted ? "submit-button-disabled" : "submit-button";
@@ -271,6 +299,22 @@ const handleOptionChange = featureName => {
   };
   // 使用计算得到的信息在UI中渲染
   const submissionInfo = getSubmittedFeaturesAndBonuses();
+
+  
+
+ 
+
+// 假设这个函数会在某个地方被调用，例如作为玩家投票动作的一部分
+// handleVote 是玩家投票动作的处理函数
+// const handleVote = (playerId, voteOption) => {
+//   // 设置玩家的投票选项
+//   // 假设 setPlayerVote 是更新玩家投票状态的函数
+//   setPlayerVote(playerId, voteOption);
+
+//   // 然后检查是否所有玩家都已完成投票
+//   handleVotingCompleted();
+// };
+
 
   
   
@@ -404,7 +448,7 @@ const handleOptionChange = featureName => {
       )}
           </div>
  
-
+          <Button handleClick={() => player.stage.set("submit", true)}>Continue</Button>
 
 
      {/* 任务简介 */}
