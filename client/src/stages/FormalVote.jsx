@@ -1,10 +1,11 @@
 // // //formalvote.jsx
 
 
-// //formalvote.jsx
+ 
 import React, { useEffect, useState } from "react";
 import { useGame,usePlayer, usePlayers, useRound } from "@empirica/core/player/classic/react";
 import './TableStyles.css';
+import { useChat } from '../ChatContext'; 
 import { Button } from "../components/Button";
 
 const features = [
@@ -24,11 +25,16 @@ export function FormalVote() {
   const player = usePlayer();
   const players = usePlayers();
   const round = useRound();
+  const { appendSystemMessage } = useChat();
+
   const [submittedData, setSubmittedData] = useState(null);
   const isVoting = round.get("isVoting");
   const submittedData_formal = round.get("submittedData_formal");
   const pass = players.filter(p => p.get("role") !== "CEO").every(p => p.get("vote") === "For");
   const totalPoints = round.get("totalPoints");
+
+  const generateUniqueId = () => `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
+
   // 在组件加载时获取提案数据和投票状态
   useEffect(() => {
     const dataFormal = round.get("submittedData_formal");
@@ -60,6 +66,39 @@ export function FormalVote() {
       console.log(`Round result: ${pass ? 'Passed' : 'Did Not Pass'}`);
   };
   };
+
+
+
+  const allPlayersVoted = players.every(p => p.get("vote") || p.get("role") === "CEO");
+  const forVotes = players.filter(p => p.get("vote") === "For").length;
+  const againstVotes = players.filter(p => p.get("vote") === "Against").length;
+
+
+  useEffect(() => {
+    const role = player.get("role");
+    
+    if (allPlayersVoted ) {
+  const formalresultText = `Formal Voting Results: ${forVotes} Accept, ${againstVotes} Reject. ` + (pass ? "The proposal has been accepted." : "The proposal has not been accepted.");
+    
+    // 发送系统消息
+    appendSystemMessage({
+      id: generateUniqueId(), // 使用生成的唯一ID
+      text: formalresultText,
+      sender: {
+        id: Date.now(),
+        name: "System",
+        avatar: "",
+        role: "system",
+      }
+    });
+    console.log(formalresultText);
+
+
+  }
+}, [allPlayersVoted,players,players]); // 移除 appendSystemMessage 作为依赖项
+
+
+
 
 
   // 如果所有玩家都已投票

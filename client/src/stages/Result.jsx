@@ -3,15 +3,17 @@ import { useGame, usePlayer, usePlayers, useRound } from "@empirica/core/player/
 
 
 import { Button } from "../components/Button";
-
 import { useChat } from '../ChatContext'; 
+
+
 export function Result() {
 
   const player = usePlayer();
   const game = useGame();
   const round = useRound();
-  const { appendSystemMessage } = useChat();
-  
+
+
+
   const players = usePlayers();
   const forVotes = players.filter(p => p.get("vote") === "For").length;
   const againstVotes = players.filter(p => p.get("vote") === "Against").length;
@@ -19,13 +21,16 @@ export function Result() {
   const pass = players.filter(p => p.get("role") !== "CEO").every(p => p.get("vote") === "For");
 
 
+
+
+
     // 如有反对票
     if (againstVotes > 0) {
       return (
         <div>
           <h4>Voting Results:</h4>
-          <p>Votes For: {forVotes}</p>
-          <p>Votes Against: {againstVotes}</p>
+          <p>Votes Accept: {forVotes}</p>
+          <p>Votes Reject: {againstVotes}</p>
           <p>The vote did not pass. Please click the button to try again. If this is the last round, you will go to Exit-Sruvey page.</p>
           <Button handleClick={() => player.stage.set("submit", true)}>Continue</Button>
         </div>

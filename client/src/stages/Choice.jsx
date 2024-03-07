@@ -222,7 +222,6 @@ const handleOptionChange = featureName => {
 
     const messageText = `${submitterRoleName} initiated an Informal Vote. Features Included are: ${selectedFeatureNames.join(", ")}.`;
 
- 
 
     appendSystemMessage({
       id: generateUniqueId(), // 使用生成的唯一ID

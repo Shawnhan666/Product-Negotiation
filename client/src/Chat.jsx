@@ -30,6 +30,10 @@ export function Chat({
     
   const displaySystemMessage = (text, id) => {
     console.log(`Displaying system message: ${text} with ID: ${id}`);
+
+    console.log("System Messages: ", systemMessages);
+    console.log("System Messages Length: ", systemMessages.length);
+
     // 显示消息的逻辑
     scope.append(attribute, {
       text,
@@ -40,11 +44,14 @@ export function Chat({
       },
     });
   };
-  
 
   useEffect(() => {
     const currentLength = systemMessages.length;
     // 检查消息数组长度是否发生变化
+    console.log("System Messages: ", systemMessages);
+    console.log("System Messages Length: ", systemMessages.length);
+
+
     if (currentLength !== systemMessagesLengthRef.current && currentLength > 0) {
       const latestMessage = systemMessages[currentLength - 1];
       const messageId = latestMessage.id || Date.now().toString();
@@ -58,7 +65,6 @@ export function Chat({
     systemMessagesLengthRef.current = currentLength;
   }, [systemMessages.length]); // 依赖于systemMessages数组长度的变化
 
-  
 
   if (!scope || !player) {
     return <LoadingComp />;
@@ -76,18 +82,14 @@ export function Chat({
     });
   };
 
-  
   return (
 <div className="h-full w-full flex flex-col">  
-
 
       <Messages msgs={playerMessages } playerRole={player.get("role")}  />
       <Input onNewMessage={handleNewMessage} playerRole={player.get("role")} />
     </div> 
   );
 }
-
-
 
 // function Messages(props) {
   function Messages({ props, msgs, playerRole,  }) {
