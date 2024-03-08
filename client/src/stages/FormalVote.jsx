@@ -95,7 +95,7 @@ export function FormalVote() {
 
 
   }
-}, [allPlayersVoted,players,players]); // 移除 appendSystemMessage 作为依赖项
+}, [allPlayersVoted]); // 移除 appendSystemMessage 作为依赖项
 
 
 
