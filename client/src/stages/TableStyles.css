@@ -1,30 +1,29 @@
 /* TableStyles.css */
 
 .task-brief {
-  margin-top: 90px; /* 添加一些顶部边距 */
+  margin-top: 10px; /* 添加一些顶部边距 */
   padding: 15px; /* 内边距 */
   background-color: #f0f0f0; /* 背景颜色 */
   border-radius: 5px; /* 圆角边框 */
-
 }
-
 .task-brief ul {
   list-style-type: disc; /* 使用实心圆点作为列表项的标记 */
   padding-left: 20px; /* 给列表添加左内边距，确保点不会和文本挨太近 */
 }
-
 .task-brief li {
   margin-bottom: 10px; /* 给列表项之间增加一些间隙 */
 }
-
-
 .task-brief-title {
   text-align: center; /* 仅将这个标题的文本居中 */
 }
-
-
 .container {
-  max-height: 1050px; /* 或者根据您页面的实际高度来调整 */
+ max-height: 1100px;
+  max-width: 1000px; 
+  padding: 0 20px; 
+  overflow-y: auto; /* 内容超出时在容器内显示滚动条 */
+  margin: 0 auto;
+  padding: 20px;
+  box-sizing: border-box; /* 确保内边距包含在高度计算内 */
 }
 
  
@@ -47,27 +46,10 @@
   text-align: center; /* 文本居中对齐 */
 }
 
-/* 设置特定列的宽度 */
-.styled-table thead th:nth-child(1),
-.styled-table tbody td:nth-child(1) {
-  width: 40%; /* 第一列宽度，调整为所需的百分比 */
-}
-
 .styled-table thead th {
   background-color: #54b1ee; /* Ensure this matches the button color */
   color: white;
   /* Other styling properties */
-}
-
-
-.styled-table thead th:nth-child(2),
-.styled-table tbody td:nth-child(2) {
-  width: 20%; /* 第二列宽度 */
-}
-
-.styled-table thead th:nth-child(3),
-.styled-table tbody td:nth-child(3) {
-  width: 20%; /* 第三列宽度 */
 }
 
 .styled-table thead tr {
@@ -87,7 +69,7 @@
 }
 
 .submit-button-orange {
-  background-color: #f39a2d; /* Adjust this color to match your theme */
+  background-color: #f8d54a; /* Adjust this color to match your theme */
   color: rgb(255, 255, 255);
   border: none;
   padding: 8px 12px;
@@ -132,15 +114,13 @@
 }
 
 
-
-
 .table-wrapper {
   margin: 0 10px; ;
   display: flex;
   box-sizing: border-box;
   flex-direction: column;
-  justify-content: space-between; /* 如果需要，可调整为center或start等 */
-  align-items: start; /* 使子元素与容器的顶部对齐 */
+  justify-content: space-between; 
+  align-items: start; 
 }
 
  
@@ -148,7 +128,7 @@
   width: 100%; /* 使它们宽度充满父容器 */
   display: flex;
   justify-content: flex-end; /* 内容靠右对齐 */
-  padding-right: 20px; /* 假设表格与容器右边的距离，可调整 */
+  padding-right: 1px; /* 假设表格与容器右边的距离，可调整 */
  
   bottom: 0; /* 距离容器底部0 */
   right: 0; /* 距离容器右边0 */
@@ -160,10 +140,6 @@
   gap: 20px; /* 在按钮之间添加一些间隙 */
 }
 
-
- 
- 
-
 .content-wrapper {
   display: flex;
   justify-content: center; /* 子元素水平居中 */
@@ -172,15 +148,24 @@
 
 
 .table-container {
-  display: flex;
+
+
+
+  display: grid;
   justify-content: center;
   align-items: start;
-  gap: 0px; /* 根据需要调整间隙 */
-  position: relative;
-}
+  gap: 20px;
+  width: auto;
+  max-width: 100%; /* 保证容器可以根据屏幕宽度扩展 */
+  margin: 0 auto;
+  grid-template-columns: repeat(auto-fit, 350px); /* 两列，每列固定400px宽度 */
+
+  }
+
+
+
 
 .second-styled-table thead th {
- 
   background-color: #0c4f92; /* 深蓝色 */
   color: white;
 }
@@ -190,14 +175,19 @@
 .text-brief-wrapper {
   display: flex;
   justify-content: center; /* 使.task-brief整体居中 */
-  width: 100%; /* 占满父容器宽度 */
+  width: 90%; /* 占满父容器宽度 */
+  margin-top: -1px; /* 向上移动 */
+  padding-left: 100px; /* 增加左侧的内边距来创建留白 */
 }
+
 .text-brief {
-  width: 80%; /* 根据需要调整宽度，确保文本左对齐 */
-  text-align: left;
-  margin-top: 9px;
+  width: 100%; /* 根据需要调整宽度，确保文本左对齐 */
+
+  text-align: flex;
+  margin-top: 0px;
   padding: 15px;
-  background-color: #f39a2d;
+
+  background-color: #f8d54a;
   border-radius: 5px;
 }
 
@@ -226,6 +216,7 @@
   margin-left: auto;
   margin-right: auto;
   width: 100%; /* 或根据您的设计需求调整 */
+  
   /* 其他样式不变 */
 }
 
@@ -242,8 +233,8 @@
 }
 
 .styled-table-orange thead th {
-  background-color: #f39a2d; /* Ensure this matches the button color */
-  color: rgb(255, 255, 255);
+  background-color: #f8d54a; /* Ensure this matches the button color */
+  color: rgb(12, 1, 1);
   /* Other styling properties */
 }
 
@@ -260,4 +251,43 @@
 
 .styled-table-orange thead tr {
   background-color: rgb(255, 255, 255);
+}
+
+
+.waiting-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh; /* 根据需要调整高度 */
+  font-size: 25px; /* 调整字号 */
+  transform: translateY(-100px); /* 向上移动50像素 */
+}
+
+/* 加载动画 */
+.loader {
+  border: 5px solid #f3f3f3; /* 浅灰色作为加载动画的背景色 */
+  border-top: 5px solid #3498db; /* 蓝色作为加载动画的前景色 */
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 2s linear infinite;
+}
+
+/* 动画效果 */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+
+.selected-feature span {
+  color:rgb(1, 1, 16);
+  font-weight: bold; /* 加粗显示 */
+  font-size: 16px; /* 对号的大小 */
+}
+
+/* 目标特定的<td>（第三个）在所有<tr>中 */
+.styled-table-orange tr td:nth-child(3) {
+  color: black; /* 设置文本颜色为黑色 */
 }

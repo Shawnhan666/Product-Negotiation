@@ -29,7 +29,7 @@ export function Result() {
       return (
         <div>
           <h4>Voting Results:</h4>
-          <p>Votes Accept: {forVotes}</p>
+          <p>Votes Accept: {forVotes+1}</p>
           <p>Votes Reject: {againstVotes}</p>
           <p>The vote did not pass. Please click the button to try again. If this is the last round, you will go to Exit-Sruvey page.</p>
           <Button handleClick={() => player.stage.set("submit", true)}>Continue</Button>

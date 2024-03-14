@@ -1,64 +1,40 @@
 factors:
-  - desc: playerCount determines the number of Players are in a Game.
-    name: playerCount
-    values:
-      - value: 3
-
-  - desc: How many times participants will make a choice
-    name: numRounds
-    values:
-      - value: 1
-      - value: 2
-      - value: 3
-      - value: 4
-      - value: 5
-  
-  - desc: Duration of the Formal Submit stage in seconds
-    name: formalSubmitDuration
-    values:
-      - value: 300
-      - value: 600
-      - value: 1200
-
-  - desc: Duration of the Informal Submit stage in seconds
-    name: informalSubmitDuration
-    values:
-      - value: 5
-      - value: 180
-      - value: 300
-
-      
+    - name: playerCount
+      desc: playerCount determines the number of Players are in a Game.
+      values:
+        - value: 3
+    - name: numRounds
+      desc: How many times participants will make a choice
+      values:
+        - value: 1
+        - value: 2
+        - value: 3
+        - value: 4
+        - value: 5
+    - name: formalSubmitDuration
+      desc: Duration of the Formal Submit stage in seconds
+      values:
+        - value: 300
+        - value: 600
+        - value: 1200
+    - name: informalSubmitDuration
+      desc: Duration of the Informal Submit stage in seconds
+      values:
+        - value: 5
+        - value: 180
+        - value: 300
+    - name: roles
+      desc: Roles configuration for the game
+      values:
+        - value: BIGCEO,Department_Head_A,Department_Head_B
+        - value: Role,Department_Head_A,Department_Head_B
+        - value: CEO,Department_Head_A,Department_Head_B
 treatments:
-
-
-  - desc: 4 rounds game with 180s informal submit and 600s formal submit
-    factors:
-      playerCount: 3
-      numRounds: 4
-      informalSubmitDuration: 180
-      formalSubmitDuration: 600
-    name: 4 rounds game (180s Informal, 600s Formal)
-
-  - desc: 5 rounds game with 300s informal submit and 1200s formal submit
-    factors:
-      playerCount: 3
-      numRounds: 5
-      informalSubmitDuration: 300
-      formalSubmitDuration: 1200
-    name: 5 rounds game (300s Informal, 1200s Formal)
-
-  - desc: 3 rounds game with 180s informal submit and 1200s formal submit
-    factors:
-      playerCount: 3
-      numRounds: 3
-      informalSubmitDuration: 180
-      formalSubmitDuration: 1200
-    name: 3 rounds game (180s Informal, 1200s Formal)
-
-  - desc: 5 rounds game with 5s informal submit and 600s formal submit
-    factors:
-      playerCount: 3
-      numRounds: 5
-      informalSubmitDuration: 5
-      formalSubmitDuration: 600
-    name: 5 rounds game (5s Informal, 600s Formal)
+    - name: 5 rounds game (300s Informal, 1200s Formal)
+      desc: 5 rounds game with 300s informal submit and 1200s formal submit
+      factors:
+        formalSubmitDuration: 1200
+        informalSubmitDuration: 300
+        numRounds: 5
+        playerCount: 3
+        roles: CEO,Department_Head_A,Department_Head_B

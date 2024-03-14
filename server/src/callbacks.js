@@ -1,17 +1,17 @@
 //callbacks.js
 import { ClassicListenersCollector } from "@empirica/core/admin/classic";
-import { roles } from '../../AAA';
- 
-
-
 export const Empirica = new ClassicListenersCollector();
+import { usePlayer, useGame } from "@empirica/core/player/classic/react";
+
+
+
 
 
 Empirica.onGameStart(({ game }) => {
-
-
-
   const treatment = game.get("treatment");
+  // const {roles} = treatment;
+  const roles = ["CEO", "Department_Head_A", "Department_Head_B"];
+
   const { numRounds, informalSubmitDuration, formalSubmitDuration } = treatment;
 
   for (let i = 0; i < numRounds; i++) {
@@ -25,9 +25,7 @@ Empirica.onGameStart(({ game }) => {
     round.addStage({name:"Result", duration: 600})
   }
 
-
-
-
+ 
   game.players.forEach((player, index) => {
     const roleIndex = index % roles.length;
     const roleName = roles[roleIndex]; // 获取角色名

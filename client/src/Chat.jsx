@@ -23,10 +23,6 @@ export function Chat({
     const [lastMessageId, setLastMessageId] = useState(null); // 存储最后一条消息的ID
     const systemMessagesLengthRef = useRef(systemMessages.length); // 使用ref来跟踪消息数组长度
 
-
-
-
-
     
   const displaySystemMessage = (text, id) => {
     console.log(`Displaying system message: ${text} with ID: ${id}`);
@@ -39,8 +35,8 @@ export function Chat({
       text,
       sender: {
         id: Date.now(), 
-        name: "System",
-        role: "system", 
+        name: "Notification",
+        role: "Notification", 
       },
     });
   };
@@ -148,32 +144,32 @@ const roleColors = {
   const msg = attribute.value;
   
   // 声明并初始化 isSystemMessage 变量
-  const isSystemMessage = msg.sender && msg.sender.role === "system";
+  const isSystemMessage = msg.sender && msg.sender.role === "Notification";
   const ts = attribute.createdAt;
   const textColor = isSystemMessage ? "#FF4500" : roleColors[msg.sender.role] || "#000000";
  
 
-
-  let avatar = msg.sender.avatar;
-  if (!avatar) {
-    avatar = `https://avatars.dicebear.com/api/identicon/${msg.sender.id}.svg`;
-  }
-  let avatarImage = (
-    <img
-      className="inline-block h-9 w-9 rounded-full"
-      src={avatar}
-      alt={msg.sender.id}
-    />
-  );
-  if (!avatar.startsWith("http")) {
-    avatarImage = (
-      <div className="inline-block h-9 w-9 rounded-full">{avatar}</div>
-    );
-  }
+  // let avatar = msg.sender.avatar;
+  // if (!avatar) {
+  //   avatar = `https://avatars.dicebear.com/api/identicon/${msg.sender.id}.svg`;
+  // }
+  // let avatarImage = (
+  //   <img
+  //     className="inline-block h-9 w-9 rounded-full"
+  //     src={avatar}
+  //     alt={msg.sender.id}
+  //   />
+  // );
+  // if (!avatar.startsWith("http")) {
+  //   avatarImage = (
+  //     <div className="inline-block h-9 w-9 rounded-full">{avatar}</div>
+  //   );
+  // }
 
   return (
+    
     <div className="flex items-start my-2">
-      <div className="flex-shrink-0">{avatarImage}</div>
+      {/* <div className="flex-shrink-0">{avatarImage}</div> */}
       <div className="ml-3 text-sm">
         <p>
   

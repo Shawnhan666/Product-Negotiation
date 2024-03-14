@@ -6,18 +6,9 @@ import './TableStyles.css';
 import { useState, useEffect} from 'react';
 import { useGame } from "@empirica/core/player/classic/react";
 import { useChat } from '../ChatContext'; 
+import features from './features.json';
 
 
-const features = [
-  { name: "Touchscreen", bonus: { CEO: 1, Department_Head_A: -0.5, Department_Head_B: 1 } },
-  { name: "Fingerprint Reader", bonus: { CEO: -0.5, Department_Head_A: 1, Department_Head_B: 1 } },
-  { name: "4K Display", bonus: { CEO: 1, Department_Head_A: 1, Department_Head_B: 1 } },
-  { name: "Thunderbolt 4 Ports", bonus: { CEO: -0.5, Department_Head_A: 1, Department_Head_B: -0.5 } },
-  { name: "AI-Enhanced Performance", bonus: { CEO: 1, Department_Head_A: 1, Department_Head_B: 1 } },
-  { name: "Ultra-Light Design", bonus: { CEO: 1, Department_Head_A: -0.5, Department_Head_B: 1 } },
-  { name: "High-speed WiFi 6E", bonus: { CEO: -0.5, Department_Head_A: -0.5, Department_Head_B: -0.5 } },
-  { name: "Long Battery Life", bonus: { CEO: 1, Department_Head_A: -0.5, Department_Head_B: -0.5 } },
-];
 
 export function Choice() {
   const player = usePlayer();
@@ -47,6 +38,30 @@ export function Choice() {
   };
 
 
+  const handleNext = () => {
+    // 重置轮次相关的状态
+    round.set("nextClicked", true);
+    round.set("votingCompleted", false);
+    round.set("anySubmitted", false);
+    round.set("submittedData_informal", null);
+    round.set("allVoted", false)
+    round.set("selectedFeaturesForInformalVote", null);
+    round.set("submittedInformalVote", false)
+    
+  
+    // 重置每个玩家的投票状态
+    players.forEach(player => {
+        player.set("vote", null);
+        player.set("currentVote", null); // 如果你有这个状态的话
+        player.set("allVoted", false)
+        console.log(`Reset vote for player ${player.id}`);
+    });
+  
+    // 可以在这里添加任何其他需要在点击Next时执行的逻辑
+  
+    // 可选：如果你需要在状态重置后强制刷新页面
+    // window.location.reload();
+  };
 
   useEffect(() => {
     setTotalPoints(calculateTotal());
@@ -101,21 +116,7 @@ export function Choice() {
 
 
 
-useEffect(() => {
-  const allVoted = players.every(player => player.get("vote"));
-  // 打印以监控每个玩家的投票状态和allVoted的结果
-  console.log("vote stage:", players.map(player => ({ id: player.id, vote: player.get("vote") })));
-  console.log("all voted？", allVoted);
 
-  if (allVoted) {
-      round.set("votingCompleted", true);
-      console.log("all voted，set votingCompleted为true");
-  }
-}, [players, round]); // 当players或round变化时触发
-
-
-
-//---------------------------------------------------------------------------------------------------------
 
 useEffect(() => {
   const role = player.get("role");
@@ -131,9 +132,9 @@ useEffect(() => {
       text: resultsMessage,
       sender: {
         id: Date.now(),
-        name: "System",
+        name: "Notification",
         avatar: "",
-        role: "system",
+        role: "Notification",
       }
     });
     console.log(resultsMessage);
@@ -144,33 +145,27 @@ useEffect(() => {
 
 //----------------------------------------------------------------------------------------------
 
-const handleNext = () => {
-  // 重置轮次相关的状态
-  round.set("nextClicked", true);
-  round.set("votingCompleted", false);
-  round.set("anySubmitted", false);
-  round.set("submittedData_informal", null);
-  round.set("allVoted", false)
-  round.set("selectedFeaturesForInformalVote", null);
-  round.set("submittedInformalVote", false)
-  
-  
-  
+useEffect(() => {
+  const allVoted = players.every(player => player.get("vote"));
+  // 打印以监控每个玩家的投票状态和allVoted的结果
+  console.log("vote stage:", players.map(player => ({ id: player.id, vote: player.get("vote") })));
+  console.log("all voted？", allVoted);
 
-  // 重置每个玩家的投票状态
-  players.forEach(player => {
-      player.set("vote", null);
-      player.set("currentVote", null); // 如果你有这个状态的话
-      player.set("allVoted", false)
-      console.log(`Reset vote for player ${player.id}`);
-  });
+  if (allVoted) {
+      round.set("votingCompleted", true);
+      console.log("all voted，set votingCompleted为true");
 
-  // 可以在这里添加任何其他需要在点击Next时执行的逻辑
+      // 使用 setTimeout 来延迟重置逻辑的执行，确保有足够的时间来处理和显示投票结果
+  setTimeout(() => {
+    handleNext();
+  }, 1000); // 延迟1秒执行
 
-  // 可选：如果你需要在状态重置后强制刷新页面
-  // window.location.reload();
-};
+  }
+}, [players, round, handleNext]); // 当players或round变化时触发
 
+
+
+//---------------------------------------------------------------------------------------------------------
 
 
 //
@@ -203,22 +198,25 @@ const handleOptionChange = featureName => {
 
 
   const handleSubmitProposal = (event) => {
-    console.log("handleSubmitProposal called"); // 添加此行来检查函数是否被调用
+ 
     event.preventDefault();
     const submitterRoleName = player.get("role");
     const choices = saveChoices();
-    // 新增：把选择的特性名称保存到round属性中
+    const hasSelectedFeature = Object.values(selectedFeatures).some(value => value === true);
+    if (!hasSelectedFeature) {
+      alert("You must propose at least one feature to include in your product.");
+      return;}
     const selectedFeatureNames = Object.keys(selectedFeatures).filter(feature => selectedFeatures[feature]);
     round.set("selectedFeaturesForInformalVote", selectedFeatureNames);
-    round.set("anySubmitted", true);  // 设置轮次状态
+    round.set("anySubmitted", true);   
     setProposalSubmitted(true);
     round.set("submittedData_informal", {
       playerID: player._id,
       decisions: choices,
       submitterRole: submitterRoleName
     });
-    // 触发回调
-    round.set("submittedInformalVote", true); //  Chat.jsx
+ 
+    round.set("submittedInformalVote", true);  
 
     const messageText = `${submitterRoleName} initiated an Informal Vote. Features Included are: ${selectedFeatureNames.join(", ")}.`;
 
@@ -228,9 +226,9 @@ const handleOptionChange = featureName => {
       text: messageText,
       sender: {
         id: Date.now(),
-        name: "System",
+        name: "Notification",
         avatar: "", // 如果有系统用户的头像可以在这里设置
-        role: "system", // 标识这是一个系统消息
+        role: "Notification", // 标识这是一个系统消息
       }
     });
 
@@ -254,25 +252,9 @@ const handleOptionChange = featureName => {
   
     player.set("vote", vote); // 存储当前玩家的投票
     round.append("votes", { id: player._id, vote: vote }); // 将投票结果存储到轮次状态中
-  
   };
-  
-
-
-
-
-
-
-
-    // 动态决定“Submit for Informal Vote”按钮的类名
-  const submitButtonClassName = anySubmitted ? "submit-button-disabled" : "submit-button";
-         // 动态决定“Next”按钮的类名
-  const nextButtonClassName = votingCompleted ? "next-button" : "next-button-disabled";
-
-
-
  
-  const submittedDatainformal = round.get("submittedData_informal");
+
   
 
   // 根据提交的数据计算并获取相关信息
@@ -299,20 +281,6 @@ const handleOptionChange = featureName => {
   // 使用计算得到的信息在UI中渲染
   const submissionInfo = getSubmittedFeaturesAndBonuses();
 
-  
-
- 
-
-// 假设这个函数会在某个地方被调用，例如作为玩家投票动作的一部分
-// handleVote 是玩家投票动作的处理函数
-// const handleVote = (playerId, voteOption) => {
-//   // 设置玩家的投票选项
-//   // 假设 setPlayerVote 是更新玩家投票状态的函数
-//   setPlayerVote(playerId, voteOption);
-
-//   // 然后检查是否所有玩家都已完成投票
-//   handleVotingCompleted();
-// };
 
 
   
@@ -329,17 +297,15 @@ const handleOptionChange = featureName => {
         <h6>The product under deliberation is: <strong>Laptop</strong>.</h6>
         <h6>You "desired features" are: <strong>{
         round.get("selectedFeaturesForInformalVote")?.join(", ") || " "
-        }</strong></h6>
+        }. </strong></h6>
 
       </div>
       </div>
-
 
     <div className="table-container">
       <div className="table-wrapper">
-      <br />
+
             <table className="styled-table">
-           
                 <thead>
                   <tr style={{ backgroundColor: 'lightblue' }}>
                     <th>Product Features</th>
@@ -348,29 +314,30 @@ const handleOptionChange = featureName => {
                   </tr>
                 </thead>
                 <tbody>
-                  {features.map((feature, index) => {
-                    const isSelectedForVote = round.get("selectedFeaturesForInformalVote")?.includes(feature.name);
-                    return (
-                      <tr key={index}>
-                        <td className={isSelectedForVote ? "selected-feature" : ""}>{feature.name}</td>
-                        <td>
-                          <input
-                            type="checkbox"
-                            checked={selectedFeatures[feature.name] || false}
-                            onChange={() => handleOptionChange(feature.name)}
-                          />
-                        </td>
-                        <td>{selectedFeatures[feature.name] ? feature.bonus[player.get("role")] : 0}</td>
-                      </tr>
-                    );
-                  })}
+                              {features.map((feature, index) => {
+                                const isSelectedForVote = round.get("selectedFeaturesForInformalVote")?.includes(feature.name);
+                                return (
+                                  <tr key={index}>
+                                    <td className={isSelectedForVote ? "selected-feature" : ""}>{feature.name}</td>
+                                    <td>
+                                      <input
+                                        type="checkbox"
+                                        checked={selectedFeatures[feature.name] || false}
+                                        onChange={() => handleOptionChange(feature.name)}
+                                      />
+                                    </td>
+                                    <td>{selectedFeatures[feature.name] ? feature.bonus[player.get("role")] : 0}</td>
+                                  </tr>
+                                );
+                              })}
                 </tbody>
               </table>
-
+      
               {/* "Total" 部分显示在表格下方 */}
               <div className="total-points-display">
                 Total Bonus: ${totalPoints}
               </div>
+              <br />
               {/* 移动提交按钮到 "Total" 部分下方 */}
               {!anySubmitted && (
                 <div className="button-container">
@@ -382,14 +349,14 @@ const handleOptionChange = featureName => {
              </div>
   
          {submittedData_informal && (
+          <div className="table-container">
            <div className="second-styled-table thead th">
-            <br />
+
             <table className="styled-table"  >
     <thead>
     <tr  >
-        <th colSpan="2">Informal Submission Details: Submitted by {getSubmitterRoleName()}</th>
+        <th colSpan="2">Informal Proposal by {getSubmitterRoleName()}</th>
       </tr>
-      
       <tr  >
         <th>Product Features</th>
         <th>Bonus</th>
@@ -403,20 +370,15 @@ const handleOptionChange = featureName => {
         </tr>
       ))}
       <tr>
-      {/* <td style={{ fontWeight: 'bold' }}>Your bonus</td>
-        <td>{submissionInfo && submissionInfo.totalBonus}</td> */}
       </tr>
     </tbody>
   </table>
-  <div style={{ marginLeft: "360px" }}>Your bonus: ${submissionInfo && submissionInfo.totalBonus}</div>
-
+  <div className="total-points-display"> Your bonus: ${submissionInfo && submissionInfo.totalBonus}</div>
+          </div>
           </div>
         )}
-
 </div>
-
-
-
+<br />
 <div className="voting-section">
       {round.get("anySubmitted") && !currentVote && !allVoted && (
         <div className="voting-buttons-container">
@@ -432,19 +394,20 @@ const handleOptionChange = featureName => {
         </div>
       )}
 
-      {votingCompleted && (
+      {/* {votingCompleted && (
         <div className="voting-results-container">
         <div><strong>Accept :</strong> {forVotersCount} {forVotersCount === 1 ? 'vote' : 'votes'}</div>
         <div><strong>Reject :</strong> {againstVotersCount} {againstVotersCount === 1 ? 'vote' : 'votes'}</div>
-        <Button 
+
+         <Button 
           className="next-button" 
           handleClick={handleNext} 
           disabled={!votingCompleted}>
           Next Informal Submit
-        </Button>
+        </Button> 
       </div>
     
-      )}
+      )} */}
           </div>
  
           <Button handleClick={() => player.stage.set("submit", true)}>Continue</Button>
@@ -471,10 +434,6 @@ const handleOptionChange = featureName => {
       <p>In each deliberation, there will be two department heads and one CEO. You are randomly assigned one of these roles each time, which means your role can change from one deliberation to another. Anyone can suggest an <strong>unofficial vote</strong> to gauge each other's interest in including or excluding product features. After 10 minutes, an <strong>official vote</strong> will be conducted where the CEO will propose a set of product features and the two department heads will vote “YES” or “NO” to them. Only official vote results will affect earnings.</p>
       <p>You can see your role and priority features at the bottom of the main negotiations page.</p>
     </div>
-  
-
-
-
   
       
     </div>
