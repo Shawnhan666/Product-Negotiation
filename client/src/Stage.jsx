@@ -12,8 +12,7 @@ import { FormalSubmit } from "./stages/FormalSubmit";
 import { FormalVote } from "./stages/FormalVote";
 import { Result } from "./stages/Result";
 import { useEffect} from 'react';
-
-
+import '/Users/shawn/CEO game/client/src/stages/TableStyles.css';
 
 
 export function Stage() {
@@ -36,9 +35,16 @@ export function Stage() {
     }
 
     return (
-      <div className="text-center text-gray-400 pointer-events-none">
-        Please wait for other player(s).
-      </div>
+
+      <div className="waiting-section">
+      <div className="loader"></div> 
+    <p>Please wait for other players.</p>
+  </div>
+
+
+      // <div className="text-center text-gray-400 pointer-events-none">
+      //   Please wait for other player(s).
+      // </div>
     );
   }
 

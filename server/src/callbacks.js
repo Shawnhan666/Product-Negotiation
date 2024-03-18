@@ -4,13 +4,17 @@ export const Empirica = new ClassicListenersCollector();
 import { usePlayer, useGame } from "@empirica/core/player/classic/react";
 
 
-
-
-
 Empirica.onGameStart(({ game }) => {
   const treatment = game.get("treatment");
-  // const {roles} = treatment;
-  const roles = ["CEO", "Department_Head_A", "Department_Head_B"];
+
+  const {role1}= treatment;
+  const {role2} = treatment;
+  const {role3} = treatment;
+  
+  
+  console.log("Original roles value:", role1 ,role2, role3);
+
+ // const roles = ["CEO", "Department_Head_A", "Department_Head_B"];
 
   const { numRounds, informalSubmitDuration, formalSubmitDuration } = treatment;
 
@@ -18,23 +22,45 @@ Empirica.onGameStart(({ game }) => {
     const round = game.addRound({
       name: `Round ${i+1}`,
     });
-    //round.addStage({ name: "Informal Submit", duration: informalSubmitDuration });
-    round.addStage({ name: "Informal Submit", duration: 5000 });
-
-    round.addStage({ name: "Formal Submit", duration: 2000 });
+    //round.addStage({ name: "Informal Submit", duration: 600 });
+    round.addStage({ name: "Informal Submit", duration: informalSubmitDuration });
+    // round.addStage({ name: "Formal Submit", duration: 2000 });
+    round.addStage({ name: "Formal Submit", duration: formalSubmitDuration });
     round.addStage({name:"Result", duration: 600})
   }
 
+
  
-  game.players.forEach((player, index) => {
-    const roleIndex = index % roles.length;
-    const roleName = roles[roleIndex]; // 获取角色名
-    player.set("role", roles[roleIndex]);
-    player.set("name", roleName); 
-  });
+const roles = ["role1", "role2", "role3"]; // 使用字符串 'role1', 'role2', 'role3' 作为角色标识符
+game.players.forEach((player, index) => {
+  const roleIdentifier = roles[index % roles.length]; // 确保循环分配
+  player.set("role", roleIdentifier); // 设置玩家的角色为 'role1', 'role2', 或 'role3'
+  // 假设你想要根据角色标识符保留原有的角色名称映射
+  const roleNameMapping = {role1, role2,role3};
+  player.set("role", roleIdentifier); // 用于内部逻辑，如颜色映射
+  player.set("name", roleNameMapping[roleIdentifier]); // 依据角色标识符设置角色名称
+});
 
 
-  
+  // const roles = [role1, role2, role3]; // 将角色放入数组以方便访问
+  // game.players.forEach((player, index) => {
+  //   // 直接根据索引分配角色
+  //   const roleName = roles[index]; // 由于玩家和角色数量匹配，直接这样分配
+  //   player.set("role", roleName);
+  //   player.set("name", roleName);
+  // });
+
+
+ 
+  // game.players.forEach((player, index) => {
+  //   // const roleIndex = index % roles.length;
+  //   // const roleName = roles[roleIndex]; // 获取角色名
+  //   // player.set("role", roles[roleIndex]);
+  //   // player.set("name", roleName); 
+  // });
+
+
+
   game.set("submitCount", 0);
   game.set("submissions", []);
   game.set("roundResults", []);
@@ -66,12 +92,9 @@ Empirica.onStageStart(({ stage }) => {
     stage.set("allVoted", false)
       console.log(`Reset vote for player ${player.id}`);
     }
- 
+
   }
 });
-
-
-
 
 Empirica.onStageEnded(({ stage, game }) => {
   if (stage.get("name") === "Result") {
@@ -80,18 +103,18 @@ Empirica.onStageEnded(({ stage, game }) => {
     const players = stage.currentGame.players;
     let allVotedNotAgainst = true; // 初始化为 true
 
-    for (const player of players) {
-      if (player.get("vote") === "Against") {
-        allVotedNotAgainst = false; // 如果有玩家投票 'Against'，设置为 false
-        break; // 跳出循环，因为不再需要检查其他玩家
-      }
-    }
+    // for (const player of players) {
+    //   if (player.get("vote") === "Against") {
+    //     allVotedNotAgainst = false; // 如果有玩家投票 'Against'，设置为 false
+    //     break; // 跳出循环，因为不再需要检查其他玩家
+    //   }
+    // }
 
-    if (allVotedNotAgainst) {
-      console.log("No players have voted 'Against'. Ending the game early.");
-      stage.currentGame.end("failed", "No players voted Against"); // 结束游戏
-      return; // 退出函数
-    }
+    // if (allVotedNotAgainst) {
+    //   console.log("No players have voted 'Against'. Ending the game early.");
+    //   stage.currentGame.end("failed", "No players voted Against"); // 结束游戏
+    //   return; // 退出函数
+    // }
  
   }
 });
@@ -105,34 +128,4 @@ Empirica.onGameEnded(({ game }) => {});
 
  
 
-// Empirica.on("round", "submittedInformalVote", (ctx, round, submittedInformalVote) => {
-//   console.log("Handling 'submittedInformalVote' change:", submittedInformalVote);
-//   console.log("Current round:", ctx.currentRound); // 示例使用ctx参数
-
-//   // 检查是否已处理过提交，避免重复发送消息
-//   if (!submittedInformalVote) {
-//     console.log("No new submission. Exiting callback.");
-//     return;
-//   }
-
-//   console.log("New submission detected. Sending system message.");
-//   // 假设您已经有了一个处理消息的函数
-//   sendSystemMessage(game, "Hello, Someone just submitted an informal vote.");
-// });
-
-// function sendSystemMessage(game, text) {    //// test!!!!!!!!
-//   console.log("Fetching current messages from the game.");
-//   const currentMessages = game.get("messages") || [];
-//   console.log("Current messages:", currentMessages);
-
-//   const newMessage = {
-//     text: text,
-//     sender: "System",
-//     createdAt: new Date().toISOString(),
-//   };
-
-//   console.log("Adding new message:", newMessage);
-//   const updatedMessages = [...currentMessages, newMessage];
-//   game.set("messages", updatedMessages);
-//   console.log("Updated messages have been set.");
-// }
+ 

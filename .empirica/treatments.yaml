@@ -11,24 +11,39 @@ factors:
         - value: 3
         - value: 4
         - value: 5
+    - name: role2
+      desc: Role configuration for the second player.
+      values:
+        - value: DepartmentHeadA
+        - value: Department-A
+    - name: role3
+      desc: Role configuration for the third player.
+      values:
+        - value: DepartmentHeadB
+        - value: Department-B
     - name: formalSubmitDuration
       desc: Duration of the Formal Submit stage in seconds
       values:
         - value: 300
         - value: 600
         - value: 1200
+        - value: 60
+        - value: 2000
+    - name: role1
+      desc: Role configuration for the first player.
+      values:
+        - value: BigCEO
+        - value: CEOO
+        - value: CEO
     - name: informalSubmitDuration
       desc: Duration of the Informal Submit stage in seconds
       values:
         - value: 5
         - value: 180
         - value: 300
-    - name: roles
-      desc: Roles configuration for the game
-      values:
-        - value: BIGCEO,Department_Head_A,Department_Head_B
-        - value: Role,Department_Head_A,Department_Head_B
-        - value: CEO,Department_Head_A,Department_Head_B
+        - value: 600
+        - value: 2000
+        - value: 3
 treatments:
     - name: 5 rounds game (300s Informal, 1200s Formal)
       desc: 5 rounds game with 300s informal submit and 1200s formal submit
@@ -37,4 +52,21 @@ treatments:
         informalSubmitDuration: 300
         numRounds: 5
         playerCount: 3
-        roles: CEO,Department_Head_A,Department_Head_B
+    - name: Test
+      factors:
+        formalSubmitDuration: 60
+        informalSubmitDuration: 600
+        numRounds: 2
+        playerCount: 3
+        role1: BigCEO
+        role2: DepartmentHeadA
+        role3: DepartmentHeadB
+    - name: TTTest
+      factors:
+        formalSubmitDuration: 2000
+        informalSubmitDuration: 3
+        numRounds: 5
+        playerCount: 3
+        role1: CEO
+        role2: Department-A
+        role3: Department-B

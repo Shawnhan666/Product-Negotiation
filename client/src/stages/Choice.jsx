@@ -119,8 +119,14 @@ export function Choice() {
 
 
 useEffect(() => {
-  const role = player.get("role");
- if (votingCompleted && role === "CEO") {
+  const role = player.get("name");
+  const roleIdentifier = player.get("role");
+
+  console.log("player role", role);
+  console.log("player roleIdentifier", roleIdentifier);
+
+
+ if (votingCompleted && roleIdentifier === "role1") {
     const acceptVotes = players.filter(p => p.get("vote") === "For").length;
     const rejectVotes = players.filter(p => p.get("vote") === "Against").length;
 
@@ -150,6 +156,9 @@ useEffect(() => {
   // 打印以监控每个玩家的投票状态和allVoted的结果
   console.log("vote stage:", players.map(player => ({ id: player.id, vote: player.get("vote") })));
   console.log("all voted？", allVoted);
+
+
+
 
   if (allVoted) {
       round.set("votingCompleted", true);
@@ -200,7 +209,7 @@ const handleOptionChange = featureName => {
   const handleSubmitProposal = (event) => {
  
     event.preventDefault();
-    const submitterRoleName = player.get("role");
+    const submitterRoleName = player.get("name");
     const choices = saveChoices();
     const hasSelectedFeature = Object.values(selectedFeatures).some(value => value === true);
     if (!hasSelectedFeature) {
@@ -293,7 +302,7 @@ const handleOptionChange = featureName => {
         <h6>Toggle the checkboxes below to calculate your bonus and include features for an informal proposal.</h6>
         <h6>You may scroll to the bottom of the page to review the task brief.</h6>
         <br />
-        <h6>For this product design deliberation, your role is: <strong>{player.get("role")}</strong>.</h6>
+        <h6>For this product design deliberation, your role is: <strong>{player.get("name")}</strong>.</h6>
         <h6>The product under deliberation is: <strong>Laptop</strong>.</h6>
         <h6>You "desired features" are: <strong>{
         round.get("selectedFeaturesForInformalVote")?.join(", ") || " "

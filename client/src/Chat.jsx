@@ -81,7 +81,8 @@ export function Chat({
   return (
 <div className="h-full w-full flex flex-col">  
 
-      <Messages msgs={playerMessages } playerRole={player.get("role")}  />
+      {/* <Messages msgs={playerMessages } playerRole={player.get("role")}  /> */}
+      <Messages msgs={playerMessages } playerRole={player.get("name")}  />
       <Input onNewMessage={handleNewMessage} playerRole={player.get("role")} />
     </div> 
   );
@@ -137,9 +138,9 @@ export function Chat({
 function MessageComp({ attribute }) {
 
 const roleColors = {
-  CEO:  "#4CAF50", // 绿色
-  Department_Head_A: "#00008B", // 深蓝色
-  Department_Head_B: "#000000", // 黑色
+  role1:  "#4CAF50", // 绿色
+  role2: "#00008B", // 深蓝色
+  role3: "#000000", // 黑色
 };
   const msg = attribute.value;
   

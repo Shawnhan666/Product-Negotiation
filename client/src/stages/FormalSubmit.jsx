@@ -21,20 +21,16 @@ export function FormalSubmit() {
   const [selectedFeatures, setSelectedFeatures] = useState({});
   const [totalPoints, setTotalPoints] = useState(0);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [roleData, setRoleData] = useState({});
-  const submitterRoleName = player.get("role");
 
+  const submitterRole = player.get("role");
 
+  const role = player.get("name");
+  const roleIdentifier = player.get("role");
 
   const submittedData_formal = round.get("submittedData_formal");
  
 
-  useEffect(() => {
-    const role = player.get("role");
-    if (role in roleData) {
-      setRoleData(roleData[role]);
-    }
-  }, [player]);
+
 
   useEffect(() => {
     setTotalPoints(calculateTotal());
@@ -69,6 +65,7 @@ export function FormalSubmit() {
 
 
   const handleSubmitProposal = (event) => {
+   // player.stage.set("submit", true); // 这里假设 "submit" 是进入结果页面的正确阶段键
     event.preventDefault();
 
   // 首先，检查是否至少选择了一个特性
@@ -101,13 +98,14 @@ export function FormalSubmit() {
     round.set("totalPoints", totalPoints); // 存储totalPoints到round
 
 
-  // 检查是否是 Stellar_Cove 角色并更新提交计数和存储提交内容
-  if (submitterRoleName === "CEO") {
+
+ 
+  if (submitterRole === "role1") {
     const currentCount = game.get("submitCount") || 0;
     game.set("submitCount", currentCount + 1);
     const submissions = game.get("submissions") || [];
     submissions.push({
-      submitter: submitterRoleName,
+      submitter: submitterRole,
       choices,
       count: currentCount + 1
     });
@@ -130,17 +128,19 @@ export function FormalSubmit() {
   };
  
 
-  if (player.get("role") === "CEO") {
-    if (isSubmitted || round.get("isSubmitted")) {
-    return (
-      <div>
-        (FormalSubmit)Other parties are still voting. Once votes are in and tallied, the results will be shown.
-      </div>
-    );
-  }
-}
 
-  if (player.get("role") === "CEO") {
+//   if (player.get("role") === "CEO") {
+//     if (isSubmitted || round.get("isSubmitted")) {
+//     return (
+//       <div>
+//         (FormalSubmit)Other parties are still voting. Once votes are in and tallied, the results will be shown.
+//       </div>
+//     );
+//   }
+// }
+
+
+  if (player.get("role") === "role1") {
     return (
       <div className="container">
         <div className="text-brief-wrapper">

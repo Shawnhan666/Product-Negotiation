@@ -1,4 +1,4 @@
-// // //formalvote.jsx
+ // // //formalvote.jsx
 import React, { useEffect, useState } from "react";
 import { useGame,usePlayer, usePlayers, useRound } from "@empirica/core/player/classic/react";
 import './TableStyles.css';
@@ -49,7 +49,7 @@ export function FormalVote() {
 
     // 检查是否所有玩家都已经投票
 
-    const allPlayersVoted = players.every(p => p.get("vote") || p.get("role") === "CEO");
+    const allPlayersVoted = players.every(p => p.get("vote") || p.get("role") === "role1");
     if (allPlayersVoted) {
       round.set("allVoted", true);
       round.set("pass", pass);  // 保存这轮是否通
@@ -59,14 +59,13 @@ export function FormalVote() {
 
 
 
-  const allPlayersVoted = players.every(p => p.get("vote") || p.get("role") === "CEO");
+  const allPlayersVoted = players.every(p => p.get("vote") || p.get("role") === "role1");
   const forVotes = players.filter(p => p.get("vote") === "For").length;
   const againstVotes = players.filter(p => p.get("vote") === "Against").length;
 
 
   useEffect(() => {
-    const role = player.get("role");
-    
+    // const role = player.get("role");
     if (allPlayersVoted ) {
   const formalresultText = `Formal Voting Results: ${forVotes+1} Accept, ${againstVotes} Reject. ` + (pass ? "The proposal has been accepted." : "The proposal has not been accepted.");
     
@@ -92,7 +91,7 @@ export function FormalVote() {
   }
 
    // 如果当前玩家已经投票，或者玩家是 "Stellar_Cove"，则显示等待
-   if (player.get("vote") || player.get("role") === "CEO") {
+   if (player.get("vote") || player.get("role") === "role1") {
     return      <div className="waiting-section">
     <div className="loader"></div>  <div>Other parties are still voting. Once votes are in and tallied, the results will be shown.</div>
     </div>;
@@ -113,7 +112,7 @@ export function FormalVote() {
       <div className="text-brief-wrapper">
        <div className="text-brief">
         <h5>The CEO has made their final proposal.  Cast your vote!</h5>
-        <h6>For this product design deliberation, your role is: <strong>{player.get("role")}</strong>.</h6>
+        <h6>For this product design deliberation, your role is: <strong>{player.get("name")}</strong>.</h6>
         <h6>You "desired features" are: <strong>{selectedFeatureNames}</strong>.</h6>
       </div>
       </div>
