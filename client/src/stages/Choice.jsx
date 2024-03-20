@@ -145,7 +145,7 @@ useEffect(() => {
     });
     console.log(resultsMessage);
   }
-}, [votingCompleted,players,players]); // 移除 appendSystemMessage 作为依赖项
+}, [votingCompleted,players]); // 移除 appendSystemMessage 作为依赖项
 
 
 

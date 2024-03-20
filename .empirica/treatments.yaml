@@ -3,32 +3,6 @@ factors:
       desc: playerCount determines the number of Players are in a Game.
       values:
         - value: 3
-    - name: numRounds
-      desc: How many times participants will make a choice
-      values:
-        - value: 1
-        - value: 2
-        - value: 3
-        - value: 4
-        - value: 5
-    - name: role2
-      desc: Role configuration for the second player.
-      values:
-        - value: DepartmentHeadA
-        - value: Department-A
-    - name: role3
-      desc: Role configuration for the third player.
-      values:
-        - value: DepartmentHeadB
-        - value: Department-B
-    - name: formalSubmitDuration
-      desc: Duration of the Formal Submit stage in seconds
-      values:
-        - value: 300
-        - value: 600
-        - value: 1200
-        - value: 60
-        - value: 2000
     - name: role1
       desc: Role configuration for the first player.
       values:
@@ -44,29 +18,53 @@ factors:
         - value: 600
         - value: 2000
         - value: 3
+    - name: formalSubmitDuration
+      desc: Duration of the Formal Submit stage in seconds
+      values:
+        - value: 300
+        - value: 600
+        - value: 1200
+        - value: 60
+        - value: 2000
+        - value: 30
+    - name: formalVoteDuration
+      desc: Duration of the Formal Submit stage in seconds
+      values:
+        - value: 300
+        - value: 600
+        - value: 1200
+        - value: 60
+        - value: 2000
+        - value: 30
+    - name: numRounds
+      desc: How many times participants will make a choice
+      values:
+        - value: 1
+        - value: 2
+        - value: 3
+        - value: 4
+        - value: 5
+        - value: 10
+    - name: role2
+      desc: Role configuration for the second player.
+      values:
+        - value: DepartmentHeadA
+        - value: Department-A
+        - value: Department-Head-A
+    - name: role3
+      desc: Role configuration for the third player.
+      values:
+        - value: DepartmentHeadB
+        - value: Department-B
+        - value: Department-Head-B
 treatments:
-    - name: 5 rounds game (300s Informal, 1200s Formal)
-      desc: 5 rounds game with 300s informal submit and 1200s formal submit
-      factors:
-        formalSubmitDuration: 1200
-        informalSubmitDuration: 300
-        numRounds: 5
-        playerCount: 3
     - name: Test
       factors:
         formalSubmitDuration: 60
-        informalSubmitDuration: 600
-        numRounds: 2
-        playerCount: 3
-        role1: BigCEO
-        role2: DepartmentHeadA
-        role3: DepartmentHeadB
-    - name: TTTest
-      factors:
-        formalSubmitDuration: 2000
-        informalSubmitDuration: 3
-        numRounds: 5
+        formalVoteDuration: 60
+        informalSubmitDuration: 180
+        numRounds: 10
         playerCount: 3
         role1: CEO
-        role2: Department-A
-        role3: Department-B
+        role2: Department-Head-A
+        role3: Department-Head-B

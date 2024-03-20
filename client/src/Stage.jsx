@@ -25,9 +25,9 @@ export function Stage() {
   useEffect(() => {
     console.log("Current stage: ", stage.get("name"));
     console.log("allVoted status in Stage: ", round.get("allVoted"));
-
-
   }, [stage, round]);
+
+  const currentPhase = stage.get("name");
 
   if (player.stage.get("submit")) {
     if (players.length !== 3) {
@@ -35,41 +35,51 @@ export function Stage() {
     }
 
     return (
-
       <div className="waiting-section">
       <div className="loader"></div> 
     <p>Please wait for other players.</p>
   </div>
-
-
-      // <div className="text-center text-gray-400 pointer-events-none">
-      //   Please wait for other player(s).
-      // </div>
     );
   }
 
 
-  switch (stage.get("name")) {
-    case "Informal Submit":
-      return <Choice />;
-  
+
+      switch (stage.get("name")) {
+        case "Informal Submit":
+          return <Choice />;
+
+
+
     case "Formal Submit":
-      if (player.stage.get("submit")) {
-        return <Result />;
-      }
-      if (round.get("isSubmitted")) {
-        return <FormalVote />;
-      } else {
-        return <FormalSubmit />;
-      }
+      // if (player.stage.get("submit")) {
+      //   return <FormalVote />;
+      // }
+      // if (round.get("isSubmitted")) {
+      //   return <FormalVote />;
+      // } else {
+      //   return <FormalSubmit />;
+      // }
+        return <FormalSubmit />
+
+      case "Formal Vote":
+      //   if (player.stage.get("submit")) {
+      //   return <Result />;
+      // }
+      // if (round.get("isSubmitted")) {
+      //   return <FormalVote />;
+      // } else {
+      //   return <FormalVote />;
+      // }
+      return <FormalVote />;
 
 
     case "Result":
-      if (player.stage.get("submit")) {
-        return <FormalVote />;
-      } else {
-        return <Result />;
-      }
+      // if (player.stage.get("submit")) {
+      //   return <FormalVote />;
+      // } else {
+      //   return <Result />;
+      // }
+      return <Result />;
 
     default:
       return <Loading />;

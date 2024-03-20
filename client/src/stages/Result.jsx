@@ -1,7 +1,7 @@
 import React from "react";
 import { useGame, usePlayer, usePlayers, useRound } from "@empirica/core/player/classic/react";
 
-
+import  { useEffect, useState } from "react";
 import { Button } from "../components/Button";
 import { useChat } from '../ChatContext'; 
 
@@ -11,12 +11,52 @@ export function Result() {
   const game = useGame();
   const round = useRound();
   const players = usePlayers();
-  const forVotes = players.filter(p => p.get("vote") === "For").length;
+  const { appendSystemMessage } = useChat();
+  const generateUniqueId = () => `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
   const againstVotes = players.filter(p => p.get("vote") === "Against").length;
   const submissions = game.get("submissions") || [];
   const pass = players.filter(p => p.get("role") !== "CEO").every(p => p.get("vote") === "For");
   const totalPoints = round.get("totalPoints");
+  const missingProposal = round.get("missingProposal");
 
+  const allPlayersVoted = players.every(p => p.get("vote") || p.get("role") === "role1");
+  const forVotes = players.filter(p => p.get("vote") === "For").length;
+  const roleIdentifier = player.get("role");
+
+  const messageText = missingProposal 
+  ? "The CEO failed to provide a proposal in time. You earned $0 from this round." 
+  : `Formal Voting Results: ${forVotes+1} Accept, ${againstVotes} Reject. ` + (pass ? "The proposal has been accepted." : "The proposal has not been accepted.");
+
+
+  useEffect(() => {
+    if (roleIdentifier === "role1") {
+
+        appendSystemMessage({
+          id: generateUniqueId(), // 使用生成的唯一ID
+          text: messageText,
+          sender: {
+            id: Date.now(),
+            name: "Notification",
+            avatar: "",
+            role: "Notification",
+          }
+        });
+
+      }
+    }, []); // 移除 appendSystemMessage 作为依赖项
+
+
+
+  if (missingProposal) {
+    return (
+      <div className="waiting-section">
+        <h4>The CEO failed to provide a proposal in time, You earned $0 from this round.</h4>
+
+        <br />
+        <Button handleClick={() => player.stage.set("submit", true)}>OK</Button>
+      </div>
+    );
+  }
 
     // 如有反对票
     if (againstVotes > 0) {
@@ -48,25 +88,7 @@ export function Result() {
 
 
     <br />
-    {/* {submissions.map((submission, index) => {
-      // 对于最后一轮，使用当前计算的 pass 值；对于之前的轮次，显示为未通过
-      const isLastRound = index === submissions.length - 1;
-      const roundPassed = isLastRound ? pass : false;
-
-      return (
-        <div key={index}>
-          <p>
-            <strong>Round {index + 1}:</strong>
-            <span style={{ color: roundPassed ? 'green' : 'red' }}>
-              {' '}{roundPassed ? 'Passed' : 'Did Not Pass'}
-            </span>
-          </p>
-          {/* 显示该轮的详细信息 
-          
-          <br />
-        </div>
-      );
-    })} */}
+ 
 
         <Button handleClick={() => player.stage.set("submit", true)}>OK</Button>
   </div>

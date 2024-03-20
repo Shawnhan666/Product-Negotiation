@@ -18,8 +18,7 @@ export function Chat({
   const { systemMessages } = useChat();
   const playerMessages = scope.getAttribute(attribute)?.items || [];
     // 用于跟踪已显示消息的状态
-    const [displayedMessages, setDisplayedMessages] = useState({});
-  
+ 
     const [lastMessageId, setLastMessageId] = useState(null); // 存储最后一条消息的ID
     const systemMessagesLengthRef = useRef(systemMessages.length); // 使用ref来跟踪消息数组长度
 

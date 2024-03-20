@@ -16,17 +16,11 @@ export function FormalSubmit() {
   const round = useRound();
   const game = useGame();
   const { appendSystemMessage } = useChat();
-
   const [hasSubmittedProposal, setHasSubmittedProposal] = useState(false);
   const [selectedFeatures, setSelectedFeatures] = useState({});
   const [totalPoints, setTotalPoints] = useState(0);
   const [isSubmitted, setIsSubmitted] = useState(false);
-
   const submitterRole = player.get("role");
-
-  const role = player.get("name");
-  const roleIdentifier = player.get("role");
-
   const submittedData_formal = round.get("submittedData_formal");
  
 
@@ -37,7 +31,6 @@ export function FormalSubmit() {
   }, [selectedFeatures, player]);
 
 
- 
   const handleOptionChange = featureName => {
     setSelectedFeatures(prev => ({
       ...prev,
@@ -77,9 +70,6 @@ export function FormalSubmit() {
     return;
   }
 
-
-
-
     // 假设的保存选择逻辑
     const choices = Object.entries(selectedFeatures).reduce((acc, [feature, isSelected]) => {
       if (isSelected) acc[feature] = features.find(f => f.name === feature).bonus[player.get("role")];
@@ -96,10 +86,9 @@ export function FormalSubmit() {
     setHasSubmittedProposal(true);
     round.set("isVoting", true);  
     round.set("totalPoints", totalPoints); // 存储totalPoints到round
+    round.set("gonext", true);
 
 
-
- 
   if (submitterRole === "role1") {
     const currentCount = game.get("submitCount") || 0;
     game.set("submitCount", currentCount + 1);
@@ -128,16 +117,10 @@ export function FormalSubmit() {
   };
  
 
-
-//   if (player.get("role") === "CEO") {
-//     if (isSubmitted || round.get("isSubmitted")) {
-//     return (
-//       <div>
-//         (FormalSubmit)Other parties are still voting. Once votes are in and tallied, the results will be shown.
-//       </div>
-//     );
-//   }
-// }
+  if (round.get("isSubmitted")) {
+    player.stage.set("submit", true);  
+    return;
+  }
 
 
   if (player.get("role") === "role1") {
