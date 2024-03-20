@@ -1,12 +1,11 @@
-import { usePlayer, useRound  } from "@empirica/core/player/classic/react";
+import { usePlayer, useRound, useGame  } from "@empirica/core/player/classic/react";
 import { usePlayers } from "@empirica/core/player/classic/react";
 import React from "react";
 import { Button } from "../components/Button";
 import './TableStyles.css';
 import { useState, useEffect} from 'react';
-import { useGame } from "@empirica/core/player/classic/react";
 import { useChat } from '../ChatContext'; 
-import features from './features.json';
+// import features from './features.json';
 
 
 
@@ -15,6 +14,21 @@ export function Choice() {
   const players = usePlayers();
   const round = useRound();
   const game = useGame();
+ 
+  // const treatment = game.get("treatment");
+
+  // const {features}= treatment;
+
+  // 添加一个状态来存储 features 数据
+  const [features, setFeatures] = useState([]);
+
+  // 使用 useEffect 钩子来在组件加载时请求数据
+  useEffect(() => {
+    fetch('https://raw.githubusercontent.com/Shawnhan666/Product-Negotiation/main/client/src/stages/features.json')
+      .then(response => response.json()) // 将响应转换为 JSON
+      .then(data => setFeatures(data)) // 使用返回的数据更新状态
+      .catch(error => console.error("Failed to load features:", error)); // 处理可能的错误
+  }, []); // 空依赖数组意味着这个 useEffect 只在组件首次渲染时执行
 
 
   const { appendSystemMessage } = useChat();
