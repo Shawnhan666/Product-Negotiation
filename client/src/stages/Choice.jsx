@@ -372,8 +372,7 @@ const handleOptionChange = featureName => {
   .map(feature => feature.name)
   .join(", ");
 
-  const roundIndex = round.get("index");  // 获取当前轮次的索引
-  console.log("@@@@@@@@@@Round index:", roundIndex);
+
 
 
   
@@ -386,9 +385,6 @@ const handleOptionChange = featureName => {
         <div className="informal-text-brief-wrapper">
        <div className="informal-text-brief">
  
-         
-                                  {/* 移动"Show Task Brief"按钮到这里 */}
-                                <Button handleClick={handleShowTaskBrief}>Show Task Brief</Button>
 
         <h6>Once the countdown is complete, the CEO will have 1 minute to submit a formal proposal.</h6>
         <h6>Toggle the checkboxes below to calculate your bonus and include features for an informal proposal.</h6>
@@ -438,14 +434,18 @@ const handleOptionChange = featureName => {
                 Total Bonus: ${totalPoints}
               </div>
               <br />
-              {/* 移动提交按钮到 "Total" 部分下方 */}
+                                 
+    
+              
+
               {!anySubmitted && (
                 <div className="button-container">
+
+                  <button onClick={handleShowTaskBrief} className={"taskbrief-button"}  >Show Task Brief</button>
+
                   <button onClick={handleSubmitProposal} className={anySubmitted ? "submit-button-disabled" : "submit-button"}>
                     Submit for Informal Vote
                   </button>
-
-                  
                   </div>
               )}
    
@@ -487,6 +487,8 @@ const handleOptionChange = featureName => {
 <div className="voting-section">
       {round.get("anySubmitted") && !currentVote && !allVoted && (
         <div className="voting-buttons-container">
+
+<button onClick={handleShowTaskBrief} className={"taskbrief-button"}  >Show Task Brief</button>
           <Button className="vote-button" handleClick={() => handleVoteSubmit("For")}>Accept</Button>
           <Button className="vote-button" handleClick={() => handleVoteSubmit("Against")}>Reject</Button>
         </div>
@@ -494,6 +496,7 @@ const handleOptionChange = featureName => {
 
       {currentVote && !allVoted && (
         <div>
+          <button onClick={handleShowTaskBrief} className={"taskbrief-button"}  >Show Task Brief</button>
           {currentVote === "For" && <div>You voted Accept of this informal proposal. Waiting for other votes.</div>}
           {currentVote === "Against" && <div>You voted Reject of this informal proposal. Waiting for other votes.</div>}
         </div>

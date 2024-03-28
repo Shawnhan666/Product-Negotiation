@@ -24,26 +24,9 @@ const game = useGame();
   const playerMessages = scope.getAttribute(attribute)?.items || [];
     
  
-    const [lastMessageId, setLastMessageId] = useState(null); // 存储最后一条消息的ID
-    const systemMessagesLengthRef = useRef(systemMessages.length); // 使用ref来跟踪消息数组长度
+  const [lastMessageId, setLastMessageId] = useState(null); // 存储最后一条消息的ID
+  const systemMessagesLengthRef = useRef(systemMessages.length); // 使用ref来跟踪消息数组长度
 
- 
-    const [visibleMessages, setVisibleMessages] = useState(playerMessages);
-    const [clearedForRound, setClearedForRound] = useState(null); // 新增状态变
-    
-
-  
-    useEffect(() => {
-      // 当轮次索引是偶数且未为当前轮次清空过聊天记录
-      if (roundIndex % 2 === 0 && clearedForRound !== roundIndex) {
-        setVisibleMessages([]); // 清空可视消息
-        setClearedForRound(roundIndex); // 标记已为当前轮次清空
-      } else if (roundIndex % 2 !== 0 && clearedForRound !== roundIndex) {
-        // 对于奇数轮次，确保能够显示消息并重置清空状态
-        setVisibleMessages(playerMessages);
-        setClearedForRound(null); // 重置清空状态
-      }
-    }, [roundIndex, playerMessages, clearedForRound]);
 
   const displaySystemMessage = (text, id) => {
     console.log(`Displaying system message: ${text} with ID: ${id}`);
@@ -87,17 +70,6 @@ const game = useGame();
     return <LoadingComp />;
   }
 
-  // const handleNewMessage = (text) => {
-  //   scope.append(attribute, {
-  //     text,
-  //     sender: {
-  //       id: player.id,
-  //       name: player.get("name") || player.id,
-  //       avatar: player.get("avatar"),
-  //       role: player.get("role"), 
-  //     },
-  //   });
-  // };
 
   const handleNewMessage = (text) => {
     const newMessage = {
@@ -110,16 +82,11 @@ const game = useGame();
       },
     };
     scope.append(attribute, newMessage);
-
-    console.log("Adding new message:", newMessage);
  
- // update visibleMessages to include this new message
-     // setVisibleMessages(prevMessages => [...prevMessages, newMessage]);
+
 };
 
 
-// playerMessages
-// visibleMessages
   return (
 <div className="h-full w-full flex flex-col">  
 
@@ -158,7 +125,6 @@ const game = useGame();
   }, [msgs.length, atBottom]); // 当msgs.length变化或用户滚动到底部时触发
 
   if (msgs.length === 0) {
-    // 返回一个提示消息或空状态的UI
   }
 
 
