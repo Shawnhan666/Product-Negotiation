@@ -7,24 +7,87 @@ import { useState, useEffect} from 'react';
 import { useChat } from '../ChatContext'; 
 // import features from './features.json';
 
+// TaskBriefModal组件定义
+function TaskBriefModal({ onClose }) {
+  return (
+<div className="task-brief-modal" style={{
+      // 直接内联样式，也可以使用className引用外部CSS样式
+      position: 'fixed', 
+      top: '20%', 
+      right: '45%', 
+      left: '5%', // 从20%修改为10%，使模态框向左移动
+      padding: '10px', 
+      borderRadius: '10px', 
+      boxShadow: '0 0 10px rgba(0,0,0,0.5)', 
+      zIndex: 100,
+      backgroundColor: '#f0f0f0', // 灰色背景
+      border: '2px solid black' // 添加黑色边框
+      
+    }}>
+      <div className="task-brief">
 
+            {/* 任务简介 */}
+     
+     <h2 className="task-brief-title"><strong>Task Brief</strong></h2>
+<br />
+      <p>You will take part in <strong>five</strong> product design deliberations, each lasting 10 minutes and focusing on a different product from a technology company's portfolio. At the start of each deliberation, you will learn which features are your <strong>"desired features"</strong> for that product.</p>
+      <br />
+      <ul>
+        <li>Including a desired product feature nets you $1.</li>
+        <li>Including an undesired product feature costs you $0.50.</li>
+        <li>Excluding any feature has no impact on earnings.</li>
+        <li>To maximize earnings, you should persuade others to include your desired features and exclude undesired ones. A payoff calculator is provided for your convenience.</li>
+        <li>The total earnings you make across all design discussions equal your “bonus.”</li>
+        <li>If you finish all five, you earn a fixed $10 plus your accumulated “bonus” earnings.</li>
+      </ul>
+<br />
+      <p>In each deliberation, there will be two department heads and one CEO. You are randomly assigned one of these roles each time, which means your role can change from one deliberation to another. Anyone can suggest an <strong>unofficial vote</strong> to gauge each other's interest in including or excluding product features. After 10 minutes, an <strong>official vote</strong> will be conducted where the CEO will propose a set of product features and the two department heads will vote “YES” or “NO” to them. Only official vote results will affect earnings.</p>
+      <p>You can see your role and priority features at the bottom of the main negotiations page.</p>
+    </div>
+  
+
+ {/* 关闭按钮，使用绝对定位 */}
+ <div style={{
+    position: 'absolute', // 绝对定位
+    top: '10px', // 距离模态框顶部10px
+    right: '10px', // 距离模态框右侧10px
+    background: '#333', // 深灰色背景
+    color: 'white', // 白色文字
+    borderRadius: '50%', // 圆形
+    width: '30px', // 宽度
+    height: '30px', // 高度
+    display: 'flex', // 使用Flex布局使内容居中
+    alignItems: 'center', // 垂直居中
+    justifyContent: 'center', // 水平居中
+    cursor: 'pointer' // 鼠标悬停时的指针形状
+  }} onClick={onClose}>
+       × {/* 这里是关闭图标 */}
+  </div>
+    </div>
+  );
+}
 
 export function Choice() {
   const player = usePlayer();
   const players = usePlayers();
   const round = useRound();
   const game = useGame();
- 
-  // const treatment = game.get("treatment");
+  const [showTaskBrief, setShowTaskBrief] = useState(false);
+  // 显示任务简介的函数
+  const handleShowTaskBrief = () => setShowTaskBrief(true);
+  // 隐藏任务简介的函数
+  const handleCloseTaskBrief = () => setShowTaskBrief(false);
 
-  // const {features}= treatment;
+ const treatment = game.get("treatment");
+
+ const {featureUrl}= treatment;
 
   // 添加一个状态来存储 features 数据
   const [features, setFeatures] = useState([]);
 
   // 使用 useEffect 钩子来在组件加载时请求数据
   useEffect(() => {
-    fetch('https://raw.githubusercontent.com/Shawnhan666/Product-Negotiation/main/client/src/stages/features.json')
+    fetch(featureUrl)
       .then(response => response.json()) // 将响应转换为 JSON
       .then(data => setFeatures(data)) // 使用返回的数据更新状态
       .catch(error => console.error("Failed to load features:", error)); // 处理可能的错误
@@ -304,31 +367,45 @@ const handleOptionChange = featureName => {
   // 使用计算得到的信息在UI中渲染
   const submissionInfo = getSubmittedFeaturesAndBonuses();
 
+  const desiredFeaturesForRole = features
+  .filter(feature => feature.bonus[player.get("role")] === 1)
+  .map(feature => feature.name)
+  .join(", ");
+
+  const roundIndex = round.get("index");  // 获取当前轮次的索引
+  console.log("@@@@@@@@@@Round index:", roundIndex);
 
 
   
   
   return (
     <div className="container">
+
+{showTaskBrief && <TaskBriefModal onClose={handleCloseTaskBrief} />}
+    {/* 确保在这里调用 TaskBriefModal，并根据 showTaskBrief 状态显示或隐藏 */}
         <div className="informal-text-brief-wrapper">
        <div className="informal-text-brief">
+ 
+         
+                                  {/* 移动"Show Task Brief"按钮到这里 */}
+                                <Button handleClick={handleShowTaskBrief}>Show Task Brief</Button>
+
         <h6>Once the countdown is complete, the CEO will have 1 minute to submit a formal proposal.</h6>
         <h6>Toggle the checkboxes below to calculate your bonus and include features for an informal proposal.</h6>
         <h6>You may scroll to the bottom of the page to review the task brief.</h6>
         <br />
         <h6>For this product design deliberation, your role is: <strong>{player.get("name")}</strong>.</h6>
         <h6>The product under deliberation is: <strong>Laptop</strong>.</h6>
-        <h6>You "desired features" are: <strong>{
-        round.get("selectedFeaturesForInformalVote")?.join(", ") || " "
-        }. </strong></h6>
+        <h6>You role's desired features are:<strong>{desiredFeaturesForRole || " "}</strong>.</h6>
 
       </div>
       </div>
 
     <div className="table-container">
       <div className="table-wrapper">
-
+        
             <table className="styled-table">
+              
                 <thead>
                   <tr style={{ backgroundColor: 'lightblue' }}>
                     <th>Product Features</th>
@@ -367,8 +444,13 @@ const handleOptionChange = featureName => {
                   <button onClick={handleSubmitProposal} className={anySubmitted ? "submit-button-disabled" : "submit-button"}>
                     Submit for Informal Vote
                   </button>
+
+                  
                   </div>
               )}
+   
+          
+
              </div>
   
          {submittedData_informal && (
@@ -431,14 +513,19 @@ const handleOptionChange = featureName => {
       </div>
     
       )} */}
+ <Button handleClick={() => player.stage.set("submit", true)}>Continue</Button>
+
           </div>
  
-          <Button handleClick={() => player.stage.set("submit", true)}>Continue</Button>
+     
 
 
+
+
+    
      {/* 任务简介 */}
 
-     <div className="task-brief">
+     {/* <div className="task-brief">
      
      <h2 className="task-brief-title"><strong>Task Brief</strong></h2>
 <br />
@@ -457,7 +544,7 @@ const handleOptionChange = featureName => {
       <p>In each deliberation, there will be two department heads and one CEO. You are randomly assigned one of these roles each time, which means your role can change from one deliberation to another. Anyone can suggest an <strong>unofficial vote</strong> to gauge each other's interest in including or excluding product features. After 10 minutes, an <strong>official vote</strong> will be conducted where the CEO will propose a set of product features and the two department heads will vote “YES” or “NO” to them. Only official vote results will affect earnings.</p>
       <p>You can see your role and priority features at the bottom of the main negotiations page.</p>
     </div>
-  
+   */}
       
     </div>
   );

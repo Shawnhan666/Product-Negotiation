@@ -15,7 +15,7 @@ export function Result() {
   const generateUniqueId = () => `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
   const againstVotes = players.filter(p => p.get("vote") === "Against").length;
   const submissions = game.get("submissions") || [];
-  const pass = players.filter(p => p.get("role") !== "CEO").every(p => p.get("vote") === "For");
+  const pass = players.filter(p => p.get("role") !== "role1").every(p => p.get("vote") === "For");
   const totalPoints = round.get("totalPoints");
   const missingProposal = round.get("missingProposal");
 

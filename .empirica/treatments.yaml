@@ -62,24 +62,25 @@ factors:
       values:
         - value: https://raw.githubusercontent.com/Shawnhan666/Product-Negotiation/main/client/src/stages/features.json
 treatments:
-    - name: Test
-      factors:
-        formalSubmitDuration: 60
-        formalVoteDuration: 60
-        informalSubmitDuration: 180
-        numRounds: 10
-        playerCount: 3
-        role1: CEO
-        role2: Department-Head-A
-        role3: Department-Head-B
-    - name: urltext
+    - name: test
       factors:
         featureUrl: https://raw.githubusercontent.com/Shawnhan666/Product-Negotiation/main/client/src/stages/features.json
         formalSubmitDuration: 60
         formalVoteDuration: 60
-        informalSubmitDuration: 180
+        informalSubmitDuration: 600
         numRounds: 10
         playerCount: 3
         role1: CEO
-        role2: Department-Head-A
-        role3: Department-Head-B
+        role2: DepartmentHeadA
+        role3: DepartmentHeadB
+    - name: "222"
+      factors:
+        featureUrl: https://raw.githubusercontent.com/Shawnhan666/Product-Negotiation/main/client/src/stages/features.json
+        formalSubmitDuration: 300
+        formalVoteDuration: 300
+        informalSubmitDuration: 2000
+        numRounds: 10
+        playerCount: 3
+        role1: CEO
+        role2: Department-A
+        role3: Department-B

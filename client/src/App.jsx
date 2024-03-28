@@ -34,7 +34,8 @@ export default function App() {
       <ChatProvider> {/* 添加 ChatProvider 在这里 */}
       <div className="h-screen relative">
         <EmpiricaMenu position="bottom-left" />
-        <div className="h-full overflow-auto">
+        <div className="h-full ">
+   
           <EmpiricaContext introSteps={introSteps} exitSteps={exitSteps}>
             <Game />
           </EmpiricaContext>

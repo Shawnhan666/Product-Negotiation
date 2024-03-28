@@ -12,7 +12,8 @@ import { FormalSubmit } from "./stages/FormalSubmit";
 import { FormalVote } from "./stages/FormalVote";
 import { Result } from "./stages/Result";
 import { useEffect} from 'react';
-import '/Users/shawn/CEO game/client/src/stages/TableStyles.css';
+import "./stages/TableStyles.css";
+
 
 
 export function Stage() {

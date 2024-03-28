@@ -3,7 +3,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { usePlayer } from "@empirica/core/player/classic/react";
+import { usePlayer,useGame, useRound } from "@empirica/core/player/classic/react";
 import { Loading } from "@empirica/core/player/react";
 import { useChat } from './ChatContext';
 
@@ -12,17 +12,39 @@ export function Chat({
   attribute = "messages",
   loading: LoadingComp = Loading,
 }) {
-
+const game = useGame();
   const player = usePlayer();
-  const playerRole = player.get("role"); // 获取当前玩家的角色
+  const playerRole = player.get("role");  
+  const round = useRound();
+
+  const roundIndex = round.get("index");  // 获取当前轮次的索引
+  console.log("***********Round index:", roundIndex);
+
   const { systemMessages } = useChat();
   const playerMessages = scope.getAttribute(attribute)?.items || [];
-    // 用于跟踪已显示消息的状态
+    
  
     const [lastMessageId, setLastMessageId] = useState(null); // 存储最后一条消息的ID
     const systemMessagesLengthRef = useRef(systemMessages.length); // 使用ref来跟踪消息数组长度
 
+ 
+    const [visibleMessages, setVisibleMessages] = useState(playerMessages);
+    const [clearedForRound, setClearedForRound] = useState(null); // 新增状态变
     
+
+  
+    useEffect(() => {
+      // 当轮次索引是偶数且未为当前轮次清空过聊天记录
+      if (roundIndex % 2 === 0 && clearedForRound !== roundIndex) {
+        setVisibleMessages([]); // 清空可视消息
+        setClearedForRound(roundIndex); // 标记已为当前轮次清空
+      } else if (roundIndex % 2 !== 0 && clearedForRound !== roundIndex) {
+        // 对于奇数轮次，确保能够显示消息并重置清空状态
+        setVisibleMessages(playerMessages);
+        setClearedForRound(null); // 重置清空状态
+      }
+    }, [roundIndex, playerMessages, clearedForRound]);
+
   const displaySystemMessage = (text, id) => {
     console.log(`Displaying system message: ${text} with ID: ${id}`);
 
@@ -65,32 +87,79 @@ export function Chat({
     return <LoadingComp />;
   }
 
+  // const handleNewMessage = (text) => {
+  //   scope.append(attribute, {
+  //     text,
+  //     sender: {
+  //       id: player.id,
+  //       name: player.get("name") || player.id,
+  //       avatar: player.get("avatar"),
+  //       role: player.get("role"), 
+  //     },
+  //   });
+  // };
+
   const handleNewMessage = (text) => {
-    scope.append(attribute, {
+    const newMessage = {
       text,
       sender: {
         id: player.id,
         name: player.get("name") || player.id,
         avatar: player.get("avatar"),
-        role: player.get("role"), 
+        role: player.get("role"),
       },
-    });
-  };
+    };
+    scope.append(attribute, newMessage);
 
+    console.log("Adding new message:", newMessage);
+ 
+ // update visibleMessages to include this new message
+     // setVisibleMessages(prevMessages => [...prevMessages, newMessage]);
+};
+
+
+// playerMessages
+// visibleMessages
   return (
 <div className="h-full w-full flex flex-col">  
 
-      {/* <Messages msgs={playerMessages } playerRole={player.get("role")}  /> */}
-      <Messages msgs={playerMessages } playerRole={player.get("name")}  />
+
+      <Messages msgs={visibleMessages } playerRole={player.get("name")}  />
       <Input onNewMessage={handleNewMessage} playerRole={player.get("role")} />
     </div> 
   );
 }
 
 // function Messages(props) {
-  function Messages({ props, msgs, playerRole,  }) {
+  function Messages({  props, msgs, playerRole}) {
   const scroller = useRef(null);
+  const [atBottom, setAtBottom] = useState(true);
   const [msgCount, setMsgCount] = useState(0);
+
+  const handleScroll = () => {
+    // 确保scroller.current不是null
+    if (!scroller.current) return;
+    const { scrollTop, scrollHeight, clientHeight } = scroller.current;
+    const isAtBottom = scrollTop + clientHeight >= scrollHeight - 10; // 容忍度为10px
+    setAtBottom(isAtBottom);
+  };
+
+  useEffect(() => {
+    const element = scroller.current;
+    element?.addEventListener('scroll', handleScroll);
+
+    return () => element?.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    if (atBottom && scroller.current) {
+      scroller.current.scrollTop = scroller.current.scrollHeight;
+    }
+  }, [msgs.length, atBottom]); // 当msgs.length变化或用户滚动到底部时触发
+
+  if (msgs.length === 0) {
+    // 返回一个提示消息或空状态的UI
+  }
 
 
   useEffect(() => {
@@ -105,7 +174,7 @@ export function Chat({
 
   if (msgs.length === 0) {
     return (
-      <div className="h-full w-full flex justify-center items-center">
+      <div className="h-full w-full flex justify-center items-center" >
         <div className="flex flex-col justify-center items-center w-2/3 space-y-2">
           <div className="w-24 h-24 text-gray-200">
             <svg
@@ -125,7 +194,10 @@ export function Chat({
     );
   }
   return (
-    <div className="h-full overflow-auto pl-2 pr-4 pb-2" ref={scroller}>
+       <div className="h-full overflow-auto pl-2 pr-4 pb-2 shawn"  
+    
+
+    ref={scroller}>
       {msgs.map((msg) => (
   <MessageComp key={msg.id} attribute={msg} playerRole={playerRole} />
 ))}
@@ -149,22 +221,6 @@ const roleColors = {
   const textColor = isSystemMessage ? "#FF4500" : roleColors[msg.sender.role] || "#000000";
  
 
-  // let avatar = msg.sender.avatar;
-  // if (!avatar) {
-  //   avatar = `https://avatars.dicebear.com/api/identicon/${msg.sender.id}.svg`;
-  // }
-  // let avatarImage = (
-  //   <img
-  //     className="inline-block h-9 w-9 rounded-full"
-  //     src={avatar}
-  //     alt={msg.sender.id}
-  //   />
-  // );
-  // if (!avatar.startsWith("http")) {
-  //   avatarImage = (
-  //     <div className="inline-block h-9 w-9 rounded-full">{avatar}</div>
-  //   );
-  // }
 
   return (
     
@@ -252,16 +308,22 @@ function Input({ onNewMessage }) {
   );
 }
 function relTime(date) {
-  const now = new Date();
-  const difference = Math.floor((now.getTime() - date.getTime()) / 1000); // 获取两个时间的差值，单位为秒
-  const minutes = Math.floor(difference / 60);
-  const seconds = difference % 60;
+  const difference = (new Date().getTime() - date.getTime()) / 1000;
 
-  // 格式化分钟和秒，确保它们总是显示为两位数字
-  const formattedMinutes = minutes.toString().padStart(2, '0');
-  const formattedSeconds = seconds.toString().padStart(2, '0');
-
-  return `${formattedMinutes}:${formattedSeconds} ago`;
+  if (difference < 60) {
+    return `now`;
+  } else if (difference < 3600) {
+    return `${Math.floor(difference / 60)}m ago`;
+  } else if (difference < 86400) {
+    return `${Math.floor(difference / 3600)}h`;
+  } else if (difference < 2620800) {
+    return `${Math.floor(difference / 86400)} days ago`;
+  } else if (difference < 31449600) {
+    return `${Math.floor(difference / 2620800)} months ago`;
+  } else {
+    return `${Math.floor(difference / 31449600)} years ago`;
+  }
 }
+
 
 export default Chat;
