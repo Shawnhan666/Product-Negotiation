@@ -32,14 +32,14 @@ Empirica.onGameStart(({ game }) => {
 
 
  
-const roles = ["role1", "role2", "role3"]; // 使用字符串 'role1', 'role2', 'role3' 作为角色标识符
+const roles = ["role1", "role2", "role3"]; 
 game.players.forEach((player, index) => {
-  const roleIdentifier = roles[index % roles.length]; // 确保循环分配
-  player.set("role", roleIdentifier); // 设置玩家的角色为 'role1', 'role2', 或 'role3'
-  // 假设你想要根据角色标识符保留原有的角色名称映射
+  const roleIdentifier = roles[index % roles.length]; 
+  player.set("role", roleIdentifier);  
+  
   const roleNameMapping = {role1, role2,role3};
-  player.set("role", roleIdentifier); // 用于内部逻辑，如颜色映射
-  player.set("name", roleNameMapping[roleIdentifier]); // 依据角色标识符设置角色名称
+  player.set("role", roleIdentifier); 
+  player.set("name", roleNameMapping[roleIdentifier]); 
 });
 
 

@@ -84,3 +84,14 @@ treatments:
         role1: CEO
         role2: Department-A
         role3: Department-B
+    - name: 3r4e
+      factors:
+        featureUrl: https://raw.githubusercontent.com/Shawnhan666/Product-Negotiation/main/client/src/stages/features.json
+        formalSubmitDuration: 2000
+        formalVoteDuration: 2000
+        informalSubmitDuration: 2000
+        numRounds: 10
+        playerCount: 3
+        role1: CEO
+        role2: Department-A
+        role3: Department-Head-B

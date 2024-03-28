@@ -1,4 +1,4 @@
-import {  useGame } from "@empirica/core/player/classic/react";
+import {  useGame, useRound } from "@empirica/core/player/classic/react";
 import Chat from "./Chat"; // 导入你的Chat组件，假设它和Game.jsx在同一目录
 import React from "react";
 import { Profile } from "./Profile";
@@ -6,6 +6,7 @@ import { Stage } from "./Stage";
 
 export function Game() {
   const game = useGame();
+  const round = useRound();
   const { playerCount } = game.get("treatment");
 
   return (
@@ -19,7 +20,7 @@ export function Game() {
 
       {playerCount > 1 && (
         <div className="h-full w-256 border-l flex justify-center items-center">
-          <Chat scope={game} attribute="chat" />
+          <Chat scope={round} attribute="chat" />
         </div>
       )}
     </div>

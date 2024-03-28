@@ -1,0 +1,34 @@
+[
+    {
+      "name": "Touchscreen",
+      "bonus": { "role1": 1, "role2": -0.5, "role3": 1 }
+    },
+    {
+      "name": "Fingerprint Reader",
+      "bonus": { "role1": -0.5, "role2": 1, "role3": 1 }
+    },
+    {
+      "name": "4K Display",
+      "bonus": { "role1": 1, "role2": 1, "role3": 1 }
+    },
+    {
+      "name": "Thunderbolt 4 Ports",
+      "bonus": { "role1": -0.5, "role2": 1, "role3": -0.5 }
+    },
+    {
+      "name": "AI-Enhanced Performance",
+      "bonus": { "role1": 1, "role2": 1, "role3": 1 }
+    },
+    {
+      "name": "Ultra-Light Design",
+      "bonus": { "role1": 1, "role2": -0.5, "role3": 1 }
+    },
+    {
+      "name": "High-speed WiFi 6E",
+      "bonus": { "role1": -0.5, "role2": -0.5, "role3": -0.5 }
+    },
+    {
+      "name": "Long Battery Life",
+      "bonus": { "role1": 1, "role2": -0.5, "role3": -0.5 }
+    }
+  ]

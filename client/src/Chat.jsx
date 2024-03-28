@@ -124,7 +124,7 @@ const game = useGame();
 <div className="h-full w-full flex flex-col">  
 
 
-      <Messages msgs={visibleMessages } playerRole={player.get("name")}  />
+      <Messages msgs={playerMessages } playerRole={player.get("name")}  />
       <Input onNewMessage={handleNewMessage} playerRole={player.get("role")} />
     </div> 
   );
