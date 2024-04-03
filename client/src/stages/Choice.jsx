@@ -5,7 +5,11 @@ import { Button } from "../components/Button";
 import './TableStyles.css';
 import { useState, useEffect} from 'react';
 import { useChat } from '../ChatContext'; 
+import { Timer } from "../components/Timer";
+import { useStageTimer } from "@empirica/core/player/classic/react";
+
 // import features from './features.json';
+
 
 // TaskBriefModal组件定义
 function TaskBriefModal({ onClose }) {
@@ -72,6 +76,47 @@ export function Choice() {
   const players = usePlayers();
   const round = useRound();
   const game = useGame();
+  const { appendSystemMessage } = useChat();
+  const timer = useStageTimer();
+  let remainingSeconds = timer?.remaining ? Math.round(timer.remaining / 1000) : null;
+
+
+  
+
+  useEffect(() => {
+    // 处理 5 分钟和 2 分钟提醒
+    const reminders = [300, 120]; // 剩余时间提醒点
+    if (reminders.includes(remainingSeconds)) {
+      const minutesLeft = remainingSeconds / 60; // 将秒转换为分钟
+      appendSystemMessage({
+        id: `reminder-${remainingSeconds}`,
+        text: `Reminder: ${minutesLeft} Minute${minutesLeft > 1 ? 's' : ''} left.`,
+        sender: {
+          id: "system",
+          name: "System",
+          avatar: "",
+          role: "System",
+        }
+      });
+    }
+
+    // 处理 1 分钟警告
+    if (remainingSeconds === 60) {
+      appendSystemMessage({
+        id: `warning-${remainingSeconds}`,
+        text: "WARNING: 1 Minute left. Please finalize your list of proposed features for official voting.",
+        sender: {
+          id: "system",
+          name: "System",
+          avatar: "",
+          role: "System",
+        }
+      });
+    }
+  }, [remainingSeconds, appendSystemMessage]); // 在依赖数组中添加 appendSystemMessage
+
+
+
   const [showTaskBrief, setShowTaskBrief] = useState(false);
   // 显示任务简介的函数
   const handleShowTaskBrief = () => setShowTaskBrief(true);
@@ -85,6 +130,10 @@ export function Choice() {
   // 添加一个状态来存储 features 数据
   const [features, setFeatures] = useState([]);
 
+
+
+
+
   // 使用 useEffect 钩子来在组件加载时请求数据
   useEffect(() => {
     fetch(featureUrl)
@@ -94,7 +143,7 @@ export function Choice() {
   }, []); // 空依赖数组意味着这个 useEffect 只在组件首次渲染时执行
 
 
-  const { appendSystemMessage } = useChat();
+
 
 
   const generateUniqueId = () => `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
@@ -231,8 +280,8 @@ useEffect(() => {
 useEffect(() => {
   const allVoted = players.every(player => player.get("vote"));
   // 打印以监控每个玩家的投票状态和allVoted的结果
-  console.log("vote stage:", players.map(player => ({ id: player.id, vote: player.get("vote") })));
-  console.log("all voted？", allVoted);
+  //console.log("vote stage:", players.map(player => ({ id: player.id, vote: player.get("vote") })));
+  //console.log("all voted？", allVoted);
 
 
 
@@ -384,7 +433,7 @@ const handleOptionChange = featureName => {
     {/* 确保在这里调用 TaskBriefModal，并根据 showTaskBrief 状态显示或隐藏 */}
         <div className="informal-text-brief-wrapper">
        <div className="informal-text-brief">
- 
+
 
         <h6>Once the countdown is complete, the CEO will have 1 minute to submit a formal proposal.</h6>
         <h6>Toggle the checkboxes below to calculate your bonus and include features for an informal proposal.</h6>
@@ -411,10 +460,11 @@ const handleOptionChange = featureName => {
                 </thead>
                 <tbody>
                               {features.map((feature, index) => {
-                                const isSelectedForVote = round.get("selectedFeaturesForInformalVote")?.includes(feature.name);
+                                //const isSelectedForVote = round.get("selectedFeaturesForInformalVote")?.includes(feature.name);
+                                const isDesiredFeature = desiredFeaturesForRole.includes(feature.name);
                                 return (
                                   <tr key={index}>
-                                    <td className={isSelectedForVote ? "selected-feature" : ""}>{feature.name}</td>
+                                    <td className={isDesiredFeature ? "selected-feature" : ""}>{feature.name}</td>
                                     <td>
                                       <input
                                         type="checkbox"

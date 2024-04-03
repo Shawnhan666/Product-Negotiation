@@ -16,18 +16,16 @@ Empirica.onGameStart(({ game }) => {
 
  // const roles = ["CEO", "Department_Head_A", "Department_Head_B"];
 
-  const { numRounds, informalSubmitDuration, formalSubmitDuration, formalVoteDuration } = treatment;
+  const { numRounds, informalSubmitDuration, formalSubmitDuration, formalVoteDuration, resultDuration } = treatment;
 
   for (let i = 0; i < numRounds; i++) {
     const round = game.addRound({
       name: `Round ${i+1}`,
     });
-    //round.addStage({ name: "Informal Submit", duration: 600 });
     round.addStage({ name: "Informal Submit", duration: informalSubmitDuration });
-    // round.addStage({ name: "Formal Submit", duration: 2000 });
     round.addStage({ name: "Formal Submit", duration: formalSubmitDuration });
     round.addStage({ name: "Formal Vote", duration: formalVoteDuration });
-    round.addStage({name:"Result", duration: 600})
+    round.addStage({name:"Result", duration: resultDuration})
   }
 
 

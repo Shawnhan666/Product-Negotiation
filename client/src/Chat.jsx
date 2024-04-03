@@ -1,3 +1,4 @@
+
 import React, {
   useEffect,
   useRef,
@@ -6,6 +7,7 @@ import React, {
 import { usePlayer,useGame, useRound } from "@empirica/core/player/classic/react";
 import { Loading } from "@empirica/core/player/react";
 import { useChat } from './ChatContext';
+import { Timer } from "./components/Timer";
 
 export function Chat({
   scope,
@@ -14,11 +16,17 @@ export function Chat({
 }) {
 const game = useGame();
   const player = usePlayer();
-  const playerRole = player.get("role");  
   const round = useRound();
+  const startTimeRef = useRef(Date.now());
+  
+
+  const [firstLoadTime, setFirstLoadTime] = useState(null);
+
+ 
+
 
   const roundIndex = round.get("index");  // 获取当前轮次的索引
-  console.log("***********Round index:", roundIndex);
+
 
   const { systemMessages } = useChat();
   const playerMessages = scope.getAttribute(attribute)?.items || [];
@@ -26,13 +34,12 @@ const game = useGame();
  
   const [lastMessageId, setLastMessageId] = useState(null); // 存储最后一条消息的ID
   const systemMessagesLengthRef = useRef(systemMessages.length); // 使用ref来跟踪消息数组长度
-
+ 
 
   const displaySystemMessage = (text, id) => {
     console.log(`Displaying system message: ${text} with ID: ${id}`);
-
     console.log("System Messages: ", systemMessages);
-    console.log("System Messages Length: ", systemMessages.length);
+  
 
     // 显示消息的逻辑
     scope.append(attribute, {
@@ -46,10 +53,17 @@ const game = useGame();
   };
 
   useEffect(() => {
+    startTimeRef.current = Date.now();
+    console.log("Game Start Time initialized:", startTimeRef.current);
+  }, []); // 空数组意味着这个effect只在组件挂载时运行
+  
+
+
+  useEffect(() => {
     const currentLength = systemMessages.length;
     // 检查消息数组长度是否发生变化
     console.log("System Messages: ", systemMessages);
-    console.log("System Messages Length: ", systemMessages.length);
+    //console.log("System Messages Length: ", systemMessages.length);
 
 
     if (currentLength !== systemMessagesLengthRef.current && currentLength > 0) {
@@ -91,14 +105,14 @@ const game = useGame();
 <div className="h-full w-full flex flex-col">  
 
 
-      <Messages msgs={playerMessages } playerRole={player.get("name")}  />
+      <Messages msgs={playerMessages } playerRole={player.get("name")}  gameStartTime={startTimeRef.current}/>
       <Input onNewMessage={handleNewMessage} playerRole={player.get("role")} />
     </div> 
   );
 }
 
-// function Messages(props) {
-  function Messages({  props, msgs, playerRole}) {
+
+  function Messages({  props, msgs, playerRole, gameStartTime}) {
   const scroller = useRef(null);
   const [atBottom, setAtBottom] = useState(true);
   const [msgCount, setMsgCount] = useState(0);
@@ -165,14 +179,19 @@ const game = useGame();
 
     ref={scroller}>
       {msgs.map((msg) => (
-  <MessageComp key={msg.id} attribute={msg} playerRole={playerRole} />
+  <MessageComp key={msg.id} attribute={msg} playerRole={playerRole} gameStartTime={gameStartTime} />
 ))}
     </div>
   );
 }
 
 
-function MessageComp({ attribute }) {
+function MessageComp({ attribute, gameStartTime }) {
+
+  const messageTime = new Date(attribute.createdAt);
+  const elapsedTime = Math.floor((messageTime.getTime() - gameStartTime) / 1000);
+  const relativeTime = humanTimer(elapsedTime);
+
 
 const roleColors = {
   role1:  "#4CAF50", // 绿色
@@ -194,11 +213,12 @@ const roleColors = {
       {/* <div className="flex-shrink-0">{avatarImage}</div> */}
       <div className="ml-3 text-sm">
         <p>
-  
           <span className="font-semibold" style={{ color: textColor }}>
             {msg.sender.name}
+  
           </span>
-          <span className="pl-2 text-gray-400">{ts && relTime(ts)}</span>
+
+          <span className="pl-2 text-gray-400">{relativeTime}</span>
         </p>
         <p style={{ color: textColor }}>{msg.text}</p>
          
@@ -273,23 +293,26 @@ function Input({ onNewMessage }) {
     </form>
   );
 }
-function relTime(date) {
-  const difference = (new Date().getTime() - date.getTime()) / 1000;
-
-  if (difference < 60) {
-    return `now`;
-  } else if (difference < 3600) {
-    return `${Math.floor(difference / 60)}m ago`;
-  } else if (difference < 86400) {
-    return `${Math.floor(difference / 3600)}h`;
-  } else if (difference < 2620800) {
-    return `${Math.floor(difference / 86400)} days ago`;
-  } else if (difference < 31449600) {
-    return `${Math.floor(difference / 2620800)} months ago`;
-  } else {
-    return `${Math.floor(difference / 31449600)} years ago`;
+function humanTimer(seconds) {
+  if (seconds === null || seconds === undefined) {
+    return "--:--";
   }
+
+  let out = "";
+  const s = seconds % 60;
+  out += s < 10 ? "0" + s : s;
+
+  const min = Math.floor(seconds / 60) % 60;
+  out = `${min < 10 ? "0" + min : min}:${out}`;
+
+  const h = Math.floor(seconds / 3600);
+  if (h > 0) {
+    return `${h < 10 ? "0" + h : h}:${out}`;
+  }
+
+  return out;
 }
+
 
 
 export default Chat;

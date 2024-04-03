@@ -36,8 +36,13 @@ export function FormalVote() {
 
   const {featureUrl}= treatment;
 
-    // 添加一个状态来存储 features 数据
-    const [features, setFeatures] = useState([]);
+  const [features, setFeatures] = useState([]);
+  const desiredFeaturesForRole = features
+  .filter(feature => feature.bonus[player.get("role")] === 1)
+  .map(feature => feature.name)
+  .join(", ");
+
+
 
     // 使用 useEffect 钩子来在组件加载时请求数据
     useEffect(() => {
@@ -123,7 +128,7 @@ export function FormalVote() {
        <div className="text-brief">
         <h5>The CEO has made their final proposal.  Cast your vote!</h5>
         <h6>For this product design deliberation, your role is: <strong>{player.get("name")}</strong>.</h6>
-        <h6>You "desired features" are: <strong>{selectedFeatureNames}</strong>.</h6>
+        <h6>You "desired features" are: <strong>{desiredFeaturesForRole || " "}</strong>.</h6>
       </div>
       </div>
     <br />
@@ -140,30 +145,30 @@ export function FormalVote() {
             </thead>
             <tbody>
 
-              {features.map((feature, index) => {
-                const isSelected = selectedFeatureNames.includes(feature.name); // 检查特性是否被选中
-                return (
-  
-                  <tr key={index} className={isSelected ? "selected-feature" : ""}>
-                    <td>{feature.name}</td>
-                    {/* <td>
-                      <input
-                        type="checkbox"
-                        checked={!!isSelected} // 根据decisionsMap来确定是否选中
-                        disabled // 禁用复选框，以防止修改
-                      />
-                    </td> */}
-                    <td>
-        {/* 当特性被选中时，显示对号 */}
-        {isSelected ? <span>&#10003;</span> : <span>&nbsp;</span>} 
+{features.map((feature, index) => {
+  const isSelected = selectedFeatureNames.includes(feature.name); // 检查特性是否被选中
+  const isDesiredFeature = desiredFeaturesForRole.includes(feature.name);
+  return (
+    <tr key={index} className={isDesiredFeature ? "selected-feature" : ""}>
+   <td>{feature.name}</td>
+      {/* <td>
+        <input
+          type="checkbox"
+          checked={!!isSelected} // 根据decisionsMap来确定是否选中
+          disabled // 禁用复选框，以防止修改
+        />
+      </td> */}
+      <td>
+{/* 当特性被选中时，显示对号 */}
+{isSelected ? <span>&#10003;</span> : <span>&nbsp;</span>} 
+</td>
+      <td>
+        {isSelected ? feature.bonus[submittedData_formal.submitterRole] : 0} 
       </td>
-                    <td>
-                      {isSelected ? feature.bonus[submittedData_formal.submitterRole] : 0} 
-                    </td>
-                  </tr>
-                );
-              })}
-          </tbody>
+    </tr>
+  );
+})}
+</tbody>
         </table>
         <div className="total-points-display">Your bonus: ${totalPoints}</div>
       </div>

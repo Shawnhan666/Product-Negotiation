@@ -18,10 +18,50 @@ export function Result() {
   const pass = players.filter(p => p.get("role") !== "role1").every(p => p.get("vote") === "For");
   const totalPoints = round.get("totalPoints");
   const missingProposal = round.get("missingProposal");
-
   const allPlayersVoted = players.every(p => p.get("vote") || p.get("role") === "role1");
   const forVotes = players.filter(p => p.get("vote") === "For").length;
   const roleIdentifier = player.get("role");
+
+  const roundIndex = round.get("index"); // 获取当前轮次的索引
+  
+   // 定义一个状态来存储每个回合的编号（实际回合数）和总分数
+   const [roundsInfo, setRoundsInfo] = useState([]);
+  
+   useEffect(() => {
+    // 更新回合信息
+    const newRoundInfo = { round: roundIndex + 1, totalPoints: totalPoints };
+    setRoundsInfo((prevRoundsInfo) => [...prevRoundsInfo, newRoundInfo]);
+
+    // 更新游戏的总得分
+    const total = roundsInfo.reduce((acc, curr) => acc + curr.totalPoints, 0) + totalPoints;
+    game.set("totalPoints", total); // 假设这个方法可以更新游戏对象的总分
+
+  }, [roundIndex, totalPoints]); // 监听roundIndex和totalPoints的变化
+
+  useEffect(() => {
+    if (roundsInfo.length > 0) {
+      console.log('All Rounds Details:');
+      roundsInfo.forEach(info => {
+        console.log(`Round ${info.round} Total Points: ${info.totalPoints}`);
+      });
+      // 打印游戏的总得分
+      console.log(`Game Total Points so far: ${game.get("totalPoints")}`);
+    }
+  }, [roundsInfo]); // 当roundsInfo更新时打印所有回合的信息
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
 
   const messageText = missingProposal 
   ? "The CEO failed to provide a proposal in time. You earned $0 from this round." 
@@ -50,7 +90,7 @@ export function Result() {
   if (missingProposal) {
     return (
       <div className="waiting-section">
-        <h4>The CEO failed to provide a proposal in time, You earned $0 from this round.</h4>
+        <h4>The CEO failed to provide a proposal in time. You earned $0 from this round.</h4>
 
         <br />
         <Button handleClick={() => player.stage.set("submit", true)}>OK</Button>
@@ -65,7 +105,7 @@ export function Result() {
           <h4>Voting Results:</h4>
           <p>Votes Accept: {forVotes+1}</p>
           <p>Votes Reject: {againstVotes}</p>
-          <p>The Round is over. You failed to agree on product features. You earned $0 from this round.</p>
+          <p>The Round is over. You failed to agree on product features. You earned $0 from this round. The next round will begin soon. </p>
           <br />
           <p>Please press "OK" to acknowledge and continue.</p>
           <br />

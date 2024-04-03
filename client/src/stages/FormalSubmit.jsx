@@ -6,6 +6,8 @@ import './TableStyles.css';
 import { useState, useEffect} from 'react';
 import { useGame } from "@empirica/core/player/classic/react";
 import { useChat } from '../ChatContext'; 
+import { Timer } from "../components/Timer";
+import { useStageTimer } from "@empirica/core/player/classic/react";
 // import features from './features.json';
 
 
@@ -22,13 +24,17 @@ export function FormalSubmit() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const submitterRole = player.get("role");
   const submittedData_formal = round.get("submittedData_formal");
-
+  const timer = useStageTimer();
+  let remainingSeconds = timer?.remaining ? Math.round(timer.remaining / 1000) : null;
   const treatment = game.get("treatment");
-
   const {featureUrl}= treatment;
-
     // 添加一个状态来存储 features 数据
     const [features, setFeatures] = useState([]);
+
+    const desiredFeaturesForRole = features
+    .filter(feature => feature.bonus[player.get("role")] === 1)
+    .map(feature => feature.name)
+    .join(", ");
 
     // 使用 useEffect 钩子来在组件加载时请求数据
     useEffect(() => {
@@ -38,6 +44,41 @@ export function FormalSubmit() {
         .catch(error => console.error("Failed to load features:", error)); // 处理可能的错误
     }, []); // 空依赖数组意味着这个 useEffect 只在组件首次渲染时执行
   
+
+      
+
+  useEffect(() => {
+   
+    const reminders = [30]; 
+    if (reminders.includes(remainingSeconds)) {
+      const minutesLeft = remainingSeconds / 60; 
+      appendSystemMessage({
+        id: `reminder-${remainingSeconds}`,
+        text: "Reminder: 30 seconds left.",
+        sender: {
+          id: "system",
+          name: "System",
+          avatar: "",
+          role: "System",
+        }
+      });
+    }
+    // 处理 1 分钟警告
+    if (remainingSeconds === 10) {
+      appendSystemMessage({
+        id: `warning-${remainingSeconds}`,
+        text: "WARNING: 10 seconds left. please finalize your proposal.",
+        sender: {
+          id: "system",
+          name: "System",
+          avatar: "",
+          role: "System",
+        }
+      });
+    }
+  }, [remainingSeconds, appendSystemMessage]); // 在依赖数组中添加 appendSystemMessage
+
+
 
     
 
@@ -143,7 +184,9 @@ export function FormalSubmit() {
       <div className="container">
         <div className="text-brief-wrapper">
        <div className="text-brief">
-        <h6>TIME IS UP. As the CEO, you have 1 minute to offer an official proposal. You may continue chatting while waiting.</h6>
+        <h6>TIME IS UP. As the CEO, you have 1 minute to offer an official proposal. You may continue chatting while waiting. <strong>REMINDER: you can refer to the chat history for the informal vote results.</strong></h6>
+        <h6>For this product design deliberation, your role is: <strong>{player.get("name")}</strong>.</h6>
+        <h6>You "desired features" are: <strong>{desiredFeaturesForRole || " "}</strong>.</h6>
        </div>
        </div>
        <br />
@@ -160,22 +203,26 @@ export function FormalSubmit() {
                             </tr>
                           </thead>
                           <tbody>
-                            {features.map((feature, index) => (
-                              <tr key={index}>
-                                <td>{feature.name}</td>
-                                <td>
-                                  <input
-                                    type="checkbox"
-                                    checked={!!selectedFeatures[feature.name]}
-                                    onChange={() => handleOptionChange(feature.name)}
-                                  />
-                                </td>
-                                <td>
-                                  {selectedFeatures[feature.name] ? feature.bonus[player.get("role")] : 0}
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
+                                        {features.map((feature, index) => {
+                                          // 检查当前 feature 是否为 desired feature
+                                          const isDesiredFeature = desiredFeaturesForRole.split(", ").includes(feature.name);
+                                          return (
+                                            <tr key={index} className={isDesiredFeature ? "selected-feature" : ""}>
+                                              <td>{feature.name}</td>
+                                              <td>
+                                                <input
+                                                  type="checkbox"
+                                                  checked={!!selectedFeatures[feature.name]}
+                                                  onChange={() => handleOptionChange(feature.name)}
+                                                />
+                                              </td>
+                                              <td>
+                                                {selectedFeatures[feature.name] ? feature.bonus[player.get("role")] : 0}
+                                              </td>
+                                            </tr>
+                                          );
+                                        })}
+                                      </tbody>
                         </table>
 
                         <div className="total-points-display"> Total bonus: ${totalPoints}</div>
