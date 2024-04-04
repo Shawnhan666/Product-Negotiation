@@ -19,7 +19,8 @@ export function FormalVote() {
   const [submittedData, setSubmittedData] = useState(null);
   const isVoting = round.get("isVoting");
   const submittedData_formal = round.get("submittedData_formal");
-  const pass = players.filter(p => p.get("role") !== "CEO").every(p => p.get("vote") === "For");
+ 
+  const pass = players.filter(p => p.get("role") !== "role1").every(p => p.get("vote") === "For");
   const totalPoints = round.get("totalPoints");
 
   const selectedFeatureNames = submittedData_formal ? Object.keys(submittedData_formal.decisions).join(", ") : "No features selected";
@@ -77,23 +78,24 @@ export function FormalVote() {
     console.log( player.get("vote"));
 
     // 检查是否所有玩家都已经投票
-
     const allPlayersVoted = players.every(p => p.get("vote") || p.get("role") === "role1");
+    console.log(`allPlayersVoted bbbb`,allPlayersVoted);
     if (allPlayersVoted) {
       round.set("allVoted", true);
       round.set("pass", pass);  // 保存这轮是否通
-      console.log(`Round result: ${pass ? 'Passed' : 'Did Not Pass'}`);
+      console.log(`Round result: ${pass ? 'Passed' : 'Dddddddddid Not Pass'}`);
   };
   };
-
-
 
 
 
   // 如果所有玩家都已投票
   if (round.get("allVoted") || round.get("missingProposal")) {
-    player.stage.set("submit", true); // 这里假设 "submit" 是进入结果页面的正确阶段键
-    return <div>Transferring to the results page...</div>;
+    round.set("pass", pass);  // 保存这轮是否通
+    console.log(`allPlayersVoted bbbb`,allPlayersVoted);
+    console.log(`Round result: ${pass ? 'Passed' : 'DDDDid Not Pass'}`);
+    player.stage.set("submit", true);  
+    
   }
   
 

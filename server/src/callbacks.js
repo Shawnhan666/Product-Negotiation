@@ -96,32 +96,71 @@ Empirica.onStageStart(({ stage }) => {
 });
 
 Empirica.onStageEnded(({ stage, game }) => {
-  if (stage.get("name") === "Result") {
-    console.log("End of Result stage");
 
-    const players = stage.currentGame.players;
-    let allVotedNotAgainst = true; // 初始化为 true
+  if (stage.get("name") !== "Formal Vote") return;
 
-    // for (const player of players) {
-    //   if (player.get("vote") === "Against") {
-    //     allVotedNotAgainst = false; // 如果有玩家投票 'Against'，设置为 false
-    //     break; // 跳出循环，因为不再需要检查其他玩家
-    //   }
-    // }
+  console.log("End of formal vote stage");
 
-    // if (allVotedNotAgainst) {
-    //   console.log("No players have voted 'Against'. Ending the game early.");
-    //   stage.currentGame.end("failed", "No players voted Against"); // 结束游戏
-    //   return; // 退出函数
-    // }
- 
+  const players = stage.currentGame.players;
+  const round = stage.round;
+  const roundIndex = round.get("index"); // 获取当前轮次的索引
+  //const totalPoints = round.get("totalPoints"); // 假设你在某处已经设置了这个轮次的总分
+  let totalPoints = round.get("totalPoints"); // 使用let声明totalPoints以便可以修改它
+
+  const pass = round.get("pass"); // 获取这一轮是否通过的标志
+
+   // 如果这一轮没有通过，则设置这一轮的总分为0
+   if (!pass) {
+    totalPoints = 0;
   }
+
+
+   const cumulativePoints = stage.currentGame.get("GamePoints") || 0;
+   const updatedCumulativePoints = totalPoints + cumulativePoints;
+   stage.currentGame.set("GamePoints", updatedCumulativePoints);
+
+
+  // 更新或初始化每轮的总分数组
+  const roundPointsHistory = stage.currentGame.get("RoundPointsHistory") || [];
+  roundPointsHistory.push({ roundIndex, totalPoints });
+  stage.currentGame.set("RoundPointsHistory", roundPointsHistory);
+
+   for (const player of players) {
+   // 在控制台中展示当前轮次的索引、总分和游戏目前的总分数
+   player.set("roundPoints", totalPoints);
+   player.set("cumulativePoints", updatedCumulativePoints);
+   player.set("roundPointsHistory", roundPointsHistory);
+  }
+
+  console.log(`Round ${roundIndex+1}: Total points for this round: ${totalPoints}`);
+   console.log(`Cumulative GamePoints so far: ${updatedCumulativePoints}`);
+   console.log("Round Points History:");
+   
+   roundPointsHistory.forEach((roundData) => {
+  console.log(`Round ${roundData.roundIndex+1}: Total points: ${roundData.totalPoints}`);
+  
+   });
+
+
+ });
+
+
+
+
+Empirica.onRoundEnded(({ round }) => {
+
+ 
+
+
+
+
+
+
+
 });
 
 
 
-
-Empirica.onRoundEnded(({ round }) => {});
 
 Empirica.onGameEnded(({ game }) => {});
 

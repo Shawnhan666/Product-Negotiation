@@ -75,7 +75,7 @@ treatments:
         formalSubmitDuration: 300
         formalVoteDuration: 300
         informalSubmitDuration: 310
-        numRounds: 5
+        numRounds: 4
         playerCount: 3
         resultDuration: 20
         role1: CEO

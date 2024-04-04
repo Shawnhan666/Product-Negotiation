@@ -54,7 +54,7 @@ const game = useGame();
 
   useEffect(() => {
     startTimeRef.current = Date.now();
-    console.log("Game Start Time initialized:", startTimeRef.current);
+    //console.log("Game Start Time initialized:", startTimeRef.current);
   }, []); // 空数组意味着这个effect只在组件挂载时运行
   
 
