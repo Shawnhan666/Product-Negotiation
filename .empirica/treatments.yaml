@@ -9,24 +9,6 @@ factors:
         - value: BigCEO
         - value: CEOO
         - value: CEO
-    - name: formalVoteDuration
-      desc: Duration of the Formal Submit stage in seconds
-      values:
-        - value: 300
-        - value: 600
-        - value: 1200
-        - value: 60
-        - value: 2000
-        - value: 30
-    - name: numRounds
-      desc: How many times participants will make a choice
-      values:
-        - value: 1
-        - value: 2
-        - value: 3
-        - value: 4
-        - value: 5
-        - value: 10
     - name: role2
       desc: Role configuration for the second player.
       values:
@@ -43,6 +25,42 @@ factors:
       desc: URL of the pay off matrix
       values:
         - value: https://raw.githubusercontent.com/Shawnhan666/Product-Negotiation/main/client/src/stages/features.json
+    - name: formalSubmitDuration
+      desc: Duration of the Formal Submit stage in seconds
+      values:
+        - value: 300
+        - value: 600
+        - value: 1200
+        - value: 60
+        - value: 2000
+        - value: 30
+        - value: 310
+    - name: formalVoteDuration
+      desc: Duration of the Formal Submit stage in seconds
+      values:
+        - value: 300
+        - value: 600
+        - value: 1200
+        - value: 60
+        - value: 2000
+        - value: 30
+        - value: 20
+    - name: numRounds
+      desc: How many times participants will make a choice
+      values:
+        - value: 1
+        - value: 2
+        - value: 3
+        - value: 4
+        - value: 5
+        - value: 10
+        - value: 7
+    - name: resultDuration
+      desc: Duration of the result stage in seconds
+      values:
+        - value: 20
+        - value: 200
+        - value: 2000
     - name: informalSubmitDuration
       desc: Duration of the Informal Submit stage in seconds
       values:
@@ -54,30 +72,18 @@ factors:
         - value: 3
         - value: 60
         - value: 310
-    - name: formalSubmitDuration
-      desc: Duration of the Formal Submit stage in seconds
-      values:
-        - value: 300
-        - value: 600
-        - value: 1200
-        - value: 60
-        - value: 2000
-        - value: 30
-        - value: 310
-    - name: resultDuration
-      desc: Duration of the result stage in seconds
-      values:
-        - value: 20
+        - value: 2
+        - value: 1
 treatments:
     - name: test
       factors:
         featureUrl: https://raw.githubusercontent.com/Shawnhan666/Product-Negotiation/main/client/src/stages/features.json
-        formalSubmitDuration: 300
-        formalVoteDuration: 300
-        informalSubmitDuration: 310
-        numRounds: 4
+        formalSubmitDuration: 2000
+        formalVoteDuration: 2000
+        informalSubmitDuration: 1
+        numRounds: 2
         playerCount: 3
-        resultDuration: 20
+        resultDuration: 2000
         role1: CEO
         role2: Department-A
         role3: Department-B

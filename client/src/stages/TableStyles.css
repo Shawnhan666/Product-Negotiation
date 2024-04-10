@@ -277,6 +277,8 @@
     height: 100vh; /* 根据需要调整高度 */
     font-size: 25px; /* 调整字号 */
     transform: translateY(-100px); /* 向上移动50像素 */
+    padding-left: 230px; /* 左侧留白 */
+    padding-right: 230px; /* 右侧留白 */
   }
   
   /* 加载动画 */

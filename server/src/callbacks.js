@@ -95,54 +95,130 @@ Empirica.onStageStart(({ stage }) => {
   }
 });
 
+// Empirica.onStageEnded(({ stage, game }) => {
+
+//   if (stage.get("name") !== "Formal Vote") return;
+//   console.log("End of formal vote stage");
+//   const players = stage.currentGame.players;
+//   const round = stage.round;
+//   const roundIndex = round.get("index"); // 获取当前轮次的索引
+
+
+
+
+//   let totalPoints = round.get("totalPoints"); // 使用let声明totalPoints以便可以修改它
+
+//   const pass = round.get("pass"); // 获取这一轮是否通过的标志
+
+//    // 如果这一轮没有通过，则设置这一轮的总分为0
+//    if (!pass) {
+//     totalPoints = 0;
+//   }
+//    const cumulativePoints = stage.currentGame.get("GamePoints") || 0;
+//    const updatedCumulativePoints = totalPoints + cumulativePoints;
+//    stage.currentGame.set("GamePoints", updatedCumulativePoints);
+
+//   // 更新或初始化每轮的总分数组
+//   const roundPointsHistory = stage.currentGame.get("RoundPointsHistory") || [];
+//   roundPointsHistory.push({ roundIndex, totalPoints });
+//   stage.currentGame.set("RoundPointsHistory", roundPointsHistory);
+
+//    for (const player of players) {
+//    // 在控制台中展示当前轮次的索引、总分和游戏目前的总分数
+//    player.set("roundPoints", totalPoints);
+//    player.set("cumulativePoints", updatedCumulativePoints);
+//    player.set("roundPointsHistory", roundPointsHistory);
+//   }
+
+//   console.log(`Round ${roundIndex+1}: Total points for this round: ${totalPoints}`);
+//    console.log(`Cumulative GamePoints so far: ${updatedCumulativePoints}`);
+//    console.log("Round Points History:");
+   
+//    roundPointsHistory.forEach((roundData) => {
+//   console.log(`Round ${roundData.roundIndex+1}: Total points: ${roundData.totalPoints}`);
+  
+//    });
+
+
+//  });
+
 Empirica.onStageEnded(({ stage, game }) => {
-
   if (stage.get("name") !== "Formal Vote") return;
-
   console.log("End of formal vote stage");
 
   const players = stage.currentGame.players;
   const round = stage.round;
   const roundIndex = round.get("index"); // 获取当前轮次的索引
-  //const totalPoints = round.get("totalPoints"); // 假设你在某处已经设置了这个轮次的总分
-  let totalPoints = round.get("totalPoints"); // 使用let声明totalPoints以便可以修改它
-
   const pass = round.get("pass"); // 获取这一轮是否通过的标志
 
-   // 如果这一轮没有通过，则设置这一轮的总分为0
-   if (!pass) {
-    totalPoints = 0;
+  // 从round获取存储的每个角色奖励分数
+  const playerBonusesByRole = round.get("playerBonusesByRole") || {};
+
+  // 如果这一轮没有通过，我们可以选择将所有玩家的本轮分数设置为0
+  if (!pass) {
+    for (const role in playerBonusesByRole) {
+      playerBonusesByRole[role] = 0;
+    }
   }
 
-
-   const cumulativePoints = stage.currentGame.get("GamePoints") || 0;
-   const updatedCumulativePoints = totalPoints + cumulativePoints;
-   stage.currentGame.set("GamePoints", updatedCumulativePoints);
-
-
-  // 更新或初始化每轮的总分数组
-  const roundPointsHistory = stage.currentGame.get("RoundPointsHistory") || [];
-  roundPointsHistory.push({ roundIndex, totalPoints });
-  stage.currentGame.set("RoundPointsHistory", roundPointsHistory);
-
-   for (const player of players) {
-   // 在控制台中展示当前轮次的索引、总分和游戏目前的总分数
-   player.set("roundPoints", totalPoints);
-   player.set("cumulativePoints", updatedCumulativePoints);
-   player.set("roundPointsHistory", roundPointsHistory);
-  }
-
-  console.log(`Round ${roundIndex+1}: Total points for this round: ${totalPoints}`);
-   console.log(`Cumulative GamePoints so far: ${updatedCumulativePoints}`);
-   console.log("Round Points History:");
-   
-   roundPointsHistory.forEach((roundData) => {
-  console.log(`Round ${roundData.roundIndex+1}: Total points: ${roundData.totalPoints}`);
+   // 获取之前所有轮次的分数历史记录
+   let roundPointsHistory = stage.currentGame.get("RoundPointsHistory") || [];
   
+   for (const player of players) {
+     const role = player.get("role");
+     const roleName = player.get("name"); // 获取玩家的角色名
+ 
+     let totalPoints = playerBonusesByRole[role] || 0; // 从playerBonusesByRole获取分数，默认为0
+ 
+     const cumulativePoints = player.get("cumulativePoints") || 0;
+     const updatedCumulativePoints = totalPoints + cumulativePoints;
+ 
+     player.set("roundPoints", totalPoints);
+     player.set("cumulativePoints", updatedCumulativePoints);
+     player.set("RoundPointsHistory", roundPointsHistory);
+     // 将本轮分数添加到历史记录中
+     roundPointsHistory.push({ roundIndex, totalPoints,  roleName, role });
+   }
+ 
+   // 更新游戏对象中的历史记录
+   stage.currentGame.set("RoundPointsHistory", roundPointsHistory);
+ 
+   console.log("Round Points History:");
+ 
+   roundPointsHistory.forEach((roundData) => {
+     console.log(`Round ${roundData.roundIndex + 1}: Rolename: ${roundData.roleName}, Role: ${roundData.role}, Total points: ${roundData.totalPoints}`);
    });
-
-
  });
+
+
+
+//   // 更新或初始化每轮的总分数组
+//   const roundPointsHistory = stage.currentGame.get("RoundPointsHistory") || [];
+  
+//   for (const player of players) {
+//     const role = player.get("role");
+//     const roleName = player.get("name"); // 获取玩家的角色名
+
+
+//     let totalPoints = playerBonusesByRole[role] || 0; 
+
+//     const cumulativePoints = player.get("cumulativePoints") || 0;
+//     const updatedCumulativePoints = totalPoints + cumulativePoints;
+
+//     player.set("roundPoints", totalPoints);
+//     player.set("cumulativePoints", updatedCumulativePoints);
+//     player.set("RoundPointsHistory", roundPointsHistory);
+//     // 将本轮分数添加到历史记录中
+//     roundPointsHistory.push({ roundIndex, totalPoints,  roleName: roleName  });
+//   }
+
+//   console.log("Round Points History:");
+
+  
+//   roundPointsHistory.forEach((roundData) => {
+//     console.log(`Round ${roundData.roundIndex + 1}:  Role: ${roundData.roleName}, Total points: ${roundData.totalPoints}`);
+//   });
+// });
 
 
 

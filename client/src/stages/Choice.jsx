@@ -46,6 +46,8 @@ function TaskBriefModal({ onClose }) {
       </ul>
 <br />
       <p>In each deliberation, there will be two department heads and one CEO. You are randomly assigned one of these roles each time, which means your role can change from one deliberation to another. Anyone can suggest an <strong>unofficial vote</strong> to gauge each other's interest in including or excluding product features. After 10 minutes, an <strong>official vote</strong> will be conducted where the CEO will propose a set of product features and the two department heads will vote “YES” or “NO” to them. Only official vote results will affect earnings.</p>
+      <br />
+      
       <p>You can see your role and priority features at the bottom of the main negotiations page.</p>
     </div>
   
@@ -398,12 +400,30 @@ const handleOptionChange = featureName => {
     if (!submittedData_informal) {
       return null; // 或者返回一个表示无数据的默认状态
     }
+    const currentPlayerRole = player.get("role");
 
     // 处理 submittedData_informal 中的信息
     const { decisions } = submittedData_informal;
-    const featuresAndBonuses = Object.entries(decisions).map(([featureName, bonus]) => {
-      return { featureName, bonus };
-    });
+
+
+    // 使用 features 数组和 decisions 来计算当前玩家的奖励
+  const featuresAndBonuses = features.reduce((acc, feature) => {
+    // 检查这个特性是否被选中
+    if (decisions[feature.name]) {
+      // 如果被选中，添加到累加器中，包括特性名称和当前角色的奖励
+      acc.push({
+        featureName: feature.name,
+        // 这里假设如果特性未被选中，则奖励为 0
+        bonus: feature.bonus[currentPlayerRole] || 0
+      });
+    }
+    return acc;
+  }, []);
+
+
+    // const featuresAndBonuses = Object.entries(decisions).map(([featureName, bonus]) => {
+    //   return { featureName, bonus };
+    // });
 
     const totalBonus = featuresAndBonuses.reduce((total, { bonus }) => total + bonus, 0);
 

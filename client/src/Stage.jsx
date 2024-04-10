@@ -26,6 +26,7 @@ export function Stage() {
   useEffect(() => {
     console.log("Current stage: ", stage.get("name"));
     console.log("allVoted status in Stage: ", round.get("allVoted"));
+    
   }, [stage, round]);
 
   const currentPhase = stage.get("name");
