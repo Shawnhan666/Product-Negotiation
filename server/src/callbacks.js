@@ -68,9 +68,18 @@ game.players.forEach((player, index) => {
 
 
 Empirica.onRoundStart(({ round }) => { 
-  // 假设系统消息存储在round的一个名为'systemMessages'的属性中
-  // 您需要根据实际情况调整属性名
-  round.set("systemMessages", []); // 重置为一个空数组
+  round.set("systemMessages", []);
+
+
+ 
+
+  const startTime = Date.now();
+  round.set("roundStartTime", startTime);
+
+  console.log(`Round ${round.get("index")} Start: Round start time set at ${new Date(startTime).toISOString()}`);
+
+
+
 });
  
 

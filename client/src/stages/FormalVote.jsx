@@ -104,7 +104,7 @@ export function FormalVote() {
     
     // 将更新后的对象存储回round中
     round.set("playerBonusesByRole", playerBonusesByRole);
-    console.log("Updated playerBonusesByRole with role1's totalPoints:", playerBonusesByRole);
+ 
 
     console.log("UUUUUUspdated playerBonusesByRole:", playerBonusesByRole);
 

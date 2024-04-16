@@ -74,14 +74,15 @@ factors:
         - value: 310
         - value: 2
         - value: 1
+        - value: 1000
 treatments:
     - name: test
       factors:
         featureUrl: https://raw.githubusercontent.com/Shawnhan666/Product-Negotiation/main/client/src/stages/features.json
         formalSubmitDuration: 2000
         formalVoteDuration: 2000
-        informalSubmitDuration: 1
-        numRounds: 2
+        informalSubmitDuration: 1000
+        numRounds: 7
         playerCount: 3
         resultDuration: 2000
         role1: CEO

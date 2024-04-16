@@ -17,31 +17,28 @@ export function Chat({
 const game = useGame();
   const player = usePlayer();
   const round = useRound();
+
+
+  const roundStartTime = round.get("roundStartTime"); // 从回合状态获取开始时间
+
+
   const startTimeRef = useRef(Date.now());
-  
+
+
+
+
 
   const [firstLoadTime, setFirstLoadTime] = useState(null);
-
- 
-
-
-  const roundIndex = round.get("index");  // 获取当前轮次的索引
-
-
+  const roundIndex = round.get("index");  
   const { systemMessages } = useChat();
   const playerMessages = scope.getAttribute(attribute)?.items || [];
-    
- 
-  const [lastMessageId, setLastMessageId] = useState(null); // 存储最后一条消息的ID
-  const systemMessagesLengthRef = useRef(systemMessages.length); // 使用ref来跟踪消息数组长度
- 
+  const [lastMessageId, setLastMessageId] = useState(null); 
+  const systemMessagesLengthRef = useRef(systemMessages.length); 
 
   const displaySystemMessage = (text, id) => {
     console.log(`Displaying system message: ${text} with ID: ${id}`);
     console.log("System Messages: ", systemMessages);
   
-
-    // 显示消息的逻辑
     scope.append(attribute, {
       text,
       sender: {
@@ -55,29 +52,24 @@ const game = useGame();
   useEffect(() => {
     startTimeRef.current = Date.now();
     //console.log("Game Start Time initialized:", startTimeRef.current);
-  }, []); // 空数组意味着这个effect只在组件挂载时运行
+  }, []);
   
 
 
   useEffect(() => {
     const currentLength = systemMessages.length;
-    // 检查消息数组长度是否发生变化
     console.log("System Messages: ", systemMessages);
-    //console.log("System Messages Length: ", systemMessages.length);
-
-
     if (currentLength !== systemMessagesLengthRef.current && currentLength > 0) {
       const latestMessage = systemMessages[currentLength - 1];
       const messageId = latestMessage.id || Date.now().toString();
-      // 防止因为stage切换时的重复处理
       if (messageId !== lastMessageId) {
         displaySystemMessage(latestMessage.text, messageId);
-        setLastMessageId(messageId); // 更新最后处理的消息ID
+        setLastMessageId(messageId); 
       }
     }
-    // 更新ref为当前的长度，用于下次比较
+
     systemMessagesLengthRef.current = currentLength;
-  }, [systemMessages.length]); // 依赖于systemMessages数组长度的变化
+  }, [systemMessages.length]); 
 
 
   if (!scope || !player) {
@@ -99,26 +91,19 @@ const game = useGame();
  
 
 };
-
-
   return (
-<div className="h-full w-full flex flex-col">  
-
-
-      <Messages msgs={playerMessages } playerRole={player.get("name")}  gameStartTime={startTimeRef.current}/>
+    <div className="h-full w-full flex flex-col">  
+      <Messages msgs={playerMessages } playerRole={player.get("name")}  gameStartTime={roundStartTime}/>
       <Input onNewMessage={handleNewMessage} playerRole={player.get("role")} />
     </div> 
   );
 }
-
-
   function Messages({  props, msgs, playerRole, gameStartTime}) {
   const scroller = useRef(null);
   const [atBottom, setAtBottom] = useState(true);
   const [msgCount, setMsgCount] = useState(0);
 
   const handleScroll = () => {
-    // 确保scroller.current不是null
     if (!scroller.current) return;
     const { scrollTop, scrollHeight, clientHeight } = scroller.current;
     const isAtBottom = scrollTop + clientHeight >= scrollHeight - 10; // 容忍度为10px
@@ -128,7 +113,6 @@ const game = useGame();
   useEffect(() => {
     const element = scroller.current;
     element?.addEventListener('scroll', handleScroll);
-
     return () => element?.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -136,8 +120,7 @@ const game = useGame();
     if (atBottom && scroller.current) {
       scroller.current.scrollTop = scroller.current.scrollHeight;
     }
-  }, [msgs.length, atBottom]); // 当msgs.length变化或用户滚动到底部时触发
-
+  }, [msgs.length, atBottom]); 
   if (msgs.length === 0) {
   }
 
@@ -175,8 +158,6 @@ const game = useGame();
   }
   return (
        <div className="h-full overflow-auto pl-2 pr-4 pb-2 shawn"  
-    
-
     ref={scroller}>
       {msgs.map((msg) => (
   <MessageComp key={msg.id} attribute={msg} playerRole={playerRole} gameStartTime={gameStartTime} />
@@ -189,6 +170,10 @@ const game = useGame();
 function MessageComp({ attribute, gameStartTime }) {
 
   const messageTime = new Date(attribute.createdAt);
+ 
+  // const elapsedTime = Math.floor((messageTime.getTime() - roundStartTime) / 1000);
+  // const relativeTime = humanTimer(elapsedTime);
+  
   const elapsedTime = Math.floor((messageTime.getTime() - gameStartTime) / 1000);
   const relativeTime = humanTimer(elapsedTime);
 
@@ -199,8 +184,6 @@ const roleColors = {
   role3: "#000000", // 黑色
 };
   const msg = attribute.value;
-  
-  // 声明并初始化 isSystemMessage 变量
   const isSystemMessage = msg.sender && msg.sender.role === "Notification";
   const ts = attribute.createdAt;
   const textColor = isSystemMessage ? "#FF4500" : roleColors[msg.sender.role] || "#000000";
@@ -208,22 +191,17 @@ const roleColors = {
 
 
   return (
-    
     <div className="flex items-start my-2">
       {/* <div className="flex-shrink-0">{avatarImage}</div> */}
       <div className="ml-3 text-sm">
         <p>
           <span className="font-semibold" style={{ color: textColor }}>
             {msg.sender.name}
-  
           </span>
-
           <span className="pl-2 text-gray-400">{relativeTime}</span>
         </p>
         <p style={{ color: textColor }}>{msg.text}</p>
-         
       </div>
-  
     </div>
   );
 }
