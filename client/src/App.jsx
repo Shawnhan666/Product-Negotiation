@@ -5,11 +5,10 @@ import React from "react";
 import { Game } from "./Game";
 import { ExitSurvey } from "./intro-exit/ExitSurvey";
 import { Introduction } from "./intro-exit/Introduction";
+import { ChatProvider } from "./ChatContext";  
+import { AutoPlayerIdForm } from "./autoPlayerIdForm";
 
-
-import { ChatProvider } from "./ChatContext"; // 更新这里的路径以指向你的 ChatProvider
-
-// 其他导入...
+ 
 
 
 
@@ -17,7 +16,6 @@ import { ChatProvider } from "./ChatContext"; // 更新这里的路径以指向�
 export default function App() {
   const urlParams = new URLSearchParams(window.location.search);
   const playerKey = urlParams.get("participantKey") || "";
-
   const { protocol, host } = window.location;
   const url = `${protocol}//${host}/query`;
 
@@ -29,14 +27,32 @@ export default function App() {
     return [ExitSurvey];
   }
 
+  const paramsObj = Object.fromEntries(urlParams?.entries());
+ 
+  const playerIdFromUrl = paramsObj?.playerId || "undefined";
+ 
+   if(playerIdFromUrl=="undefined") {
+     return(
+       // this should return an error page
+       <div style={{
+         display: 'flex',
+         justifyContent: 'center',
+         alignItems: 'center',
+         height: '100vh', 
+         fontSize: '24px', 
+         color: '#333' 
+       }}>You have arrived here via an invalid URL. </div>
+     )
+   }
+
   return (
-    <EmpiricaParticipant url={url} ns={playerKey} modeFunc={EmpiricaClassic}>
-      <ChatProvider> {/* 添加 ChatProvider 在这里 */}
+    <EmpiricaParticipant url={url} ns={playerIdFromUrl} modeFunc={EmpiricaClassic}>
+      <ChatProvider>  
       <div className="h-screen relative">
         <EmpiricaMenu position="bottom-left" />
         <div className="h-full ">
    
-          <EmpiricaContext introSteps={introSteps} exitSteps={exitSteps}>
+          <EmpiricaContext playerCreate={AutoPlayerIdForm} introSteps={introSteps} exitSteps={exitSteps} disableConsent={true}>
             <Game />
           </EmpiricaContext>
         </div>

@@ -13,6 +13,14 @@ import { useStageTimer } from "@empirica/core/player/classic/react";
 
 // TaskBriefModal组件定义
 function TaskBriefModal({ onClose }) {
+
+
+  const game = useGame(); 
+  const player = usePlayer();
+  const treatment = game.get("treatment");
+  const {instructionPage} = treatment;
+  const instructionsHtml = {__html: instructionPage}
+
   return (
 <div className="task-brief-modal" style={{
       // 直接内联样式，也可以使用className引用外部CSS样式
@@ -30,11 +38,11 @@ function TaskBriefModal({ onClose }) {
     }}>
       <div className="task-brief">
 
-            {/* 任务简介 */}
-     
+       
      <h2 className="task-brief-title"><strong>Task Brief</strong></h2>
 <br />
-      <p>You will take part in <strong>five</strong> product design deliberations, each lasting 10 minutes and focusing on a different product from a technology company's portfolio. At the start of each deliberation, you will learn which features are your <strong>"desired features"</strong> for that product.</p>
+<div dangerouslySetInnerHTML={instructionsHtml} />
+      {/* <p>You will take part in <strong>five</strong> product design deliberations, each lasting 10 minutes and focusing on a different product from a technology company's portfolio. At the start of each deliberation, you will learn which features are your <strong>"desired features"</strong> for that product.</p>
       <br />
       <ul>
         <li>Including a desired product feature nets you $1.</li>
@@ -48,7 +56,7 @@ function TaskBriefModal({ onClose }) {
       <p>In each deliberation, there will be two department heads and one CEO. You are randomly assigned one of these roles each time, which means your role can change from one deliberation to another. Anyone can suggest an <strong>unofficial vote</strong> to gauge each other's interest in including or excluding product features. After 10 minutes, an <strong>official vote</strong> will be conducted where the CEO will propose a set of product features and the two department heads will vote “YES” or “NO” to them. Only official vote results will affect earnings.</p>
       <br />
       
-      <p>You can see your role and priority features at the bottom of the main negotiations page.</p>
+      <p>You can see your role and priority features at the bottom of the main negotiations page.</p> */}
     </div>
   
 

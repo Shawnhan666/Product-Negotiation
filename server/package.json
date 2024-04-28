@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@empirica/core": "1.9.3",
+    "@empirica/core": "1.11.2",
     "minimist": "1.2.6"
   },
   "devDependencies": {
