@@ -4,6 +4,7 @@ import { EmpiricaMenu, EmpiricaParticipant } from "@empirica/core/player/react";
 import React from "react";
 import { Game } from "./Game";
 import { ExitSurvey } from "./intro-exit/ExitSurvey";
+import { Summary } from "./intro-exit/Summary";
 import { Introduction } from "./intro-exit/Introduction";
 import { ChatProvider } from "./ChatContext";  
 import { AutoPlayerIdForm } from "./autoPlayerIdForm";
@@ -24,7 +25,7 @@ export default function App() {
   }
 
   function exitSteps({ game, player }) {
-    return [ExitSurvey];
+    return [Summary, ExitSurvey];
   }
 
   const paramsObj = Object.fromEntries(urlParams?.entries());

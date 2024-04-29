@@ -34,33 +34,16 @@ export function Result() {
   const nonVoters = players.filter(p => !p.get("vote") && p.get("role") !== "role1").map(p => p.get("name"));
   
   const roundPointsHistory = game.get("RoundPointsHistory");
-
-  
-   // 计算总轮数
+ 
    const totalRounds = roundPointsHistory.length / 3;
 
-
-
-   // 初始化累积得分和每轮得分描述字符串
-   
-  // 过滤出与当前玩家角色匹配的记录
+ 
   const currentPlayerRoundPoints = roundPointsHistory.filter(({ role }) => role === roleIdentifier);
-  // 生成当前玩家角色每轮得分的描述字符串
+ 
   const roundScores = currentPlayerRoundPoints.map(({ totalPoints }) => totalPoints).join(" + ");
 
 
-  // 使用let而不是const来声明cumulativePoints，因为我们需要修改它
-  // 生成每轮得分描述字符串
-  // const roundScores = roundPointsHistory.map(({ totalPoints }) => totalPoints).join(" + ");
-
-
-    
-
-
-  // const roundPointsDescription = roundPointsHistory
-  // .map(({ totalPoints }, index) => `$${totalPoints}`)
-  // .join(" + ");
-
+ 
   useEffect(() => {
     // 假设游戏状态中保存的属性名为RoundPointsHistory
     const roundPointsHistory = game.get("RoundPointsHistory");
@@ -81,37 +64,8 @@ export function Result() {
     }
   }, [game]);
 
-  //     // 数据存在时，在控制台打印每个round的信息
-  //     roundPointsHistory.forEach(({ roundIndex, roleName, totalPoints }) => {
-  //       console.log(`Round ${roundIndex + 1}: Role: ${roleName}, Total points: ${totalPoints}`);
-  //     });
-  //   }
-  // }, [game]); // 依赖项数组中包含game，这意味着当game对象变化时，useEffect会重新运行
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-const isLastRound = roundIndex === numRounds; // 检查是否是最后一个轮次
-
-//console.log(`Round result: ${pass ? 'Passed' : 'Did Not Pass'}. Non voters: ${nonVoters.join(", ")}`);
+const isLastRound = roundIndex === numRounds;  
 
   const messageText = () => {
     if (missingProposal) {
@@ -152,10 +106,11 @@ const isLastRound = roundIndex === numRounds; // 检查是否是最后一个轮�
           <h4>
             <p>The Round is over. You earned £{roundPoints} from this round.</p>
             <br />
-            <p>In total you have earned {roundScores} across {totalRounds} rounds, for a total of ${cumulativePoints}.</p>
+            {/* <p>In total you have earned {roundScores} across {totalRounds} rounds, for a total of ${cumulativePoints}.</p>
       
-            <br />
-            <p>Please press "OK" to acknowledge and continue.</p>
+            <br /> */}
+            <p>Please press "OK" to continue.</p>
+            {/* <p>Please press "OK" to acknowledge and continue.</p> */}
           </h4>
           <br />
           <Button handleClick={() => player.stage.set("submit", true)}>OK</Button>
@@ -188,9 +143,7 @@ const isLastRound = roundIndex === numRounds; // 检查是否是最后一个轮�
     if (againstVotes > 0) {
       return (
         <div className="waiting-section">
-          {/* <h4>Voting Results:</h4>
-          <p>Votes Accept: {forVotes+1}</p>
-          <p>Votes Reject: {againstVotes}</p> */}
+       
           <p>The Round is over. You failed to agree on product features. You earned $0 from this round. The next round will begin soon. </p>
           <br />
           <p>Please press "OK" to continue.</p>

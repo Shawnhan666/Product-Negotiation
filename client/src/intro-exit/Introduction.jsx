@@ -48,7 +48,7 @@ export function Introduction({ next }) {
 
         </p>
       </div>
-      <Button handleClick={next} >
+      <Button handleClick={next} autoFocus >
         <p>Next</p>
       </Button>
     </div>
