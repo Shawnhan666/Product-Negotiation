@@ -1,0 +1,134 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /* 这可以帮助控制元素的大小 */
+  }
+  
+  .centered-button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px; /* 或者任何你需要的值 */
+  }
+  
+  .blue-button {
+    background-color: #007bff; /* 蓝色背景 */
+    color: white; /* 白色文字 */
+    border: 2px solid #007bff; /* 蓝色边框 */
+    padding: 10px 20px; /* 内边距 */
+    text-align: center; /* 文字居中 */
+    text-decoration: none; /* 无文本装饰 */
+    display: inline-block; /* 行内块显示 */
+    font-size: 16px; /* 字体大小 */
+    border-radius: 5px; /* 边框圆角 */
+    cursor: pointer; /* 鼠标光标变成手指形状 */
+  }
+  
+  .blue-button:hover {
+    background-color: #0056b3; /* 鼠标悬停时的背景颜色 */
+    border: 2px solid #0056b3; /* 鼠标悬停时的边框颜色 */
+  }
+  
+  .introduction-wrapper {
+    padding-top: 80px; /* 顶部留白 */
+    padding-bottom: 80px; /* 底部留白 */
+    background-color: #fff; /* 设置背景色为白色 */
+  }
+  
+  .introduction-container {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-top: 20px; /* 顶部空白 */
+    padding-right: 20px; /* 右侧内边距 */
+    padding-bottom: 20px; /* 底部内边距 */
+    padding-left: 20px; /* 左侧内边距 */
+    max-width: 800px; /* 控制最大宽度 */
+    margin: auto; /* 水平居中 */
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+    
+    .introduction-header {
+      font-size: 1.5rem;
+      color: #333;
+      font-weight: 600;
+      margin-bottom: 20px;
+      text-align: center; /* 标题居中 */
+    }
+    
+    .introduction-content {
+      margin-bottom: 1.5rem;
+    }
+    
+    .introduction-text {
+      font-size: 1rem;
+      color: #666;
+      line-height: 1.6;
+      text-align: justify;
+    }
+    
+    .introduction-button {
+      display: block;
+      width: max-content;
+      margin-top: 20px;
+      /* other button styles */
+    }
+    
+    .centered-text {
+      text-align: center;
+    }
+    
+  
+    .container-center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh; /* 使用视口高度确保至少填满整个屏幕 */
+      text-align: left;
+    }
+    
+    /* 用于扩大表格大小的样式 */
+    .table-large {
+      width: auto; /* 或者你可以使用具体的百分比，如 80% */
+      max-width: 800px; /* 适应内容宽度，但不超过 800px */
+      min-width: 600px; /* 确保表格不会小于 600px */
+      margin: 20px 0; /* 上下留出空间 */
+    }
+    
+    /* 用于左对齐文本的样式 */
+    .text-left {
+      text-align: left;
+    }
+  
+    
+    
+    .introduction-title {
+      text-align: center; /* Center-aligns the title */
+      font-weight: bold; /* Makes the title bold */
+      font-size: 24px; /* Adjust as needed for significant enlargement */
+    }
+    
+    .section-header {
+      font-weight: bold; /* Makes section headers bold */
+      text-decoration: underline; /* Underlines section headers */
+      margin-bottom: 10px; /* Adds some space below the headers */
+    }
+    
+    .consent-section {
+      margin-bottom: 20px; /* Adds space between sections */
+    }
+    
+    .introduction-button {
+      /* Style your button as needed */
+      display: block; /* Example to make the button a block element */
+      margin: 20px auto; /* Centers the button and adds margin */
+      padding: 10px 20px; /* Example padding */
+      font-size: 16px; /* Example font size */
+      cursor: pointer; /* Changes the cursor on hover */
+    }
+   
+    
+   

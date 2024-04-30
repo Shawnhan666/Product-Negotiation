@@ -179,9 +179,9 @@ function MessageComp({ attribute, gameStartTime }) {
 
 
 const roleColors = {
-  role1:  "#4CAF50", // 绿色
-  role2: "#00008B", // 深蓝色
-  role3: "#000000", // 黑色
+  role1:  "#8B4500",  
+  role2: "#00008B", 
+  role3: "#006400", 
 };
   const msg = attribute.value;
   const isSystemMessage = msg.sender && msg.sender.role === "Notification";

@@ -8,7 +8,7 @@ import { Summary } from "./intro-exit/Summary";
 import { Introduction } from "./intro-exit/Introduction";
 import { ChatProvider } from "./ChatContext";  
 import { AutoPlayerIdForm } from "./autoPlayerIdForm";
-
+import { MyConsent } from "./intro-exit/MyConsent.jsx"; 
  
 
 
@@ -21,7 +21,7 @@ export default function App() {
   const url = `${protocol}//${host}/query`;
 
   function introSteps({ game, player }) {
-    return [Introduction];
+    return [MyConsent, Introduction];
   }
 
   function exitSteps({ game, player }) {
