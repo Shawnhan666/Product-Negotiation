@@ -27,23 +27,39 @@ export function FormalSubmit() {
   const timer = useStageTimer();
   let remainingSeconds = timer?.remaining ? Math.round(timer.remaining / 1000) : null;
   const treatment = game.get("treatment");
-  const {featureUrl}= treatment;
-    // 添加一个状态来存储 features 数据
-    const [features, setFeatures] = useState([]);
+
+ 
+  const initialFeatures = {
+    AIEnhancedPerformance: treatment.AIEnhancedPerformance.split(', ').map(Number),
+    Display4K: treatment.Display4K.split(', ').map(Number),
+    FingerprintReader: treatment.FingerprintReader.split(', ').map(Number),
+    HighspeedWiFi6E: treatment.HighspeedWiFi6E.split(', ').map(Number),
+    LongBatteryLife: treatment.LongBatteryLife.split(', ').map(Number),
+    Thunderbolt4Ports: treatment.Thunderbolt4Ports.split(', ').map(Number),
+    Touchscreen: treatment.Touchscreen.split(', ').map(Number),
+    UltraLightDesign: treatment.UltraLightDesign.split(', ').map(Number),
+  };
+
+
+  const featureNames = Object.keys(initialFeatures);
+  const roles = ["role1", "role2", "role3"];
+
+
+  const [features, setFeatures] = useState(featureNames.map(name => ({
+    name,
+    bonus: {
+      [roles[0]]: initialFeatures[name][0],
+      [roles[1]]: initialFeatures[name][1],
+      [roles[2]]: initialFeatures[name][2],
+    }
+  })));
 
     const desiredFeaturesForRole = features
     .filter(feature => feature.bonus[player.get("role")] === 1)
     .map(feature => feature.name)
     .join(", ");
 
-    // 使用 useEffect 钩子来在组件加载时请求数据
-    useEffect(() => {
-      fetch(featureUrl)
-        .then(response => response.json()) // 将响应转换为 JSON
-        .then(data => setFeatures(data)) // 使用返回的数据更新状态
-        .catch(error => console.error("Failed to load features:", error)); // 处理可能的错误
-    }, []); // 空依赖数组意味着这个 useEffect 只在组件首次渲染时执行
-  
+
 
       
 
@@ -80,12 +96,10 @@ export function FormalSubmit() {
 
 
 
-    
-
+  
   useEffect(() => {
     setTotalPoints(calculateTotal());
   }, [selectedFeatures, player]);
-
 
   const handleOptionChange = featureName => {
     setSelectedFeatures(prev => ({
@@ -102,6 +116,9 @@ export function FormalSubmit() {
       return total + (isSelected ? roleBonus : 0);
     }, 0);
   };
+
+
+
 
   const getSubmittedFeaturesAndBonuses = () => {
       // 确保 submittedData_formal 不为空

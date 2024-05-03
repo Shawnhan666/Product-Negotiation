@@ -13,51 +13,17 @@ import { useStageTimer } from "@empirica/core/player/classic/react";
 
 // TaskBriefModal组件定义
 function TaskBriefModal({ onClose }) {
-
-
   const game = useGame(); 
   const player = usePlayer();
   const treatment = game.get("treatment");
   const {instructionPage} = treatment;
   const instructionsHtml = {__html: instructionPage}
-
   return (
-<div className="task-brief-modal" style={{
-      // 直接内联样式，也可以使用className引用外部CSS样式
-      position: 'fixed', 
-      top: '20%', 
-      right: '45%', 
-      left: '5%', // 从20%修改为10%，使模态框向左移动
-      padding: '10px', 
-      borderRadius: '10px', 
-      boxShadow: '0 0 10px rgba(0,0,0,0.5)', 
-      zIndex: 100,
-      backgroundColor: '#f0f0f0', // 灰色背景
-      border: '2px solid black' // 添加黑色边框
-      
-    }}>
+<div className="task-brief-modal" style={{position: 'fixed', top: '20%', right: '45%', left: '5%', padding: '10px', borderRadius: '10px', boxShadow: '0 0 10px rgba(0,0,0,0.5)', zIndex: 100,backgroundColor: '#f0f0f0', }}>
       <div className="task-brief">
-
-       
      <h2 className="task-brief-title"><strong>Task Brief</strong></h2>
 <br />
-<div dangerouslySetInnerHTML={instructionsHtml} />
-      {/* <p>You will take part in <strong>five</strong> product design deliberations, each lasting 10 minutes and focusing on a different product from a technology company's portfolio. At the start of each deliberation, you will learn which features are your <strong>"desired features"</strong> for that product.</p>
-      <br />
-      <ul>
-        <li>Including a desired product feature nets you $1.</li>
-        <li>Including an undesired product feature costs you $0.50.</li>
-        <li>Excluding any feature has no impact on earnings.</li>
-        <li>To maximize earnings, you should persuade others to include your desired features and exclude undesired ones. A payoff calculator is provided for your convenience.</li>
-        <li>The total earnings you make across all design discussions equal your “bonus.”</li>
-        <li>If you finish all five, you earn a fixed $10 plus your accumulated “bonus” earnings.</li>
-      </ul>
-<br />
-      <p>In each deliberation, there will be two department heads and one CEO. You are randomly assigned one of these roles each time, which means your role can change from one deliberation to another. Anyone can suggest an <strong>unofficial vote</strong> to gauge each other's interest in including or excluding product features. After 10 minutes, an <strong>official vote</strong> will be conducted where the CEO will propose a set of product features and the two department heads will vote “YES” or “NO” to them. Only official vote results will affect earnings.</p>
-      <br />
-      
-      <p>You can see your role and priority features at the bottom of the main negotiations page.</p> */}
-    </div>
+<div dangerouslySetInnerHTML={instructionsHtml} /> </div>
   
 
  {/* 关闭按钮，使用绝对定位 */}
@@ -89,7 +55,6 @@ export function Choice() {
   const { appendSystemMessage } = useChat();
   const timer = useStageTimer();
   let remainingSeconds = timer?.remaining ? Math.round(timer.remaining / 1000) : null;
-
 
   
 
@@ -135,29 +100,75 @@ export function Choice() {
 
  const treatment = game.get("treatment");
 
- const {featureUrl}= treatment;
 
-  // 添加一个状态来存储 features 数据
-  const [features, setFeatures] = useState([]);
+//  const {
+//   Touchscreen,
+//   FingerprintReader, // 假设原名是 'Fingerprint Reader'
+//   Display4K, // 假设原名是 '4K Display'
+//   Thunderbolt4Ports,
+//   AIEnhancedPerformance,
+//   UltraLightDesign,
+//   HighspeedWiFi6E,
+//   LongBatteryLife
+  
+// } = treatment;
+
+
+
+const initialFeatures = {
+  AIEnhancedPerformance: treatment.AIEnhancedPerformance.split(', ').map(Number),
+  Display4K: treatment.Display4K.split(', ').map(Number),
+  FingerprintReader: treatment.FingerprintReader.split(', ').map(Number),
+  HighspeedWiFi6E: treatment.HighspeedWiFi6E.split(', ').map(Number),
+  LongBatteryLife: treatment.LongBatteryLife.split(', ').map(Number),
+  Thunderbolt4Ports: treatment.Thunderbolt4Ports.split(', ').map(Number),
+  Touchscreen: treatment.Touchscreen.split(', ').map(Number),
+  UltraLightDesign: treatment.UltraLightDesign.split(', ').map(Number),
+};
+
+const featureNames = Object.keys(initialFeatures);
+const roles = ["role1", "role2", "role3"];  // 确保与你的应用中的角色标识符一致
+
+// 使用 roles 数组来初始化 features 状态
+const [features, setFeatures] = useState(featureNames.map(name => ({
+  name,
+  bonus: {
+    [roles[0]]: initialFeatures[name][0],
+    [roles[1]]: initialFeatures[name][1],
+    [roles[2]]: initialFeatures[name][2],
+  }
+})));
+
+const [selectedFeatures, setSelectedFeatures] = useState({});
+
+const handleOptionChange = featureName => {
+  setSelectedFeatures(prev => ({
+    ...prev,
+    [featureName]: !prev[featureName]
+  }));
+  console.log(`Feature ${featureName} selected status: ${!selectedFeatures[featureName]}`);
+};
+
+const calculateTotal = () => {
+  const role = player.get("role");  // 使用玩家的角色标识符来计算总分
+  return features.reduce((total, feature) => {
+    const isSelected = selectedFeatures[feature.name];
+    const roleBonus = feature.bonus[role] || 0;
+    return total + (isSelected ? roleBonus : 0);
+  }, 0);
+};
 
 
 
 
-
-  // 使用 useEffect 钩子来在组件加载时请求数据
-  useEffect(() => {
-    fetch(featureUrl)
-      .then(response => response.json()) // 将响应转换为 JSON
-      .then(data => setFeatures(data)) // 使用返回的数据更新状态
-      .catch(error => console.error("Failed to load features:", error)); // 处理可能的错误
-  }, []); // 空依赖数组意味着这个 useEffect 只在组件首次渲染时执行
+ 
 
 
 
 
 
   const generateUniqueId = () => `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
-  const [selectedFeatures, setSelectedFeatures] = useState({});
+  //const [selectedFeatures, setSelectedFeatures] = useState({});
   const [totalPoints, setTotalPoints] = useState(0);
 
   const [proposalSubmitted, setProposalSubmitted] = useState(false);
@@ -315,21 +326,21 @@ useEffect(() => {
 
 //
 
-const handleOptionChange = featureName => {
-  setSelectedFeatures(prev => {
-    const newState = { ...prev, [featureName]: !prev[featureName] };
-    return newState;
-  });
-};
+// const handleOptionChange = featureName => {
+//   setSelectedFeatures(prev => {
+//     const newState = { ...prev, [featureName]: !prev[featureName] };
+//     return newState;
+//   });
+// };
 
-  const calculateTotal = () => {
-    const role = player.get("role");
-    return features.reduce((total, feature) => {
-      const isSelected = selectedFeatures[feature.name];
-      const roleBonus = feature.bonus[role] || 0;
-      return total + (isSelected ? roleBonus : 0);
-    }, 0);
-  };
+  // const calculateTotal = () => {
+  //   const role = player.get("role");
+  //   return features.reduce((total, feature) => {
+  //     const isSelected = selectedFeatures[feature.name];
+  //     const roleBonus = feature.bonus[role] || 0;
+  //     return total + (isSelected ? roleBonus : 0);
+  //   }, 0);
+  // };
 
   const saveChoices = () => {
     const role = player.get("role");
@@ -471,6 +482,9 @@ const handleOptionChange = featureName => {
         <h6>The product under deliberation is: <strong>Laptop</strong>.</h6>
         <h6>You role's desired features are:<strong>{desiredFeaturesForRole || " "}</strong>.</h6>
 
+        <br />
+        
+
       </div>
       </div>
 
@@ -478,8 +492,9 @@ const handleOptionChange = featureName => {
       <div className="table-wrapper">
         
             <table className="styled-table">
-              
+    
                 <thead>
+                
                   <tr style={{ backgroundColor: 'lightblue' }}>
                     <th>Product Features</th>
                     <th>Include</th>
@@ -487,6 +502,7 @@ const handleOptionChange = featureName => {
                   </tr>
                 </thead>
                 <tbody>
+      
                               {features.map((feature, index) => {
                                 //const isSelectedForVote = round.get("selectedFeaturesForInformalVote")?.includes(feature.name);
                                 const isDesiredFeature = desiredFeaturesForRole.includes(feature.name);
