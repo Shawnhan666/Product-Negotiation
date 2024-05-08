@@ -471,23 +471,23 @@ useEffect(() => {
 {showTaskBrief && <TaskBriefModal onClose={handleCloseTaskBrief} />}
     {/* 确保在这里调用 TaskBriefModal，并根据 showTaskBrief 状态显示或隐藏 */}
         <div className="informal-text-brief-wrapper">
-       <div className="informal-text-brief">
-
-
+       <div className="informal-text-brief-1">
         <h6>Once the countdown is complete, the CEO will have 1 minute to submit a formal proposal.</h6>
         <h6>Toggle the checkboxes below to calculate your bonus and include features for an informal proposal.</h6>
         <h6>You may scroll to the bottom of the page to review the task brief.</h6>
-        <br />
+        </div>
+<br />
+        <div className="informal-text-brief-2">
+     
         <h6>For this product design deliberation, your role is: <strong>{player.get("name")}</strong>.</h6>
         <h6>The product under deliberation is: <strong>Laptop</strong>.</h6>
         <h6>You role's desired features are:<strong>{desiredFeaturesForRole || " "}</strong>.</h6>
 
-        <br />
-        
 
+      
       </div>
       </div>
-
+<br />
     <div className="table-container">
       <div className="table-wrapper">
         
@@ -535,8 +535,8 @@ useEffect(() => {
               {!anySubmitted && (
                 <div className="button-container">
 
-                  <button onClick={handleShowTaskBrief} className={"taskbrief-button"}  >Show Task Brief</button>
-
+                  {/* <button onClick={handleShowTaskBrief} className={"taskbrief-button"}  >Show Task Brief</button> */}
+                  
                   <button onClick={handleSubmitProposal} className={anySubmitted ? "submit-button-disabled" : "submit-button"}>
                     Submit for Informal Vote
                   </button>
@@ -582,7 +582,7 @@ useEffect(() => {
       {round.get("anySubmitted") && !currentVote && !allVoted && (
         <div className="voting-buttons-container">
 
-<button onClick={handleShowTaskBrief} className={"taskbrief-button"}  >Show Task Brief</button>
+{/* <button onClick={handleShowTaskBrief} className={"taskbrief-button"}  >Show Task Brief</button> */}
           <Button className="vote-button" handleClick={() => handleVoteSubmit("For")}>Accept</Button>
           <Button className="vote-button" handleClick={() => handleVoteSubmit("Against")}>Reject</Button>
         </div>
@@ -590,7 +590,7 @@ useEffect(() => {
 
       {currentVote && !allVoted && (
         <div>
-          <button onClick={handleShowTaskBrief} className={"taskbrief-button"}  >Show Task Brief</button>
+          {/* <button onClick={handleShowTaskBrief} className={"taskbrief-button"}  >Show Task Brief</button> */}
           {currentVote === "For" && <div>You voted Accept of this informal proposal. Waiting for other votes.</div>}
           {currentVote === "Against" && <div>You voted Reject of this informal proposal. Waiting for other votes.</div>}
         </div>

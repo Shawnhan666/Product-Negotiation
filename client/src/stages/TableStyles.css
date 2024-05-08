@@ -18,18 +18,31 @@
     text-align: center; /* 仅将这个标题的文本居中 */
   }
 
-  .container {
+  /* .container {
     max-height: 1500px;
-    height: 90%; /* 最大宽度，保证在大屏幕上也不会过宽 */
-    max-width: 1000px; /* 最大宽度，保证在大屏幕上也不会过宽 */
-    width: 90%; /* 宽度相对于视口宽度的百分比 */
+    height: 90%; 
+    max-width: 1000px; 
+    width: 90%; 
      overflow-y: auto;
     margin: 0 auto;
     padding: 20px;
-    box-sizing: border-box; /* 确保内边距包含在高度计算内 */
-  }
+    box-sizing: border-box; 
+  } */
   
    
+  .container {
+    max-height: 90vh; /* 限制最大高度为视口高度的90% */
+    height: auto; /* 高度根据内容自动调整 */
+    max-width: 1000px;
+    width: 90%;
+    overflow-y: auto; /* 当内容超过视口高度90%时显示滚动条 */
+    margin: 0 auto;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+
+
      
   .selected-feature {
     font-weight: bold;
@@ -209,19 +222,28 @@
   
   /* 为.task-brief添加外层包装器样式 */
   .informal-text-brief-wrapper {
-    display: flex;
-    justify-content: center; /* 使.task-brief整体居中 */
+    padding-left: 20%; /* 根据父容器宽度的20%来设置 */
+    align-items: center; /* 保证内部元素居中对齐 */
     width: 100%; /* 占满父容器宽度 */
+    justify-content: center; /* 使.task-brief整体居中 */
+
   }
-  .informal-text-brief {
+  .informal-text-brief-1 {
     width: 80%; /* 根据需要调整宽度，确保文本左对齐 */
     text-align: left;
     margin-top: 0px;
-    background-color: #ffffff;
+    
+    background-color: #a4d2ef;
     border-radius: 5px;
   }
   
-  
+  .informal-text-brief-2 {
+    width: 80%; /* 根据需要调整宽度，确保文本左对齐 */
+    text-align: left;
+    margin-top: 0px;
+    background-color: #9bc5e1;
+    border-radius: 5px;
+  }
   
   
   

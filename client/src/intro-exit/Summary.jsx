@@ -50,7 +50,7 @@ export function Summary({next}) {
         <h4>
  
           <br />
-          <p>In total you have earned {roundScores} across {totalRounds} rounds, for a total of ${cumulativePoints}.</p>
+          <p>In total you have earned {roundScores} across {totalRounds} rounds, for a total bonus of ${cumulativePoints}  with basic payment £ xxx.</p>
           <br />
           <p>Please press "OK" to acknowledge and continue.</p>
         </h4>
