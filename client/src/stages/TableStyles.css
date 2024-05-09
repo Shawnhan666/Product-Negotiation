@@ -134,8 +134,14 @@
       margin-top: 10px;      /* 根据需要调整上边距 */
     }
     
+    .voting-results-container {
+      margin-right: 20px; /* 添加左边距 */
+
+    }
+
     .voting-buttons-container, .voting-results-container {
-      margin-right: 10px; /* 为容器添加右边距 */
+      margin-left: 173.5px; 
+     
     }
   
   
@@ -229,19 +235,20 @@
 
   }
   .informal-text-brief-1 {
-    width: 80%; /* 根据需要调整宽度，确保文本左对齐 */
+    width: 80%; 
     text-align: left;
     margin-top: 0px;
-    
+    padding: 15px; /* 添加padding以在内容周围增加间距 */
     background-color: #a4d2ef;
     border-radius: 5px;
   }
   
   .informal-text-brief-2 {
-    width: 80%; /* 根据需要调整宽度，确保文本左对齐 */
+    width: 80%; 
     text-align: left;
     margin-top: 0px;
-    background-color: #9bc5e1;
+    background-color: #a4d2ef;
+    padding: 15px; /* 添加padding以在内容周围增加间距 */
     border-radius: 5px;
   }
   

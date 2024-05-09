@@ -3,19 +3,12 @@ import { ClassicListenersCollector } from "@empirica/core/admin/classic";
 export const Empirica = new ClassicListenersCollector();
 import { usePlayer, useGame } from "@empirica/core/player/classic/react";
 
-
 Empirica.onGameStart(({ game }) => {
   const treatment = game.get("treatment");
-
   const {role1}= treatment;
   const {role2} = treatment;
   const {role3} = treatment;
-  
-  
   console.log("Original roles value:", role1 ,role2, role3);
-
- // const roles = ["CEO", "Department_Head_A", "Department_Head_B"];
-
   const { numRounds, informalSubmitDuration, formalSubmitDuration, formalVoteDuration, resultDuration } = treatment;
 
   for (let i = 0; i < numRounds; i++) {
@@ -28,35 +21,32 @@ Empirica.onGameStart(({ game }) => {
     round.addStage({name:"Result", duration: resultDuration})
   }
 
-
- 
-const roles = ["role1", "role2", "role3"]; 
-game.players.forEach((player, index) => {
-  const roleIdentifier = roles[index % roles.length]; 
-  player.set("role", roleIdentifier);  
+    // 定义角色及其对应名称
+    const roles = [{ key: "role1", name: role1 }, { key: "role2", name: role2 }, { key: "role3", name: role3 }];
   
-  const roleNameMapping = {role1, role2,role3};
-  player.set("role", roleIdentifier); 
-  player.set("name", roleNameMapping[roleIdentifier]); 
-});
+    // 随机分配角色
+    const shuffledRoles = roles.sort(() => Math.random() - 0.5); // 使用随机排序方法来打乱角色数组
+  
+    game.players.forEach((player, index) => {
+      const roleIndex = index % shuffledRoles.length; // 确保即使玩家数量超过角色数量，也能循环分配
+      const role = shuffledRoles[roleIndex];
+      player.set("role", role.key); // 存储角色键
+      player.set("name", role.name); // 存储角色名称
+    });
 
-
-  // const roles = [role1, role2, role3]; // 将角色放入数组以方便访问
-  // game.players.forEach((player, index) => {
-  //   // 直接根据索引分配角色
-  //   const roleName = roles[index]; // 由于玩家和角色数量匹配，直接这样分配
-  //   player.set("role", roleName);
-  //   player.set("name", roleName);
-  // });
 
 
  
-  // game.players.forEach((player, index) => {
-  //   // const roleIndex = index % roles.length;
-  //   // const roleName = roles[roleIndex]; // 获取角色名
-  //   // player.set("role", roles[roleIndex]);
-  //   // player.set("name", roleName); 
-  // });
+// const roles = ["role1", "role2", "role3"]; 
+// game.players.forEach((player, index) => {
+//   const roleIdentifier = roles[index % roles.length]; 
+//   player.set("role", roleIdentifier);  
+  
+//   const roleNameMapping = {role1, role2,role3};
+//   player.set("role", roleIdentifier); 
+//   player.set("name", roleNameMapping[roleIdentifier]); 
+// });
+
 
 
 
@@ -69,26 +59,17 @@ game.players.forEach((player, index) => {
 
 Empirica.onRoundStart(({ round }) => { 
   round.set("systemMessages", []);
-
-
- 
-
   const startTime = Date.now();
   round.set("roundStartTime", startTime);
-
   console.log(`Round ${round.get("index")} Start: Round start time set at ${new Date(startTime).toISOString()}`);
-
-
-
 });
  
 
-Empirica.onStageStart(({ stage }) => {
 
+Empirica.onStageStart(({ stage }) => {
   if (stage.get("name") === "Informal Submit") {
     console.log("start of informal submit");
     const players = stage.currentGame.players;
-    
     for (const player of players) {
       player.set("vote", null);
       player.set("currentVote", null); // 如果你有这个状态的话
@@ -100,7 +81,6 @@ Empirica.onStageStart(({ stage }) => {
     stage.set("allVoted", false)
       console.log(`Reset vote for player ${player.id}`);
     }
-
   }
 });
 

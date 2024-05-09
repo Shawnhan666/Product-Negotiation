@@ -91,45 +91,28 @@ export function Choice() {
   }, [remainingSeconds, appendSystemMessage]); // 在依赖数组中添加 appendSystemMessage
 
 
-
-  const [showTaskBrief, setShowTaskBrief] = useState(false);
-  // 显示任务简介的函数
-  const handleShowTaskBrief = () => setShowTaskBrief(true);
-  // 隐藏任务简介的函数
-  const handleCloseTaskBrief = () => setShowTaskBrief(false);
-
- const treatment = game.get("treatment");
-
-
-//  const {
-//   Touchscreen,
-//   FingerprintReader, // 假设原名是 'Fingerprint Reader'
-//   Display4K, // 假设原名是 '4K Display'
-//   Thunderbolt4Ports,
-//   AIEnhancedPerformance,
-//   UltraLightDesign,
-//   HighspeedWiFi6E,
-//   LongBatteryLife
-  
-// } = treatment;
-
+const [showTaskBrief, setShowTaskBrief] = useState(false);
+const handleShowTaskBrief = () => setShowTaskBrief(true);
+const handleCloseTaskBrief = () => setShowTaskBrief(false);
+const treatment = game.get("treatment");
 
 
 const initialFeatures = {
-  AIEnhancedPerformance: treatment.AIEnhancedPerformance.split(', ').map(Number),
-  Display4K: treatment.Display4K.split(', ').map(Number),
-  FingerprintReader: treatment.FingerprintReader.split(', ').map(Number),
-  HighspeedWiFi6E: treatment.HighspeedWiFi6E.split(', ').map(Number),
-  LongBatteryLife: treatment.LongBatteryLife.split(', ').map(Number),
-  Thunderbolt4Ports: treatment.Thunderbolt4Ports.split(', ').map(Number),
+  AI_Enhanced_Performance: treatment.AIEnhancedPerformance.split(', ').map(Number),
+  Display_4K: treatment.Display4K.split(', ').map(Number),
+  Fingerprint_Reader: treatment.FingerprintReader.split(', ').map(Number),
+  Highspeed_WiFi6E: treatment.HighspeedWiFi6E.split(', ').map(Number),
+  Long_Battery_Life: treatment.LongBatteryLife.split(', ').map(Number),
+  Thunderbolt_4Ports: treatment.Thunderbolt4Ports.split(', ').map(Number),
   Touchscreen: treatment.Touchscreen.split(', ').map(Number),
-  UltraLightDesign: treatment.UltraLightDesign.split(', ').map(Number),
+  Ultra_Light_Design: treatment.UltraLightDesign.split(', ').map(Number),
 };
 
-const featureNames = Object.keys(initialFeatures);
-const roles = ["role1", "role2", "role3"];  // 确保与你的应用中的角色标识符一致
 
-// 使用 roles 数组来初始化 features 状态
+
+const featureNames = Object.keys(initialFeatures);
+const roles = ["role1", "role2", "role3"];   
+
 const [features, setFeatures] = useState(featureNames.map(name => ({
   name,
   bonus: {
@@ -150,21 +133,13 @@ const handleOptionChange = featureName => {
 };
 
 const calculateTotal = () => {
-  const role = player.get("role");  // 使用玩家的角色标识符来计算总分
+  const role = player.get("role");  
   return features.reduce((total, feature) => {
     const isSelected = selectedFeatures[feature.name];
     const roleBonus = feature.bonus[role] || 0;
     return total + (isSelected ? roleBonus : 0);
   }, 0);
 };
-
-
-
-
- 
-
-
-
 
 
   const generateUniqueId = () => `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
@@ -215,8 +190,6 @@ const calculateTotal = () => {
   }, [selectedFeatures, player]);
 
 
-//-------------
-
  //--------------------------------------------------------------------------------------------------------重制状态
   useEffect(() => {
     if (nextClicked) {
@@ -254,9 +227,8 @@ const calculateTotal = () => {
   
     // 调用重置函数
     handleReset();
-  
-    // 你可以在这里加入其他依赖项，比如round._id，以确保每次轮次改变时重置状态
-  }, [ nextClicked, round]); // 当players或round变化时触发
+   
+  }, [ nextClicked, round]);  
 
 
 //---------------------------------------------------------------------------------------------------------重制状态
@@ -320,28 +292,6 @@ useEffect(() => {
 }, [players, round, handleNext]); // 当players或round变化时触发
 
 
-
-//---------------------------------------------------------------------------------------------------------
-
-
-//
-
-// const handleOptionChange = featureName => {
-//   setSelectedFeatures(prev => {
-//     const newState = { ...prev, [featureName]: !prev[featureName] };
-//     return newState;
-//   });
-// };
-
-  // const calculateTotal = () => {
-  //   const role = player.get("role");
-  //   return features.reduce((total, feature) => {
-  //     const isSelected = selectedFeatures[feature.name];
-  //     const roleBonus = feature.bonus[role] || 0;
-  //     return total + (isSelected ? roleBonus : 0);
-  //   }, 0);
-  // };
-
   const saveChoices = () => {
     const role = player.get("role");
     return features.reduce((choices, feature) => {
@@ -354,7 +304,7 @@ useEffect(() => {
 
 
   const handleSubmitProposal = (event) => {
- 
+
     event.preventDefault();
     const submitterRoleName = player.get("name");
     const choices = saveChoices();
@@ -484,9 +434,10 @@ useEffect(() => {
         <h6>You role's desired features are:<strong>{desiredFeaturesForRole || " "}</strong>.</h6>
 
 
-      
+   
       </div>
       </div>
+<br />
 <br />
     <div className="table-container">
       <div className="table-wrapper">
@@ -494,7 +445,6 @@ useEffect(() => {
             <table className="styled-table">
     
                 <thead>
-                
                   <tr style={{ backgroundColor: 'lightblue' }}>
                     <th>Product Features</th>
                     <th>Include</th>
@@ -574,42 +524,27 @@ useEffect(() => {
   </table>
   <div className="total-points-display"> Your bonus: ${submissionInfo && submissionInfo.totalBonus}</div>
           </div>
+          {round.get("anySubmitted") && !currentVote && !allVoted && (
+        <div className="voting-buttons-container">
+           <Button className="vote-button" handleClick={() => handleVoteSubmit("For")}>Accept</Button>
+          <Button className="vote-button" handleClick={() => handleVoteSubmit("Against")}>Reject</Button> 
+        </div>
+      )}
           </div>
         )}
 </div>
 <br />
 <div className="voting-section">
-      {round.get("anySubmitted") && !currentVote && !allVoted && (
-        <div className="voting-buttons-container">
-
-{/* <button onClick={handleShowTaskBrief} className={"taskbrief-button"}  >Show Task Brief</button> */}
-          <Button className="vote-button" handleClick={() => handleVoteSubmit("For")}>Accept</Button>
-          <Button className="vote-button" handleClick={() => handleVoteSubmit("Against")}>Reject</Button>
-        </div>
-      )}
+  
 
       {currentVote && !allVoted && (
         <div>
-          {/* <button onClick={handleShowTaskBrief} className={"taskbrief-button"}  >Show Task Brief</button> */}
           {currentVote === "For" && <div>You voted Accept of this informal proposal. Waiting for other votes.</div>}
           {currentVote === "Against" && <div>You voted Reject of this informal proposal. Waiting for other votes.</div>}
         </div>
       )}
 
-      {/* {votingCompleted && (
-        <div className="voting-results-container">
-        <div><strong>Accept :</strong> {forVotersCount} {forVotersCount === 1 ? 'vote' : 'votes'}</div>
-        <div><strong>Reject :</strong> {againstVotersCount} {againstVotersCount === 1 ? 'vote' : 'votes'}</div>
-
-         <Button 
-          className="next-button" 
-          handleClick={handleNext} 
-          disabled={!votingCompleted}>
-          Next Informal Submit
-        </Button> 
-      </div>
-    
-      )} */}
+ 
  <Button handleClick={() => player.stage.set("submit", true)}>Continue</Button>
 
           </div>
