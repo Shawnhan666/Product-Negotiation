@@ -306,11 +306,11 @@
     height: 100vh; /* 根据需要调整高度 */
     font-size: 25px; /* 调整字号 */
     transform: translateY(-100px); /* 向上移动50像素 */
-    padding-left: 230px; /* 左侧留白 */
-    padding-right: 230px; /* 右侧留白 */
+    padding-left: calc(5vw); /* 左侧留白设置为视窗宽度的10% */
+    padding-right: calc(5vw); /* 右侧留白设置为视窗宽度的15% */
   }
   
-  /* 加载动画 */
+
   .loader {
     border: 5px solid #f3f3f3; /* 浅灰色作为加载动画的背景色 */
     border-top: 5px solid #3498db; /* 蓝色作为加载动画的前景色 */

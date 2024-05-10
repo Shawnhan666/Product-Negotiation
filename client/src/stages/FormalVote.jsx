@@ -162,10 +162,17 @@
   
      // 如果当前玩家已经投票，或者玩家是 "Stellar_Cove"，则显示等待
      if (player.get("vote") || player.get("role") === "role1") {
-      return      <div className="waiting-section">
-      <div className="loader"></div>  <div>Other parties are still voting. Once votes are in and tallied, the results will be shown.</div>
-      </div>;
+      return (
+        <div className="container">
+        <div className="waiting-section">
+         
+            <div className="loader"></div>
+            <div>Other parties are still voting. Once votes are in and tallied, the results will be shown.</div>
+          </div>
+        </div>
+      );
     }
+    
   
       if (!submittedData_formal || !submittedData_formal.decisions) {
   

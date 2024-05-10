@@ -5,21 +5,34 @@ import { usePlayer, useGame } from "@empirica/core/player/classic/react";
 
 Empirica.onGameStart(({ game }) => {
   const treatment = game.get("treatment");
-  const {role1}= treatment;
-  const {role2} = treatment;
-  const {role3} = treatment;
+  const { role1, role2, role3, numRounds, informalSubmitDuration, formalSubmitDuration, formalVoteDuration, resultDuration } = treatment;
   console.log("Original roles value:", role1 ,role2, role3);
-  const { numRounds, informalSubmitDuration, formalSubmitDuration, formalVoteDuration, resultDuration } = treatment;
+ 
+
+  // for (let i = 0; i < numRounds; i++) {
+  //   const round = game.addRound({
+  //     name: `Round ${i+1}`,
+  //   });
+  //   round.addStage({ name: "Informal Submit", duration: informalSubmitDuration });
+  //   round.addStage({ name: "Formal Submit", duration: formalSubmitDuration });
+  //   round.addStage({ name: "Formal Vote", duration: formalVoteDuration });
+  //   round.addStage({name:"Result", duration: resultDuration})
+  // }
 
   for (let i = 0; i < numRounds; i++) {
     const round = game.addRound({
-      name: `Round ${i+1}`,
+      name: `Round ${i + 1}`,
     });
     round.addStage({ name: "Informal Submit", duration: informalSubmitDuration });
     round.addStage({ name: "Formal Submit", duration: formalSubmitDuration });
     round.addStage({ name: "Formal Vote", duration: formalVoteDuration });
-    round.addStage({name:"Result", duration: resultDuration})
+    
+    // 只有当不是最后一轮时才添加结果阶段
+    if (i < numRounds - 1) {
+      round.addStage({ name: "Result", duration: resultDuration });
+    }
   }
+
 
     // 定义角色及其对应名称
     const roles = [{ key: "role1", name: role1 }, { key: "role2", name: role2 }, { key: "role3", name: role3 }];
@@ -33,30 +46,10 @@ Empirica.onGameStart(({ game }) => {
       player.set("role", role.key); // 存储角色键
       player.set("name", role.name); // 存储角色名称
     });
-
-
-
- 
-// const roles = ["role1", "role2", "role3"]; 
-// game.players.forEach((player, index) => {
-//   const roleIdentifier = roles[index % roles.length]; 
-//   player.set("role", roleIdentifier);  
-  
-//   const roleNameMapping = {role1, role2,role3};
-//   player.set("role", roleIdentifier); 
-//   player.set("name", roleNameMapping[roleIdentifier]); 
-// });
-
-
-
-
   game.set("submitCount", 0);
   game.set("submissions", []);
   game.set("roundResults", []);
-
 });
-
-
 Empirica.onRoundStart(({ round }) => { 
   round.set("systemMessages", []);
   const startTime = Date.now();
@@ -64,8 +57,6 @@ Empirica.onRoundStart(({ round }) => {
   console.log(`Round ${round.get("index")} Start: Round start time set at ${new Date(startTime).toISOString()}`);
 });
  
-
-
 Empirica.onStageStart(({ stage }) => {
   if (stage.get("name") === "Informal Submit") {
     console.log("start of informal submit");
@@ -134,54 +125,9 @@ Empirica.onStageEnded(({ stage, game }) => {
    });
  });
 
-
-
-//   // 更新或初始化每轮的总分数组
-//   const roundPointsHistory = stage.currentGame.get("RoundPointsHistory") || [];
-  
-//   for (const player of players) {
-//     const role = player.get("role");
-//     const roleName = player.get("name"); // 获取玩家的角色名
-
-
-//     let totalPoints = playerBonusesByRole[role] || 0; 
-
-//     const cumulativePoints = player.get("cumulativePoints") || 0;
-//     const updatedCumulativePoints = totalPoints + cumulativePoints;
-
-//     player.set("roundPoints", totalPoints);
-//     player.set("cumulativePoints", updatedCumulativePoints);
-//     player.set("RoundPointsHistory", roundPointsHistory);
-//     // 将本轮分数添加到历史记录中
-//     roundPointsHistory.push({ roundIndex, totalPoints,  roleName: roleName  });
-//   }
-
-//   console.log("Round Points History:");
-
-  
-//   roundPointsHistory.forEach((roundData) => {
-//     console.log(`Round ${roundData.roundIndex + 1}:  Role: ${roundData.roleName}, Total points: ${roundData.totalPoints}`);
-//   });
-// });
-
-
-
-
 Empirica.onRoundEnded(({ round }) => {
 
- 
-
-
-
-
-
-
-
 });
-
-
-
-
 Empirica.onGameEnded(({ game }) => {});
 
  

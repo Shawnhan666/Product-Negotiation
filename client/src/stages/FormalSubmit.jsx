@@ -8,6 +8,7 @@ import { useGame } from "@empirica/core/player/classic/react";
 import { useChat } from '../ChatContext'; 
 import { Timer } from "../components/Timer";
 import { useStageTimer } from "@empirica/core/player/classic/react";
+
 // import features from './features.json';
 
 
@@ -188,8 +189,7 @@ export function FormalSubmit() {
      }
    });
   };
- 
-
+  
   if (round.get("isSubmitted")) {
     player.stage.set("submit", true);  
     return;
@@ -260,10 +260,12 @@ export function FormalSubmit() {
 
   } else {
     return (
+      <div className="container">
       <div className="waiting-section">
           <div className="loader"></div> 
         <p>Please wait while the CEO enters a proposal for you to vote on.</p>
       </div>
+    </div>
     );
   }
 }

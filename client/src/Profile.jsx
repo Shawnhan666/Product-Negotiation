@@ -85,9 +85,7 @@ function TaskBriefModal({ onClose }) {
           {/* {stage ? stage.get("name") : ""} */}
         </div>
       </div>
-
       <Timer />
-
       <div className="flex space-x-3 items-center justify-end">
         <button
           onClick={handleShowTaskBrief}
@@ -101,21 +99,4 @@ function TaskBriefModal({ onClose }) {
 }
 
 
-
-{/* 
-      <div className="flex space-x-3 items-center justify-end">
-        <div className="flex flex-col items-center">
-           <div className="text-xs font-semibold uppercase tracking-wide leading-none text-gray-400">
-            Score
-          </div>
-          {/*<div className="text-3xl font-semibold !leading-none tabular-nums">
-            {score}
-          </div> 
-        </div>
-        {/* <div className="h-11 w-11">
-          <Avatar player={player} />
-        </div> 
-      </div>
-    </div>
-  );
-} */}
+ 
