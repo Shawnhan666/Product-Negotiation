@@ -21,10 +21,6 @@ factors:
         - value: DepartmentHeadB
         - value: Department-B
         - value: Department-Head-B
-    - name: featureUrl
-      desc: URL of the pay off matrix
-      values:
-        - value: https://raw.githubusercontent.com/Shawnhan666/Product-Negotiation/main/client/src/stages/features.json
     - name: Touchscreen
       values:
         - value: 1, -0.5, 1
@@ -104,6 +100,10 @@ factors:
         - value: 1
         - value: 1000
         - value: 3000
+    - name: featureUrl
+      desc: URL of the pay off matrix
+      values:
+        - value: https://raw.githubusercontent.com/Shawnhan666/Product-Negotiation/main/client/src/stages/features.json
 treatments:
     - name: test
       factors:
