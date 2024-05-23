@@ -1,4 +1,6 @@
-[
+{
+  "product_name": "Laptop",
+  "features": [
     {
       "name": "Touchscreen",
       "bonus": { "role1": 1, "role2": -0.5, "role3": 1 }
@@ -32,3 +34,4 @@
       "bonus": { "role1": 1, "role2": -0.5, "role3": -0.5 }
     }
   ]
+}

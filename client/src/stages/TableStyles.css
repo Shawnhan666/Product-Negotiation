@@ -139,7 +139,8 @@
 
     }
 
-    .voting-buttons-container, .voting-results-container {
+    .voting-buttons-container {
+      display: flex;  
       margin-left: 173.5px; 
      
     }

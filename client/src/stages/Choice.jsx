@@ -1,4 +1,4 @@
-import { usePlayer, useRound, useGame  } from "@empirica/core/player/classic/react";
+import { usePlayer, useRound, useGame } from "@empirica/core/player/classic/react";
 import { usePlayers } from "@empirica/core/player/classic/react";
 import React from "react";
 import { Button } from "../components/Button";
@@ -8,14 +8,13 @@ import { useChat } from '../ChatContext';
 import { Timer } from "../components/Timer";
 import { useStageTimer } from "@empirica/core/player/classic/react";
 
-// import features from './features.json';
-
 
 // TaskBriefModal组件定义
 function TaskBriefModal({ onClose }) {
   const game = useGame(); 
   const player = usePlayer();
   const treatment = game.get("treatment");
+  
   const {instructionPage} = treatment;
   const instructionsHtml = {__html: instructionPage}
   return (
@@ -59,6 +58,12 @@ export function Choice() {
   
 
   useEffect(() => {
+    // check players number 
+    console.log("Number of players currently in the game:", players.length);
+  }, [players]); // 依赖于 players 数组，确保只在玩家列表变化时输出
+
+
+  useEffect(() => {
     // 处理 5 分钟和 2 分钟提醒
     const reminders = [300, 120]; // 剩余时间提醒点
     if (reminders.includes(remainingSeconds)) {
@@ -96,54 +101,47 @@ const handleShowTaskBrief = () => setShowTaskBrief(true);
 const handleCloseTaskBrief = () => setShowTaskBrief(false);
 const treatment = game.get("treatment");
 
-
-const initialFeatures = {
-  AI_Enhanced_Performance: treatment.AIEnhancedPerformance.split(', ').map(Number),
-  Display_4K: treatment.Display4K.split(', ').map(Number),
-  Fingerprint_Reader: treatment.FingerprintReader.split(', ').map(Number),
-  Highspeed_WiFi6E: treatment.HighspeedWiFi6E.split(', ').map(Number),
-  Long_Battery_Life: treatment.LongBatteryLife.split(', ').map(Number),
-  Thunderbolt_4Ports: treatment.Thunderbolt4Ports.split(', ').map(Number),
-  Touchscreen: treatment.Touchscreen.split(', ').map(Number),
-  Ultra_Light_Design: treatment.UltraLightDesign.split(', ').map(Number),
-};
+const {featureUrl}= treatment;
+  // 添加一个状态来存储 features 数据
+const [features, setFeatures] = useState([]);
+const [productName, setProductName] = useState([]);
 
 
+  useEffect(() => {
+    fetch(featureUrl)
+      .then(response => response.json()) // 将响应转换为 JSON
+      .then(data => {
+        setFeatures(data.features); // 更新特性
+        setProductName(data.product_name); // 存储产品名称
+      })
 
-const featureNames = Object.keys(initialFeatures);
-const roles = ["role1", "role2", "role3"];   
+      .catch(error => console.error("Failed to load features:", error)); // 处理可能的错误
+  }, []); 
 
-const [features, setFeatures] = useState(featureNames.map(name => ({
-  name,
-  bonus: {
-    [roles[0]]: initialFeatures[name][0],
-    [roles[1]]: initialFeatures[name][1],
-    [roles[2]]: initialFeatures[name][2],
-  }
-})));
+
 
 const [selectedFeatures, setSelectedFeatures] = useState({});
 
 const handleOptionChange = featureName => {
-  setSelectedFeatures(prev => ({
-    ...prev,
-    [featureName]: !prev[featureName]
-  }));
-  console.log(`Feature ${featureName} selected status: ${!selectedFeatures[featureName]}`);
+  setSelectedFeatures(prev => {
+    const newState = { ...prev, [featureName]: !prev[featureName] };
+    return newState;
+  });
 };
 
-const calculateTotal = () => {
-  const role = player.get("role");  
-  return features.reduce((total, feature) => {
-    const isSelected = selectedFeatures[feature.name];
-    const roleBonus = feature.bonus[role] || 0;
-    return total + (isSelected ? roleBonus : 0);
-  }, 0);
-};
+  const calculateTotal = () => {
+    const role = player.get("role");
+    return features.reduce((total, feature) => {
+      const isSelected = selectedFeatures[feature.name];
+      const roleBonus = feature.bonus[role] || 0;
+      return total + (isSelected ? roleBonus : 0);
+    }, 0);
+  };
+
 
 
   const generateUniqueId = () => `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
-  //const [selectedFeatures, setSelectedFeatures] = useState({});
+
   const [totalPoints, setTotalPoints] = useState(0);
 
   const [proposalSubmitted, setProposalSubmitted] = useState(false);
@@ -161,7 +159,7 @@ const calculateTotal = () => {
 
 
   const handleNext = () => {
-    // 重置轮次相关的状态
+    // Reset round-related state
     round.set("nextClicked", true);
     round.set("votingCompleted", false);
     round.set("anySubmitted", false);
@@ -169,20 +167,14 @@ const calculateTotal = () => {
     round.set("allVoted", false)
     round.set("selectedFeaturesForInformalVote", null);
     round.set("submittedInformalVote", false)
-    
-  
-    // 重置每个玩家的投票状态
     players.forEach(player => {
         player.set("vote", null);
-        player.set("currentVote", null); // 如果你有这个状态的话
+        player.set("currentVote", null); 
         player.set("allVoted", false)
         console.log(`Reset vote for player ${player.id}`);
     });
   
-    // 可以在这里添加任何其他需要在点击Next时执行的逻辑
-  
-    // 可选：如果你需要在状态重置后强制刷新页面
-    // window.location.reload();
+
   };
 
   useEffect(() => {
@@ -235,61 +227,34 @@ const calculateTotal = () => {
 
 
 
-
-
-useEffect(() => {
-
-  const role = player.get("name");
-  const roleIdentifier = player.get("role");
-
-  console.log("player role", role);
-  console.log("player roleIdentifier", roleIdentifier);
-
-  // Check if the vote is complete and only allow a specific role to send the system message
-  if (votingCompleted && roleIdentifier === "role1") {
-    const acceptVotes = players.filter(p => p.get("vote") === "For").length;
-    const rejectVotes = players.filter(p => p.get("vote") === "Against").length;
-
-      
-        const votePassed = acceptVotes === 3 && rejectVotes === 0;
-        const voteStatus = votePassed ? "passed" : "failed";
-
-    // Retrieve the selected features for this vote
-    const selectedFeatures = round.get("selectedFeaturesForInformalVote") || [];
-
-    // Build the result message including the selected features
-    const resultsMessage = `This vote has ${voteStatus} with ${acceptVotes} accept, ${rejectVotes} reject. Features Included: ${selectedFeatures.join(", ")}.`;
-
-    // Send the system message
-    appendSystemMessage({
-      id: generateUniqueId(), // Use a unique ID
-      text: resultsMessage,
-      sender: {
-        id: Date.now(),
-        name: "Notification",
-        avatar: "",
-        role: "Notification",
-      }
-    });
-    console.log(resultsMessage);
-  }
-
+// useEffect(() => {
 //   const role = player.get("name");
 //   const roleIdentifier = player.get("role");
-
 //   console.log("player role", role);
 //   console.log("player roleIdentifier", roleIdentifier);
 
-
-//  if (votingCompleted && roleIdentifier === "role1") {
+//   // Check if the vote is complete and only allow a specific role to send the system message
+//   if (votingCompleted && roleIdentifier === "role1") {
 //     const acceptVotes = players.filter(p => p.get("vote") === "For").length;
 //     const rejectVotes = players.filter(p => p.get("vote") === "Against").length;
 
-//     // 构建结果消息
-//     const resultsMessage = `Informal Vote Results: ${acceptVotes} accept, ${rejectVotes} reject.`;
-//     // 发送系统消息
+//          // total votes number 
+//     const totalVotes = acceptVotes + rejectVotes;
+
+//     // 检查总投票数是否等于玩家总数
+//     if (totalVotes === players.length) {
+//         const votePassed = acceptVotes === 3 && rejectVotes === 0;
+//         const voteStatus = votePassed ? "passed" : "failed";
+
+//     // Retrieve the selected features for this vote
+//     const selectedFeatures = round.get("selectedFeaturesForInformalVote") || [];
+
+//     // Build the result message including the selected features
+//     const resultsMessage = `This vote has ${voteStatus} with ${acceptVotes} accept, ${rejectVotes} reject. Features Included: ${selectedFeatures.join(", ")}.`;
+
+//     // Send the system message
 //     appendSystemMessage({
-//       id: generateUniqueId(), 
+//       id: generateUniqueId(), // Use a unique ID
 //       text: resultsMessage,
 //       sender: {
 //         id: Date.now(),
@@ -299,10 +264,53 @@ useEffect(() => {
 //       }
 //     });
 //     console.log(resultsMessage);
-//   }
-}, [votingCompleted,players]); 
+  
+// } else {
+//   console.log("Not all players have voted. No system message sent.");
+// }
+// }
+
+// }, [votingCompleted,players]); 
 
 
+// 新创建的函数，用于处理投票完成后的逻辑
+const handleVoteResults = () => {
+  const role = player.get("name");
+  const roleIdentifier = player.get("role");
+
+  console.log("player role", role);
+  console.log("player roleIdentifier", roleIdentifier);
+
+  if (roleIdentifier === "role1") {
+    const acceptVotes = players.filter(p => p.get("vote") === "For").length;
+    const rejectVotes = players.filter(p => p.get("vote") === "Against").length;
+
+    const totalVotes = acceptVotes + rejectVotes;
+
+    if (totalVotes === players.length) {
+      const votePassed = acceptVotes === 3 && rejectVotes === 0;
+      const voteStatus = votePassed ? "passed" : "failed";
+
+      const selectedFeatures = round.get("selectedFeaturesForInformalVote") || [];
+      const resultsMessage = `This vote has ${voteStatus} with ${acceptVotes} accept, ${rejectVotes} reject. Features Included: ${selectedFeatures.join(", ")}.`;
+
+      appendSystemMessage({
+        id: generateUniqueId(),
+        text: resultsMessage,
+        sender: {
+          id: Date.now(),
+          name: "Notification",
+          avatar: "",
+          role: "Notification",
+        }
+      });
+
+      console.log(resultsMessage);
+    } else {
+      console.log("Not all players have voted. No system message sent.");
+    }
+  }
+};
 
 //----------------------------------------------------------------------------------------------
 
@@ -311,15 +319,14 @@ useEffect(() => {
 
   if (allVoted) {
       round.set("votingCompleted", true);
-      console.log("all voted，set votingCompleted为true");
+      console.log("all voted, set votingCompleted为true");
 
-      // 使用 setTimeout 来延迟重置逻辑的执行，确保有足够的时间来处理和显示投票结果
-  setTimeout(() => {
-    handleNext();
-  }, 1000); // 延迟1秒执行
+      handleVoteResults();  /////////////////
+      handleNext();        //////////////////
+
 
   }
-}, [players, round, handleNext]); // 当players或round变化时触发
+}, [players, round, handleNext]); 
 
 
   const saveChoices = () => {
@@ -460,7 +467,7 @@ useEffect(() => {
         <div className="informal-text-brief-2">
      
         <h6>For this product design deliberation, your role is: <strong>{player.get("name")}</strong>.</h6>
-        <h6>The product under deliberation is: <strong>Laptop</strong>.</h6>
+        <h6>The product under deliberation is: <strong>{productName}</strong>.</h6>
         <h6>You role's desired features are:<strong>{desiredFeaturesForRole || " "}</strong>.</h6>
 
 
@@ -557,6 +564,7 @@ useEffect(() => {
           {round.get("anySubmitted") && !currentVote && !allVoted && (
         <div className="voting-buttons-container">
            <Button className="vote-button" handleClick={() => handleVoteSubmit("For")}>Accept</Button>
+           
           <Button className="vote-button" handleClick={() => handleVoteSubmit("Against")}>Reject</Button> 
         </div>
       )}

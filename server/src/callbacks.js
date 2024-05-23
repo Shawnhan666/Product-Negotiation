@@ -8,6 +8,7 @@ Empirica.onGameStart(({ game }) => {
   const { role1, role2, role3, numRounds, informalSubmitDuration, formalSubmitDuration, formalVoteDuration, resultDuration } = treatment;
   console.log("Original roles value:", role1 ,role2, role3);
  
+  console.log("Number of players in the game:", game.players.length);
 
   // for (let i = 0; i < numRounds; i++) {
   //   const round = game.addRound({
