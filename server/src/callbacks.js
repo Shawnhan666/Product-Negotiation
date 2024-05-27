@@ -24,8 +24,8 @@ Empirica.onGameStart(({ game }) => {
     const round = game.addRound({
       name: `Round ${i + 1}`,
     });
-    round.addStage({ name: "Informal Submit", duration: informalSubmitDuration });
-    round.addStage({ name: "Formal Submit", duration: formalSubmitDuration });
+    round.addStage({ name: "Discussion and Informal Vote", duration: informalSubmitDuration });
+    round.addStage({ name: "Submit Formal Vote", duration: formalSubmitDuration });
     round.addStage({ name: "Formal Vote", duration: formalVoteDuration });
     
     // 只有当不是最后一轮时才添加结果阶段

@@ -11,6 +11,9 @@ export function Summary({next}) {
     const round = useRound();
     const players = usePlayers();
   
+    const treatment = game.get("treatment");
+  
+    const {basicpay} = treatment;
 
     const roleIdentifier = player.get("role");
     const roundPoints = player.get("roundPoints") || 0;
@@ -50,7 +53,8 @@ export function Summary({next}) {
         <h4>
  
           <br />
-          <p>In total you have earned £{roundScores} across {totalRounds} rounds, for a total bonus of ${cumulativePoints}  with basic payment £ xxx.</p>
+          {/* <p>In total you have earned £{roundScores} across {totalRounds} rounds, for a total bonus of ${cumulativePoints}  with basic payment £{basicpay}.</p> */}
+          <p>You earned a bonus of £{roundScores} for a total payment of £{basicpay}+{roundScores}.</p>
           <br />
           <p>Please press "OK" to acknowledge and continue.</p>
         </h4>

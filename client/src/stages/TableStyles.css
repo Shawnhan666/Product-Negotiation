@@ -131,7 +131,7 @@
     .voting-section {
       display: flex;         /* 启用 flexbox */
       justify-content: flex-end; /* 将子元素对齐到容器的右侧 */
-      margin-top: 10px;      /* 根据需要调整上边距 */
+      margin-top: 0px;      /* 根据需要调整上边距 */
     }
     
     .voting-results-container {

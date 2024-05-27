@@ -102,6 +102,8 @@ const handleCloseTaskBrief = () => setShowTaskBrief(false);
 const treatment = game.get("treatment");
 
 const {featureUrl}= treatment;
+const {role1} = treatment;
+
   // 添加一个状态来存储 features 数据
 const [features, setFeatures] = useState([]);
 const [productName, setProductName] = useState([]);
@@ -443,7 +445,7 @@ useEffect(() => {
   const submissionInfo = getSubmittedFeaturesAndBonuses();
 
   const desiredFeaturesForRole = features
-  .filter(feature => feature.bonus[player.get("role")] === 1)
+  .filter(feature => feature.bonus[player.get("role")] > 0)
   .map(feature => feature.name)
   .join(", ");
 
@@ -456,22 +458,19 @@ useEffect(() => {
     <div className="container">
 
 {showTaskBrief && <TaskBriefModal onClose={handleCloseTaskBrief} />}
-    {/* 确保在这里调用 TaskBriefModal，并根据 showTaskBrief 状态显示或隐藏 */}
+
         <div className="informal-text-brief-wrapper">
        <div className="informal-text-brief-1">
-        <h6>Once the countdown is complete, the CEO will have 1 minute to submit a formal proposal.</h6>
-        <h6>Toggle the checkboxes below to calculate your bonus and include features for an informal proposal.</h6>
-        <h6>You may scroll to the bottom of the page to review the task brief.</h6>
+        <h6>When time is up, {role1} will submit a final vote.</h6>
+        <h6><br/>On this page, make as many informal proposals as you want.</h6>
         </div>
 <br />
         <div className="informal-text-brief-2">
      
-        <h6>For this product design deliberation, your role is: <strong>{player.get("name")}</strong>.</h6>
-        <h6>The product under deliberation is: <strong>{productName}</strong>.</h6>
-        <h6>You role's desired features are:<strong>{desiredFeaturesForRole || " "}</strong>.</h6>
+        <h6>Your role is: <strong>{player.get("name")}</strong>.</h6>
+        <h6><br/>The product under deliberation is: <strong>{productName}</strong>.</h6>
+        <h6><br/>You desired features are highlighted in blue.</h6>
 
-
-   
       </div>
       </div>
 <br />
@@ -482,6 +481,7 @@ useEffect(() => {
             <table className="styled-table">
     
                 <thead>
+                  <tr><td colspan="3" style={{borderTop:'0px',borderRight:'0px',borderLeft:'0px',fontWeight:'bold'}}>Calculator</td></tr>
                   <tr style={{ backgroundColor: 'lightblue' }}>
                     <th>Product Features</th>
                     <th>Include</th>
@@ -489,7 +489,6 @@ useEffect(() => {
                   </tr>
                 </thead>
                 <tbody>
-      
                               {features.map((feature, index) => {
                                 //const isSelectedForVote = round.get("selectedFeaturesForInformalVote")?.includes(feature.name);
                                 const isDesiredFeature = desiredFeaturesForRole.includes(feature.name);
@@ -515,8 +514,7 @@ useEffect(() => {
                 Total Bonus: ${totalPoints}
               </div>
               <br />
-                                 
-    
+                                
               
 
               {!anySubmitted && (
@@ -527,6 +525,18 @@ useEffect(() => {
                   <button onClick={handleSubmitProposal} className={anySubmitted ? "submit-button-disabled" : "submit-button"}>
                     Submit for Informal Vote
                   </button>
+
+
+
+                
+          {/* <Button handleClick={() => player.stage.set("submit", true)}>Continue</Button>  */}
+      
+   
+
+
+{/* <Button handleClick={() => player.stage.set("submit", true)}>Continue</Button> */}
+
+
                   </div>
               )}
    
@@ -541,7 +551,9 @@ useEffect(() => {
             <table className="styled-table"  >
     <thead>
     <tr  >
-        <th colSpan="2">Informal Proposal by {getSubmitterRoleName()}</th>
+      <td colspan="2" style={{borderTop:'0px',borderRight:'0px',borderLeft:'0px',fontWeight:'bold'}}>
+        Informal Proposal by {getSubmitterRoleName()}
+        </td>
       </tr>
       <tr  >
         <th>Product Features</th>
@@ -561,6 +573,25 @@ useEffect(() => {
   </table>
   <div className="total-points-display"> Your bonus: ${submissionInfo && submissionInfo.totalBonus}</div>
           </div>
+
+
+          <div className="voting-section">
+              {currentVote && !allVoted && (
+                <div>
+              {currentVote === "For" && <div style={{ color: 'red' }}>You voted Accept of this informal proposal. Waiting for other votes.</div>}
+                {currentVote === "Against" && <div style={{ color: 'red' }}>You voted Reject of this informal proposal. Waiting for other votes.</div>}
+          </div>
+  )}
+
+
+
+      </div>
+
+
+
+
+
+
           {round.get("anySubmitted") && !currentVote && !allVoted && (
         <div className="voting-buttons-container">
            <Button className="vote-button" handleClick={() => handleVoteSubmit("For")}>Accept</Button>
@@ -572,20 +603,7 @@ useEffect(() => {
         )}
 </div>
 <br />
-<div className="voting-section">
-  
 
-      {currentVote && !allVoted && (
-        <div>
-          {currentVote === "For" && <div>You voted Accept of this informal proposal. Waiting for other votes.</div>}
-          {currentVote === "Against" && <div>You voted Reject of this informal proposal. Waiting for other votes.</div>}
-        </div>
-      )}
-
- 
- <Button handleClick={() => player.stage.set("submit", true)}>Continue</Button>
-
-          </div>
  
   
       

@@ -27,7 +27,7 @@ export function FormalSubmit() {
   const timer = useStageTimer();
   let remainingSeconds = timer?.remaining ? Math.round(timer.remaining / 1000) : null;
   const treatment = game.get("treatment");
-
+  const {role1} = treatment;
  
   const {featureUrl}= treatment;
   const [features, setFeatures] = useState([]);
@@ -163,7 +163,7 @@ export function FormalSubmit() {
   }
 
   const selectedFeatureNames = Object.entries(selectedFeatures).filter(([_, isSelected]) => isSelected).map(([featureName]) => featureName);
-   const formalmessageText = `CEO has submitted a formal proposal. Features Included are: ${selectedFeatureNames.join(", ")}.`;
+   const formalmessageText = `${role1} has submitted a formal proposal. Features Included are: ${selectedFeatureNames.join(", ")}.`;
    appendSystemMessage({
      id: generateUniqueId(), // 使用生成的唯一ID
      text: formalmessageText,
@@ -187,7 +187,7 @@ export function FormalSubmit() {
       <div className="container">
         <div className="text-brief-wrapper">
        <div className="text-brief">
-        <h6>TIME IS UP. As the CEO, you have 1 minute to offer an official proposal. You may continue chatting while waiting. <strong>REMINDER: you can refer to the chat history for the informal vote results.</strong></h6>
+        <h6>TIME IS UP. As the {role1}, you have 1 minute to offer an official proposal. You may continue chatting while waiting. <strong>REMINDER: you can refer to the chat history for the informal vote results.</strong></h6>
         <h6>For this product design deliberation, your role is: <strong>{player.get("name")}</strong>.</h6>
         <h6>You "desired features" are: <strong>{desiredFeaturesForRole || " "}</strong>.</h6>
        </div>
@@ -249,7 +249,7 @@ export function FormalSubmit() {
       <div className="container">
       <div className="waiting-section">
           <div className="loader"></div> 
-        <p>Please wait while the CEO enters a proposal for you to vote on.</p>
+        <p>Please wait while the {role1} enters a proposal for you to vote on.</p>
       </div>
     </div>
     );

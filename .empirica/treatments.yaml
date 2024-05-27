@@ -3,48 +3,6 @@ factors:
       desc: playerCount determines the number of Players are in a Game.
       values:
         - value: 3
-    - name: role1
-      desc: Role configuration for the first player.
-      values:
-        - value: BigCEO
-        - value: CEOO
-        - value: CEO
-    - name: role2
-      desc: Role configuration for the second player.
-      values:
-        - value: DepartmentHeadA
-        - value: Department-A
-        - value: Department-Head-A
-    - name: role3
-      desc: Role configuration for the third player.
-      values:
-        - value: DepartmentHeadB
-        - value: Department-B
-        - value: Department-Head-B
-    - name: Touchscreen
-      values:
-        - value: 1, -0.5, 1
-    - name: FingerprintReader
-      values:
-        - value: -0.5, 1, 1
-    - name: Display4K
-      values:
-        - value: 1, 1, 1
-    - name: Thunderbolt4Ports
-      values:
-        - value: -0.5, 1, -0.5
-    - name: AIEnhancedPerformance
-      values:
-        - value: 1, 1, 1
-    - name: UltraLightDesign
-      values:
-        - value: 1, -0.5, 1
-    - name: HighspeedWiFi6E
-      values:
-        - value: -0.5, -0.5, -0.5
-    - name: LongBatteryLife
-      values:
-        - value: 1, -0.5, -0.5
     - name: formalSubmitDuration
       desc: Duration of the Formal Submit stage in seconds
       values:
@@ -75,16 +33,48 @@ factors:
         - value: 5
         - value: 10
         - value: 7
+    - name: instructionPage
+      desc: 1st sentence, Instructions displayed before the CandyCount game starts.
+      values:
+        - value: You will take part in <strong>five</strong> product design deliberations, each lasting 10 minutes and focusing on a different product from a technology company's portfolio. At the start of each deliberation, you will learn which features are your <strong>"desired features"</strong> for that product.           <br /><br />           <ul>         <li>Including a desired product feature nets you $1.</li>         <li>Including an undesired product feature costs you $0.50.</li>         <li>Excluding any feature has no impact on earnings.</li>         <li>To maximize earnings, you should persuade others to include your desired features and exclude undesired ones. A payoff calculator is provided for your convenience.</li>         <li>The total earnings you make across all design discussions equal your “bonus.”</li>         <li>If you finish all five, you earn a fixed $10 plus your accumulated “bonus” earnings.</li>       </ul>       <br />           In each deliberation, there will be two department heads and one CEO. You are randomly assigned one of these roles each time, which means your role can change from one deliberation to another. Anyone can suggest an <strong>unofficial vote</strong> to gauge each other's interest in including or excluding product features. After 10 minutes, an <strong>official vote</strong> will be conducted where the CEO will propose a set of product features and the two department heads will vote “YES” or “NO” to them. Only official vote results will affect earnings.           <br />           <br />           You can see your role and priority features at the bottom of the main negotiations page.
+    - name: role1
+      desc: Role configuration for the first player.
+      values:
+        - value: BigCEO
+        - value: CEOO
+        - value: CEO
+        - value: Head Chef
+    - name: role2
+      desc: Role configuration for the second player.
+      values:
+        - value: DepartmentHeadA
+        - value: Department-A
+        - value: Department-Head-A
+        - value: Soux Chef
+    - name: role3
+      desc: Role configuration for the third player.
+      values:
+        - value: DepartmentHeadB
+        - value: Department-B
+        - value: Department-Head-B
+        - value: Pastry Maker
     - name: resultDuration
       desc: Duration of the result stage in seconds
       values:
         - value: 20
         - value: 200
         - value: 2000
-    - name: instructionPage
-      desc: 1st sentence, Instructions displayed before the CandyCount game starts.
+        - value: 60
+    - name: basicpay
+      desc: basic payment.
       values:
-        - value: You will take part in <strong>five</strong> product design deliberations, each lasting 10 minutes and focusing on a different product from a technology company's portfolio. At the start of each deliberation, you will learn which features are your <strong>"desired features"</strong> for that product.           <br /><br />           <ul>         <li>Including a desired product feature nets you $1.</li>         <li>Including an undesired product feature costs you $0.50.</li>         <li>Excluding any feature has no impact on earnings.</li>         <li>To maximize earnings, you should persuade others to include your desired features and exclude undesired ones. A payoff calculator is provided for your convenience.</li>         <li>The total earnings you make across all design discussions equal your “bonus.”</li>         <li>If you finish all five, you earn a fixed $10 plus your accumulated “bonus” earnings.</li>       </ul>       <br />           In each deliberation, there will be two department heads and one CEO. You are randomly assigned one of these roles each time, which means your role can change from one deliberation to another. Anyone can suggest an <strong>unofficial vote</strong> to gauge each other's interest in including or excluding product features. After 10 minutes, an <strong>official vote</strong> will be conducted where the CEO will propose a set of product features and the two department heads will vote “YES” or “NO” to them. Only official vote results will affect earnings.           <br />           <br />           You can see your role and priority features at the bottom of the main negotiations page.
+        - value: 3
+        - value: 999
+    - name: featureUrl
+      desc: URL of the pay off matrix
+      values:
+        - value: https://raw.githubusercontent.com/Shawnhan666/Product-Negotiation/main/client/src/stages/features.json
+        - value: https://raw.githubusercontent.com/joshua-a-becker/RTools/master/testscoresheet.json
     - name: informalSubmitDuration
       desc: Duration of the Informal Submit stage in seconds
       values:
@@ -100,29 +90,49 @@ factors:
         - value: 1
         - value: 1000
         - value: 3000
-    - name: featureUrl
-      desc: URL of the pay off matrix
-      values:
-        - value: https://raw.githubusercontent.com/Shawnhan666/Product-Negotiation/main/client/src/stages/features.json
+        - value: 1800
 treatments:
-    - name: test
+    - name: becker-test
+      desc: this is a test treatment
       factors:
-        AIEnhancedPerformance: 1, 1, 1
-        Display4K: 1, 1, 1
-        FingerprintReader: -0.5, 1, 1
-        HighspeedWiFi6E: -0.5, -0.5, -0.5
-        LongBatteryLife: 1, -0.5, -0.5
-        Thunderbolt4Ports: -0.5, 1, -0.5
-        Touchscreen: 1, -0.5, 1
-        UltraLightDesign: 1, -0.5, 1
+        basicpay: 3
         featureUrl: https://raw.githubusercontent.com/Shawnhan666/Product-Negotiation/main/client/src/stages/features.json
-        formalSubmitDuration: 2000
-        formalVoteDuration: 2000
-        informalSubmitDuration: 3000
+        formalSubmitDuration: 60
+        formalVoteDuration: 60
+        informalSubmitDuration: 600
         instructionPage: You will take part in <strong>five</strong> product design deliberations, each lasting 10 minutes and focusing on a different product from a technology company's portfolio. At the start of each deliberation, you will learn which features are your <strong>"desired features"</strong> for that product.           <br /><br />           <ul>         <li>Including a desired product feature nets you $1.</li>         <li>Including an undesired product feature costs you $0.50.</li>         <li>Excluding any feature has no impact on earnings.</li>         <li>To maximize earnings, you should persuade others to include your desired features and exclude undesired ones. A payoff calculator is provided for your convenience.</li>         <li>The total earnings you make across all design discussions equal your “bonus.”</li>         <li>If you finish all five, you earn a fixed $10 plus your accumulated “bonus” earnings.</li>       </ul>       <br />           In each deliberation, there will be two department heads and one CEO. You are randomly assigned one of these roles each time, which means your role can change from one deliberation to another. Anyone can suggest an <strong>unofficial vote</strong> to gauge each other's interest in including or excluding product features. After 10 minutes, an <strong>official vote</strong> will be conducted where the CEO will propose a set of product features and the two department heads will vote “YES” or “NO” to them. Only official vote results will affect earnings.           <br />           <br />           You can see your role and priority features at the bottom of the main negotiations page.
         numRounds: 1
         playerCount: 3
-        resultDuration: 2000
-        role1: CEO
-        role2: Department-A
-        role3: Department-B
+        resultDuration: 60
+        role1: Head Chef
+        role2: Soux Chef
+        role3: Pastry Maker
+    - name: shawntest
+      factors:
+        basicpay: 999
+        featureUrl: https://raw.githubusercontent.com/Shawnhan666/Product-Negotiation/main/client/src/stages/features.json
+        formalSubmitDuration: 600
+        formalVoteDuration: 600
+        informalSubmitDuration: 600
+        instructionPage: You will take part in <strong>five</strong> product design deliberations, each lasting 10 minutes and focusing on a different product from a technology company's portfolio. At the start of each deliberation, you will learn which features are your <strong>"desired features"</strong> for that product.           <br /><br />           <ul>         <li>Including a desired product feature nets you $1.</li>         <li>Including an undesired product feature costs you $0.50.</li>         <li>Excluding any feature has no impact on earnings.</li>         <li>To maximize earnings, you should persuade others to include your desired features and exclude undesired ones. A payoff calculator is provided for your convenience.</li>         <li>The total earnings you make across all design discussions equal your “bonus.”</li>         <li>If you finish all five, you earn a fixed $10 plus your accumulated “bonus” earnings.</li>       </ul>       <br />           In each deliberation, there will be two department heads and one CEO. You are randomly assigned one of these roles each time, which means your role can change from one deliberation to another. Anyone can suggest an <strong>unofficial vote</strong> to gauge each other's interest in including or excluding product features. After 10 minutes, an <strong>official vote</strong> will be conducted where the CEO will propose a set of product features and the two department heads will vote “YES” or “NO” to them. Only official vote results will affect earnings.           <br />           <br />           You can see your role and priority features at the bottom of the main negotiations page.
+        numRounds: 1
+        playerCount: 3
+        resultDuration: 60
+        role1: Head Chef
+        role2: Soux Chef
+        role3: Pastry Maker
+    - name: slow-test
+      desc: this is a test treatment
+      factors:
+        basicpay: 3
+        featureUrl: https://raw.githubusercontent.com/joshua-a-becker/RTools/master/testscoresheet.json
+        formalSubmitDuration: 30
+        formalVoteDuration: 30
+        informalSubmitDuration: 1800
+        instructionPage: You will take part in <strong>five</strong> product design deliberations, each lasting 10 minutes and focusing on a different product from a technology company's portfolio. At the start of each deliberation, you will learn which features are your <strong>"desired features"</strong> for that product.           <br /><br />           <ul>         <li>Including a desired product feature nets you $1.</li>         <li>Including an undesired product feature costs you $0.50.</li>         <li>Excluding any feature has no impact on earnings.</li>         <li>To maximize earnings, you should persuade others to include your desired features and exclude undesired ones. A payoff calculator is provided for your convenience.</li>         <li>The total earnings you make across all design discussions equal your “bonus.”</li>         <li>If you finish all five, you earn a fixed $10 plus your accumulated “bonus” earnings.</li>       </ul>       <br />           In each deliberation, there will be two department heads and one CEO. You are randomly assigned one of these roles each time, which means your role can change from one deliberation to another. Anyone can suggest an <strong>unofficial vote</strong> to gauge each other's interest in including or excluding product features. After 10 minutes, an <strong>official vote</strong> will be conducted where the CEO will propose a set of product features and the two department heads will vote “YES” or “NO” to them. Only official vote results will affect earnings.           <br />           <br />           You can see your role and priority features at the bottom of the main negotiations page.
+        numRounds: 1
+        playerCount: 3
+        resultDuration: 60
+        role1: Head Chef
+        role2: Soux Chef
+        role3: Pastry Maker

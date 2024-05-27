@@ -29,7 +29,7 @@
     const againstVotes = players.filter(p => p.get("vote") === "Against").length;
     const formalresultText = `Formal Voting Results: ${forVotes+1} Accept, ${againstVotes} Reject. ` + (pass ? "The proposal has been accepted." : "The proposal has not been accepted.");
     const treatment = game.get("treatment");
-
+    const {role1} = treatment;
     const {featureUrl}= treatment;
      const [features, setFeatures] = useState([]);
 
@@ -195,7 +195,7 @@
       <div>
         <div className="text-brief-wrapper">
           <div className="text-brief">
-            <h5>The CEO has made their final proposal. Cast your vote!</h5>
+            <h5>The {role1}  has made their final proposal. Cast your vote!</h5>
             <h6>For this product design deliberation, your role is: <strong>{player.get("name")}</strong>.</h6>
             <h6>Your "desired features" are: <strong>{desiredFeaturesForRole || " "}</strong>.</h6>
           </div>

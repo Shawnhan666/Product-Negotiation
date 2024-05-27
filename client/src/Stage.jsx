@@ -47,12 +47,12 @@ export function Stage() {
 
 
       switch (stage.get("name")) {
-        case "Informal Submit":
+        case "Discussion and Informal Vote":
           return <Choice />;
 
 
 
-    case "Formal Submit":
+    case "Submit Formal Vote":
       // if (player.stage.get("submit")) {
       //   return <FormalVote />;
       // }

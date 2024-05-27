@@ -10,7 +10,20 @@ export function MyConsent({ next }) {
     <div className="introduction-container">
       <h2 className="introduction-title">Consent Form</h2>
       <br />
-      <p>Thank you for considering participating in our study of numerical decisions.</p>
+      {/* <p>Thank you for considering participating in our study of numerical decisions.</p> */}
+
+
+
+
+
+
+
+
+
+
+
+
+
       {/* <div className="consent-section">
         <br />
         <h3 className="section-header">Survey</h3>
@@ -45,6 +58,41 @@ export function MyConsent({ next }) {
         <h3 className="section-header">Contact</h3>
         <p>For questions, contact the principal investigator Joshua Becker at joshua.becker@ucl.ac.uk.</p>
       </div>*/}
+<div className="consent-section">
+<p>Thank you for considering participating in our design challenge. This game can be completed in approximately 15 minutes, including time for reading the instructions. Please read the following information carefully before deciding whether to participate in our research.
+<br/><br/>
+</p><p><b>The Activity</b>
+<br/></p><p>In this survey, you will be asked to complete a design challenge in groups of 3 to 5 team members.  For this game, you will seek to agree reach agreement with your teammates on a set of features to include in a fictional product design.  For example, you may be tasked with designing a laptop, and will have to choose whether to include a fast charging port, an extra USB port, a touchscreen, and so forth. 
+<br/><br/>
+</p><p>You will receive a bonus or penalty for the inclusion of each feature.  Your scoring system may not be the same as other members of your team.  Your bonus payment will be based on your final score, and therefore your final payment will depend on the agreement you may or may not reach with other participants.
+<br/><br/>
+</p><p>You will receive £2.50 plus any bonus you may earn.
+<br/><br/>
+</p><p><b>Benefits</b>
+</p><p>You will receive £2.50 for participating in addition plus any bonus you may earn based on your team’s agreed design.  
+<br/><br/>
+</p><p><b>Anonymity</b>
+
+</p><p>Your responses are anonymous and will be used solely for research purposes. No identifying information will be collected or presented as part of this research.
+<br/><br/>
+</p><p><b>Scope of Study:</b>
+</p><p>The purpose of our study is to explore how people make numerical decisions.
+<br/><br/>
+</p><p><b>Withdrawal from Study</b>
+</p><p>Your participation in this study is voluntary, and you are free to withdraw at any time without any penalty. However, payment is provided only to participants who complete the study in full. If you choose to withdraw before completing the study, you will NOT be eligible for payment.
+<br/><br/>
+</p><p><b>Possible Risks</b>
+</p><p>There are no risks anticipated in this study beyond those present in routine daily life.
+<br/><br/>
+</p><p><b>Consent</b>
+</p><p>By clicking on the “proceed” button located at the bottom-right corner of your screen, you are providing your informed consent to participate in the current research. You may withdraw at any time by closing your browser window.
+<br/><br/>
+</p><p><b>Contact</b>
+</p><p>For questions, contact the principal investigator Joshua Becker at joshua.becker@ucl.ac.uk.
+</p><br/><br/>
+</div>
+
+
       <div className="centered-button-container"> 
      
 

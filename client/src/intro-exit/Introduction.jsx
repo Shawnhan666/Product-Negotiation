@@ -18,7 +18,7 @@ export function Introduction({ next }) {
     <div className="mt-3 sm:mt-5 p-20">
       <h3 className="text-lg leading-6 font-medium text-gray-900">
  
-       <strong>Task Brief</strong>
+       {/* <strong>Task Brief</strong> */}
       </h3>
       <div className="mt-2 mb-6">
         <p className="text-sm text-black-500">
