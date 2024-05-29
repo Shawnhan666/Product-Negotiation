@@ -127,7 +127,11 @@ Empirica.onStageEnded(({ stage, game }) => {
  });
 
 Empirica.onRoundEnded(({ round }) => {
+  console.log("hello/adsf")
 
+  round.currentGame.set("test", 1)
+  round.currentGame.set("missingProposal", round.get("missingProposal"))
+  round.currentGame.set("pass", round.get("pass"))
 });
 Empirica.onGameEnded(({ game }) => {});
 

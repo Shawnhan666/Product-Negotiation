@@ -3,26 +3,6 @@ factors:
       desc: playerCount determines the number of Players are in a Game.
       values:
         - value: 3
-    - name: formalSubmitDuration
-      desc: Duration of the Formal Submit stage in seconds
-      values:
-        - value: 300
-        - value: 600
-        - value: 1200
-        - value: 60
-        - value: 2000
-        - value: 30
-        - value: 310
-    - name: formalVoteDuration
-      desc: Duration of the Formal Submit stage in seconds
-      values:
-        - value: 300
-        - value: 600
-        - value: 1200
-        - value: 60
-        - value: 2000
-        - value: 30
-        - value: 20
     - name: numRounds
       desc: How many times participants will make a choice
       values:
@@ -45,28 +25,6 @@ factors:
       values:
         - value: https://raw.githubusercontent.com/Shawnhan666/Product-Negotiation/main/client/src/stages/features.json
         - value: https://raw.githubusercontent.com/joshua-a-becker/RTools/master/testscoresheet.json
-    - name: informalSubmitDuration
-      desc: Duration of the Informal Submit stage in seconds
-      values:
-        - value: 5
-        - value: 180
-        - value: 300
-        - value: 600
-        - value: 2000
-        - value: 3
-        - value: 60
-        - value: 310
-        - value: 2
-        - value: 1
-        - value: 1000
-        - value: 3000
-        - value: 1800
-    - name: basicpay
-      desc: basic payment.
-      values:
-        - value: 3
-        - value: 999
-        - value: 1.99
     - name: instructionPage
       desc: 1st sentence, Instructions displayed before the CandyCount game starts.
       values:
@@ -96,6 +54,54 @@ factors:
         - value: Department-Head-B
         - value: Pastry Maker
         - value: THREE
+    - name: informalSubmitDuration
+      desc: Duration of the Informal Submit stage in seconds
+      values:
+        - value: 5
+        - value: 180
+        - value: 300
+        - value: 600
+        - value: 2000
+        - value: 3
+        - value: 60
+        - value: 310
+        - value: 2
+        - value: 1
+        - value: 1000
+        - value: 3000
+        - value: 1800
+        - value: 15
+    - name: formalSubmitDuration
+      desc: Duration of the Formal Submit stage in seconds
+      values:
+        - value: 300
+        - value: 600
+        - value: 1200
+        - value: 60
+        - value: 2000
+        - value: 30
+        - value: 310
+        - value: 5
+        - value: 2
+    - name: formalVoteDuration
+      desc: Duration of the Formal Submit stage in seconds
+      values:
+        - value: 300
+        - value: 600
+        - value: 1200
+        - value: 60
+        - value: 2000
+        - value: 30
+        - value: 20
+        - value: 5
+        - value: 2
+    - name: basicpay
+      desc: basic payment.
+      values:
+        - value: 3
+        - value: 999
+        - value: 1.99
+        - value: 2.5
 treatments:
     - name: becker-test
       desc: this is a test treatment
@@ -126,14 +132,14 @@ treatments:
         role1: Head Chef
         role2: Soux Chef
         role3: Pastry Maker
-    - name: slow-test
-      desc: this is a test treatment
+    - name: pilot-test-180
+      desc: pilot test
       factors:
-        basicpay: 1.99
+        basicpay: 2.5
         featureUrl: https://raw.githubusercontent.com/joshua-a-becker/RTools/master/testscoresheet.json
-        formalSubmitDuration: 30
-        formalVoteDuration: 30
-        informalSubmitDuration: 600
+        formalSubmitDuration: 60
+        formalVoteDuration: 60
+        informalSubmitDuration: 180
         instructionPage: 'You will be randomly assigned a role in a product design discussion lasting 10 minutes.   <br/> </br>You will be given a list of priorities for feature inclusion, and the bonus that you earn (or lose) for each feature. <br/> <br/><b>How you earn a bonus</b>: <br/>• Desired features earn you money. <br/>• Undesired features costs you money. <br/>• Excluding features has no impact on earnings. <br/>• A calculator is provided to assess tradeoffs. <br/> <br/>Try to earn as much as you can!   Use the chat to persuade others to include your desired features. <br/> <br/><b>How it works</b>: <br/>• Any player may propose an <strong>unofficial vote</strong> at any time.  <br/>• One player is randomly assigned project leader.   <br/>• After 10 minutes, this project leader will propose a final, <strong>official vote</strong>.  <br/>• Only the final vote will determine your earnings.'
         numRounds: 1
         playerCount: 3

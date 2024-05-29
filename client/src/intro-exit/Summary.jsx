@@ -27,6 +27,8 @@ export function Summary({next}) {
         // 假设游戏状态中保存的属性名为RoundPointsHistory
         const roundPointsHistory = game.get("RoundPointsHistory");
         
+        const missingProposal = game.get("missingProposal")
+
         if (roundPointsHistory) {
           // 计算总轮数
           const totalRounds = roundPointsHistory.length;
@@ -40,8 +42,13 @@ export function Summary({next}) {
     
           // 设置总结信息
           console.log(`In total you have earned £ ${roundScores} across ${totalRounds} rounds, for a total of ${cumulativePoints}.`);
+          
+          console.log(game.get("missingProposal"))    
+          window.game = game;
         }
       }, [game]);
+
+      
 
   
     const handleContinue = () => {
@@ -54,11 +61,13 @@ export function Summary({next}) {
     
   
     return (
-      <div className="waiting-section">
+      <>{game&&(<div className="waiting-section">
         <h4>
  
           <br />
           {/* <p>In total you have earned £{roundScores} across {totalRounds} rounds, for a total bonus of ${cumulativePoints}  with basic payment £{basicpay}.</p> */}
+          { game.get("missingProposal") ? <>No proposal was submitted in time.<br/><br/></> : <></>}
+          { game.get("pass")  ? "" : <>The proposal did not pass.<br/><br/></> }
           {returnText}
           <br />
           <br/><p>Please press "OK" to acknowledge and continue.</p>
@@ -68,7 +77,7 @@ export function Summary({next}) {
         <p>OK</p>
         </Button>  
         {/* <Button handleClick={handleContinue}>OK</Button> */}
-      </div>
+      </div>)}</>
     );
   }
   

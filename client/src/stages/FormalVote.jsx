@@ -227,7 +227,7 @@
                 })}
               </tbody>
             </table>
-            <div className="total-points-display">Your bonus: ${calculatePlayerTotalBonus()}</div>
+            <div className="total-points-display">Your bonus: ${Math.round(calculatePlayerTotalBonus()*100)/100}</div>
           </div>
         </div>
         <br/>

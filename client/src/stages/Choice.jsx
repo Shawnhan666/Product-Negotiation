@@ -7,6 +7,7 @@ import { useState, useEffect} from 'react';
 import { useChat } from '../ChatContext'; 
 import { Timer } from "../components/Timer";
 import { useStageTimer } from "@empirica/core/player/classic/react";
+import { isDevelopment } from "@empirica/core/player"
 
 
 // TaskBriefModal组件定义
@@ -567,7 +568,7 @@ useEffect(() => {
               </button>
             {/* <Button handleClick={() => player.stage.set("submit", true)}>Continue</Button>  */}
   
-            {/* <Button handleClick={() => player.stage.set("submit", true)}>Continue</Button> */}
+            {isDevelopment&&(<Button handleClick={() => player.stage.set("submit", true)}>Continue</Button>)}
 
 
             </div>

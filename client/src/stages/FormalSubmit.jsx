@@ -226,7 +226,7 @@ export function FormalSubmit() {
                                       </tbody>
                         </table>
 
-                        <div className="total-points-display"> Total bonus: ${totalPoints}</div>
+                        <div className="total-points-display"> Total bonus: ${Math.round(totalPoints*100)/100}</div>
                         <br />
                 {!hasSubmittedProposal && (
                         <div className="button-container">
