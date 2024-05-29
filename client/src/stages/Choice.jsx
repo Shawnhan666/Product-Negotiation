@@ -457,159 +457,128 @@ useEffect(() => {
   return (
     <div className="container">
 
-{showTaskBrief && <TaskBriefModal onClose={handleCloseTaskBrief} />}
+      {showTaskBrief && <TaskBriefModal onClose={handleCloseTaskBrief} />}
 
-        <div className="informal-text-brief-wrapper">
-       <div className="informal-text-brief-1">
-        <h6>When time is up, {role1} will submit a final vote.</h6>
-        <h6><br/>On this page, make as many informal proposals as you want.</h6>
+      <div className="informal-text-brief-wrapper">
+        <div className="informal-text-brief-1">
+          <h6>When time is up, {role1} will submit a final vote.</h6>
+          <h6><br/>On this page, make as many informal proposals as you want.</h6>
         </div>
-<br />
+        <br />
         <div className="informal-text-brief-2">
-     
-        <h6>Your role is: <strong>{player.get("name")}</strong>.</h6>
-        <h6><br/>The product under deliberation is: <strong>{productName}</strong>.</h6>
-        <h6><br/>You desired features are highlighted in blue.</h6>
-
+          <h6>Your role is: <strong>{player.get("name")}</strong>.</h6>
+          <h6><br/>The product under deliberation is: <strong>{productName}</strong>.</h6>
+          <h6><br/>You desired features are highlighted in blue.</h6>
+        </div>
       </div>
-      </div>
-<br />
-<br />
-    <div className="table-container">
-      <div className="table-wrapper">
-        
-            <table className="styled-table">
-    
-                <thead>
-                  <tr><td colspan="3" style={{borderTop:'0px',borderRight:'0px',borderLeft:'0px',fontWeight:'bold'}}>Calculator</td></tr>
-                  <tr style={{ backgroundColor: 'lightblue' }}>
-                    <th>Product Features</th>
-                    <th>Include</th>
-                    <th>Bonus</th>
-                  </tr>
-                </thead>
-                <tbody>
-                              {features.map((feature, index) => {
-                                //const isSelectedForVote = round.get("selectedFeaturesForInformalVote")?.includes(feature.name);
-                                const isDesiredFeature = desiredFeaturesForRole.includes(feature.name);
-                                return (
-                                  <tr key={index}>
-                                    <td className={isDesiredFeature ? "selected-feature" : ""}>{feature.name}</td>
-                                    <td>
-                                      <input
-                                        type="checkbox"
-                                        checked={selectedFeatures[feature.name] || false}
-                                        onChange={() => handleOptionChange(feature.name)}
-                                      />
-                                    </td>
-                                    <td>{selectedFeatures[feature.name] ? feature.bonus[player.get("role")] : 0}</td>
-                                  </tr>
-                                );
-                              })}
-                </tbody>
-              </table>
+      <br />
+      <br />
+      <div className="table-container">
       
-              {/* "Total" 部分显示在表格下方 */}
-              <div className="total-points-display">
-                Total Bonus: ${Math.round(totalPoints*100)/100}
-              </div>
-              <br />
-                                
-              
-
-              {!anySubmitted && (
-                <div className="button-container">
-
-                  {/* <button onClick={handleShowTaskBrief} className={"taskbrief-button"}  >Show Task Brief</button> */}
-                  
-                  <button onClick={handleSubmitProposal} className={anySubmitted ? "submit-button-disabled" : "submit-button"}>
-                    Submit for Informal Vote
-                  </button>
-
-
-
-                
-          {/* <Button handleClick={() => player.stage.set("submit", true)}>Continue</Button>  */}
-      
-   
-
-
-{/* <Button handleClick={() => player.stage.set("submit", true)}>Continue</Button> */}
-
-
-                  </div>
-              )}
-   
-          
-
-             </div>
-  
-         {submittedData_informal && (
+        {submittedData_informal && (
           <div className="table-container">
-           <div className="second-styled-table thead th">
-
-            <table className="styled-table"  >
-    <thead>
-    <tr  >
-      <td colspan="2" style={{borderTop:'0px',borderRight:'0px',borderLeft:'0px',fontWeight:'bold'}}>
-        Informal Proposal by {getSubmitterRoleName()}
-        </td>
-      </tr>
-      <tr  >
-        <th>Product Features</th>
-        <th>Bonus</th>
-      </tr>
-    </thead>
-    <tbody>
-      {submissionInfo && submissionInfo.featuresAndBonuses.map(({ featureName, bonus }, index) => (
-        <tr key={index}>
-          <td>{featureName}</td>
-          <td>{bonus}</td>
-        </tr>
-      ))}
-      <tr>
-      </tr>
-    </tbody>
-  </table>
-  <div className="total-points-display"> Your bonus: ${submissionInfo && Math.round(submissionInfo.totalBonus*100)/100}</div>
-          </div>
-
-
-          <div className="voting-section">
+            <div className="second-styled-table thead th">
+              <table className="styled-table"  >
+              <thead>
+                <tr  >
+                  <td colspan="2" style={{borderTop:'0px',borderRight:'0px',borderLeft:'0px',fontWeight:'bold'}}>
+                    Informal Proposal by {getSubmitterRoleName()}
+                  </td>
+                </tr>
+                <tr  >
+                  <th>Product Features</th>
+                  <th>Bonus</th>
+                </tr>
+              </thead>
+              <tbody>
+                {submissionInfo && submissionInfo.featuresAndBonuses.map(({ featureName, bonus }, index) => (
+                  <tr key={index}>
+                    <td>{featureName}</td>
+                    <td>{bonus}</td>
+                  </tr>
+                ))}
+                <tr>
+                </tr>
+              </tbody>
+              </table>
+            <div className="total-points-display"> Your bonus: ${submissionInfo && Math.round(submissionInfo.totalBonus*100)/100}</div>
+            </div>
+            <div className="voting-section">
               {currentVote && !allVoted && (
                 <div>
-              {currentVote === "For" && <div style={{ color: 'red' }}>You voted Accept of this informal proposal. Waiting for other votes.</div>}
-                {currentVote === "Against" && <div style={{ color: 'red' }}>You voted Reject of this informal proposal. Waiting for other votes.</div>}
-          </div>
-  )}
-
-
-
-      </div>
-
-
-
-
-
-
-          {round.get("anySubmitted") && !currentVote && !allVoted && (
-        <div className="voting-buttons-container">
-           <Button className="vote-button" handleClick={() => handleVoteSubmit("For")}>Accept</Button>
-           
-          <Button className="vote-button" handleClick={() => handleVoteSubmit("Against")}>Reject</Button> 
-        </div>
-      )}
+                  {currentVote === "For" && <div style={{ color: 'red' }}>You voted Accept of this informal proposal. Waiting for other votes.</div>}
+                  {currentVote === "Against" && <div style={{ color: 'red' }}>You voted Reject of this informal proposal. Waiting for other votes.</div>}
+                </div>
+              )}
+            </div>
+            {round.get("anySubmitted") && !currentVote && !allVoted && (
+              <div className="voting-buttons-container">
+                <Button className="vote-button" handleClick={() => handleVoteSubmit("For")}>Accept</Button>
+              
+                <Button className="vote-button" handleClick={() => handleVoteSubmit("Against")}>Reject</Button> 
+              </div>
+            )}
           </div>
         )}
-</div>
-<br />
+        
+        <div className="table-wrapper">        
+          <table className="styled-table">
+            <thead>
+              <tr><td colspan="3" style={{borderTop:'0px',borderRight:'0px',borderLeft:'0px',fontWeight:'bold'}}>Calculator</td></tr>
+              <tr style={{ backgroundColor: 'lightblue' }}>
+                <th>Product Features</th>
+                <th>Include</th>
+                <th>Bonus</th>
+              </tr>
+            </thead>    
+            <tbody>
+              {features.map((feature, index) => {
+                //const isSelectedForVote = round.get("selectedFeaturesForInformalVote")?.includes(feature.name);
+                const isDesiredFeature = desiredFeaturesForRole.includes(feature.name);
+                return (
+                  <tr key={index}>
+                    <td className={isDesiredFeature ? "selected-feature" : ""}>{feature.name}</td>
+                    <td>
+                      <input
+                        type="checkbox"
+                        checked={selectedFeatures[feature.name] || false}
+                        onChange={() => handleOptionChange(feature.name)}
+                      />
+                    </td>
+                    <td>{selectedFeatures[feature.name] ? feature.bonus[player.get("role")] : 0}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+  
+          {/* "Total" 部分显示在表格下方 */}
+          <div className="total-points-display">
+            Total Bonus: ${Math.round(totalPoints*100)/100}
+          </div>
+          <br />
+          {!anySubmitted && (
+            <div className="button-container">
 
- 
+              {/* <button onClick={handleShowTaskBrief} className={"taskbrief-button"}  >Show Task Brief</button> */}
+              
+              <button onClick={handleSubmitProposal} className={anySubmitted ? "submit-button-disabled" : "submit-button"}>
+                Submit for Informal Vote
+              </button>
+            {/* <Button handleClick={() => player.stage.set("submit", true)}>Continue</Button>  */}
   
-      
+            {/* <Button handleClick={() => player.stage.set("submit", true)}>Continue</Button> */}
+
+
+            </div>
+          )}
+        </div>
+  
+        
+      </div>
+      <br />
     </div>
-  );
-  
-      }
+  );  
+}
 
 
