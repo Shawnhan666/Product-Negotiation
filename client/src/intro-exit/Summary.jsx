@@ -56,7 +56,7 @@ export function Summary({next}) {
     };
 
     const returnText = roundScores>=0 ?
-      <>You earned a bonus of £{roundScores} and a base payment of £{basicpay} for a total payment of £{parseInt(basicpay) + parseInt(roundScores)}.</>
+      <>You earned a bonus of £{roundScores} and a base payment of £{basicpay} for a total payment of £{parseFloat(basicpay) + parseFloat(roundScores)}.</>
       : <>Your bonus was negative, and so was set to zero.<br/><br/>  You earned a base payment of £{basicpay}</>
     
   

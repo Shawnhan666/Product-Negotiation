@@ -462,14 +462,14 @@ useEffect(() => {
 
       <div className="informal-text-brief-wrapper">
         <div className="informal-text-brief-1">
-          <h6>When time is up, {role1} will submit a final vote.</h6>
-          <h6><br/>On this page, make as many informal proposals as you want.</h6>
+          <h6>{ role1 === player.get("name") ? "As "+role1+", you" : "When time is up, "+role1 } will submit a final proposal.{ role1 === player.get("name") ? "when time is up" : "" }</h6>
+          <h6><br/><strong>You ALL must agree for the proposal to pass!</strong></h6>
         </div>
         <br />
         <div className="informal-text-brief-2">
-          <h6>Your role is: <strong>{player.get("name")}</strong>.</h6>
-          <h6><br/>The product under deliberation is: <strong>{productName}</strong>.</h6>
-          <h6><br/>You desired features are highlighted in blue.</h6>
+          <h6>On this page, make as many informal proposals as you want.</h6>
+          <h6><br/>The calculator shows your bonus for any given proposal.</h6>
+          <h6><br/>You preferred features are highlighted in blue.</h6>
         </div>
       </div>
       <br />
