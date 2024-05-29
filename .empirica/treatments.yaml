@@ -133,7 +133,7 @@ treatments:
         featureUrl: https://raw.githubusercontent.com/joshua-a-becker/RTools/master/testscoresheet.json
         formalSubmitDuration: 30
         formalVoteDuration: 30
-        informalSubmitDuration: 60
+        informalSubmitDuration: 600
         instructionPage: 'You will be randomly assigned a role in a product design discussion lasting 10 minutes.   <br/> </br>You will be given a list of priorities for feature inclusion, and the bonus that you earn (or lose) for each feature. <br/> <br/><b>How you earn a bonus</b>: <br/>• Desired features earn you money. <br/>• Undesired features costs you money. <br/>• Excluding features has no impact on earnings. <br/>• A calculator is provided to assess tradeoffs. <br/> <br/>Try to earn as much as you can!   Use the chat to persuade others to include your desired features. <br/> <br/><b>How it works</b>: <br/>• Any player may propose an <strong>unofficial vote</strong> at any time.  <br/>• One player is randomly assigned project leader.   <br/>• After 10 minutes, this project leader will propose a final, <strong>official vote</strong>.  <br/>• Only the final vote will determine your earnings.'
         numRounds: 1
         playerCount: 3

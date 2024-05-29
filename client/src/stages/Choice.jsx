@@ -136,7 +136,7 @@ const handleOptionChange = featureName => {
     return features.reduce((total, feature) => {
       const isSelected = selectedFeatures[feature.name];
       const roleBonus = feature.bonus[role] || 0;
-      return total + (isSelected ? roleBonus : 0);
+      return (total + (isSelected ? roleBonus : 0));
     }, 0);
   };
 
@@ -511,7 +511,7 @@ useEffect(() => {
       
               {/* "Total" 部分显示在表格下方 */}
               <div className="total-points-display">
-                Total Bonus: ${totalPoints}
+                Total Bonus: ${Math.round(totalPoints*100)/100}
               </div>
               <br />
                                 
@@ -571,7 +571,7 @@ useEffect(() => {
       </tr>
     </tbody>
   </table>
-  <div className="total-points-display"> Your bonus: ${submissionInfo && submissionInfo.totalBonus}</div>
+  <div className="total-points-display"> Your bonus: ${submissionInfo && Math.round(submissionInfo.totalBonus*100)/100}</div>
           </div>
 
 
