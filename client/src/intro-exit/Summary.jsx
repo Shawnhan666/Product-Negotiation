@@ -47,6 +47,11 @@ export function Summary({next}) {
     const handleContinue = () => {
       player.stage.set("submit", true);
     };
+
+    const returnText = roundScores>=0 ?
+      <>You earned a bonus of £{roundScores} and a base payment of £{basicpay} for a total payment of £{parseInt(basicpay) + parseInt(roundScores)}.</>
+      : <>Your bonus was negative, and so was set to zero.<br/><br/>  You earned a base payment of £{basicpay}</>
+    
   
     return (
       <div className="waiting-section">
@@ -54,9 +59,9 @@ export function Summary({next}) {
  
           <br />
           {/* <p>In total you have earned £{roundScores} across {totalRounds} rounds, for a total bonus of ${cumulativePoints}  with basic payment £{basicpay}.</p> */}
-          <p>You earned a bonus of £{roundScores} for a total payment of £{basicpay}+{roundScores}.</p>
+          {returnText}
           <br />
-          <p>Please press "OK" to acknowledge and continue.</p>
+          <br/><p>Please press "OK" to acknowledge and continue.</p>
         </h4>
         <br />
         <Button handleClick={next} autoFocus >

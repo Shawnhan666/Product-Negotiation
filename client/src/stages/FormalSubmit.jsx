@@ -187,9 +187,7 @@ export function FormalSubmit() {
       <div className="container">
         <div className="text-brief-wrapper">
        <div className="text-brief">
-        <h6>TIME IS UP. As the {role1}, you have 1 minute to offer an official proposal. You may continue chatting while waiting. <strong>REMINDER: you can refer to the chat history for the informal vote results.</strong></h6>
-        <h6>For this product design deliberation, your role is: <strong>{player.get("name")}</strong>.</h6>
-        <h6>You "desired features" are: <strong>{desiredFeaturesForRole || " "}</strong>.</h6>
+        <h6>Time to vote! Please offer a final proposal.<br/><br/>The chat history contains informal vote results.</h6>
        </div>
        </div>
        <br />

@@ -195,9 +195,7 @@
       <div>
         <div className="text-brief-wrapper">
           <div className="text-brief">
-            <h5>The {role1}  has made their final proposal. Cast your vote!</h5>
-            <h6>For this product design deliberation, your role is: <strong>{player.get("name")}</strong>.</h6>
-            <h6>Your "desired features" are: <strong>{desiredFeaturesForRole || " "}</strong>.</h6>
+            <h5>The {role1} has made their final proposal.<br/><br/>Time to cast your final vote!</h5>
           </div>
         </div>
         <br />
