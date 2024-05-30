@@ -6,9 +6,10 @@ import StrawPoll from "../components/StrawPoll"
 import { useEffect} from 'react';
 import Chat from "../Chat";
 import { useChat } from '../ChatContext'; 
+import walkThroughFeatures from "../walkThroughFeatureData"
 
 export function Walkthrough({ next }) {
-
+  
   const game = useGame(); 
   const player = usePlayer();
   const treatment = game.get("treatment");
@@ -137,6 +138,7 @@ export function Walkthrough({ next }) {
       <div className="flex-child">
         <StrawPoll 
           featureUrl="https://raw.githubusercontent.com/joshua-a-becker/RTools/master/testscoresheet.json" 
+          featureData = {walkThroughFeatures}
           submissionData = {submissionData}
           handleVoteSubmission = {handleVoteSubmission}
           WaitingMessage = "If this were a real game, you'd be waiting for other players to vote.<br/><br/>Note: this vote doesn't count!  Only the final vote counts."
@@ -147,6 +149,7 @@ export function Walkthrough({ next }) {
       <div className="flex-child">
         <Calculator 
           featureUrl={treatment.featureUrl}
+          featureData = {walkThroughFeatures}
           handleProposalSubmission={handleProposalSubmission}
           showVoteButton={true}
           roleName = {"role1"}

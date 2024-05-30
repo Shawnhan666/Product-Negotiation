@@ -13,13 +13,14 @@ function Calculator(props) {
 
     const [totalPoints, setTotalPoints] = useState(0);
 
-    const [features, setFeatures] = useState([]);
-    const [productName, setProductName] = useState([]);
+    //const [features, setFeatures] = useState([]);
+    //const [productName, setProductName] = useState([]);
 
+    const features = props.featureData.features;
+    const productName = props.featureData.productName;
 
     const [selectedFeatures, setSelectedFeatures] = useState(propSelectedFeatures);
 
-    const featureUrl = props.featureUrl;
     const playerRole = props.roleName;
 
 
@@ -80,18 +81,6 @@ function Calculator(props) {
     useEffect(() => {
         setTotalPoints(calculateTotal());
     }, [selectedFeatures]);  
-
-    useEffect(() => {
-        fetch(featureUrl)
-            .then(response => response.json()) 
-            .then(data => {
-                setFeatures(data.features); 
-                setProductName(data.product_name); 
-            })
-            .catch(error => console.error("Failed to load features:", error));
-            
-    }, []); 
-
 
   
 

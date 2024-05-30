@@ -7,9 +7,10 @@ function StrawPoll(props) {
 
     const { WaitingMessage = 'Waiting for other players.', ...restProps } = props;
 
-    const [features, setFeatures] = useState([]);
+    //const [features, setFeatures] = useState([]);
+    const features = props.featureData.features;
 
-    const featureUrl = props.featureUrl;
+    //const featureUrl = props.featureUrl;
 
     const playerRole = "role1";//player.get("role");
 
@@ -28,6 +29,7 @@ function StrawPoll(props) {
         props.handleVoteSubmission(vote);
     };
      
+    /*
     useEffect(() => {
         fetch(featureUrl)
             .then(response => response.json()) 
@@ -37,6 +39,7 @@ function StrawPoll(props) {
             .catch(error => console.error("Failed to load features:", error));
             
     }, []); 
+    */
 
 
 
