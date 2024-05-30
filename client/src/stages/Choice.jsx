@@ -9,6 +9,9 @@ import { Timer } from "../components/Timer";
 import { useStageTimer } from "@empirica/core/player/classic/react";
 import { isDevelopment } from "@empirica/core/player"
 
+import Calculator from "../components/Calculator"
+import StrawPoll from "../components/StrawPoll"
+
 
 // TaskBriefModal组件定义
 function TaskBriefModal({ onClose }) {
@@ -455,31 +458,8 @@ useEffect(() => {
 
 
 
-
-  
-  
-  return (
-    <div className="container">
-
-      {showTaskBrief && <TaskBriefModal onClose={handleCloseTaskBrief} />}
-
-      <div className="informal-text-brief-wrapper">
-        <div className="informal-text-brief-1">
-          <h6>{ role1 === player.get("name") ? "As "+role1+", you" : "When time is up, "+role1 } will submit a final proposal.{ role1 === player.get("name") ? "when time is up" : "" }</h6>
-          <h6><br/><strong>You ALL must agree for the proposal to pass!</strong></h6>
-        </div>
-        <br />
-        <div className="informal-text-brief-2">
-          <h6>On this page, make as many informal proposals as you want.</h6>
-          <h6><br/>The calculator shows your bonus for any given proposal.</h6>
-          <h6><br/>You preferred features are highlighted in blue.</h6>
-        </div>
-      </div>
-      <br />
-      <br />
-      <div className="table-container">
-      
-        {submittedData_informal && (
+  const strawPollContent = submittedData_informal ? 
+    <>
           <div className="table-container">
             <div className="second-styled-table thead th">
               <table className="styled-table"  >
@@ -523,64 +503,125 @@ useEffect(() => {
               </div>
             )}
           </div>
-        )}
-        
-        <div className="table-wrapper">        
-          <table className="styled-table">
-            <thead>
-              <tr><td colspan="3" style={{borderTop:'0px',borderRight:'0px',borderLeft:'0px',fontWeight:'bold'}}>Calculator</td></tr>
-              <tr style={{ backgroundColor: 'lightblue' }}>
-                <th>Product Features</th>
-                <th>Include</th>
-                <th>Bonus</th>
-              </tr>
-            </thead>    
-            <tbody>
-              {features.map((feature, index) => {
-                //const isSelectedForVote = round.get("selectedFeaturesForInformalVote")?.includes(feature.name);
-                const isDesiredFeature = desiredFeaturesForRole.includes(feature.name);
-                return (
-                  <tr key={index}>
-                    <td className={isDesiredFeature ? "selected-feature" : ""}>{feature.name}</td>
-                    <td>
-                      <input
-                        type="checkbox"
-                        checked={selectedFeatures[feature.name] || false}
-                        onChange={() => handleOptionChange(feature.name)}
-                      />
+        </>
+        :
+        <>
+            <div className="second-styled-table thead th">
+                <table className="styled-table"  >
+                <thead>
+                <tr>
+                    <td colSpan="2" style={{borderTop:'0px',borderRight:'0px',borderLeft:'0px',fontWeight:'bold'}}>
+                    &lt;No Proposal Has Been Made Yet&gt;
                     </td>
-                    <td>{selectedFeatures[feature.name] ? feature.bonus[player.get("role")] : 0}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-  
-          {/* "Total" 部分显示在表格下方 */}
-          <div className="total-points-display">
-            Total Bonus: ${Math.round(totalPoints*100)/100}
-          </div>
-          <br />
-          {!anySubmitted && (
-            <div className="button-container">
-
-              {/* <button onClick={handleShowTaskBrief} className={"taskbrief-button"}  >Show Task Brief</button> */}
-              
-              <button onClick={handleSubmitProposal} className={anySubmitted ? "submit-button-disabled" : "submit-button"}>
-                Submit for Informal Vote
-              </button>
-            {/* <Button handleClick={() => player.stage.set("submit", true)}>Continue</Button>  */}
-  
-            {isDevelopment&&(<Button handleClick={() => player.stage.set("submit", true)}>Continue</Button>)}
-
-
+                </tr>
+                <tr>
+                    <th>Product Features</th>
+                    <th>Bonus</th>
+                </tr>
+                </thead>
+                <tbody>
+                
+                    <tr>
+                    <td>-</td>
+                    <td>-</td>
+                    </tr>
+                
+                <tr>
+                </tr>
+                </tbody>
+                </table>
             </div>
-          )}
+        </>
+  
+  const calculatorContent = <>
+    <div className="table-wrapper">        
+      <table className="styled-table">
+        <thead>
+          <tr><td colspan="3" style={{borderTop:'0px',borderRight:'0px',borderLeft:'0px',fontWeight:'bold'}}>Calculator (Role: {player.get("role")})</td></tr>
+          <tr style={{ backgroundColor: 'lightblue' }}>
+            <th>Product Features</th>
+            <th>Include</th>
+            <th>Bonus</th>
+          </tr>
+        </thead>    
+        <tbody>
+          {features.map((feature, index) => {
+            //const isSelectedForVote = round.get("selectedFeaturesForInformalVote")?.includes(feature.name);
+            const isDesiredFeature = desiredFeaturesForRole.includes(feature.name);
+            return (
+              <tr key={index}>
+                <td className={isDesiredFeature ? "selected-feature" : ""}>{feature.name}</td>
+                <td>
+                  <input
+                    type="checkbox"
+                    checked={selectedFeatures[feature.name] || false}
+                    onChange={() => handleOptionChange(feature.name)}
+                  />
+                </td>
+                <td>
+                  {selectedFeatures[feature.name] ? 
+                    <strong>{feature.bonus[player.get("role")]}</strong> 
+                  : 
+                    <div style={{color:"#888888"}}>{feature.bonus[player.get("role")]}</div>
+                  }
+                  
+                  
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+
+      {/* "Total" 部分显示在表格下方 */}
+      <div className="total-points-display">
+        Total Bonus: ${Math.round(totalPoints*100)/100}
+      </div>
+      {!anySubmitted && (
+        <div className="button-container">
+          <button onClick={handleSubmitProposal} className={anySubmitted ? "submit-button-disabled" : "submit-button"}>
+            Submit for Informal Vote
+          </button>
         </div>
+      )}
+    </div>
+  </>
+  
+  return (
+    <div className="container">
+
+      {showTaskBrief && <TaskBriefModal onClose={handleCloseTaskBrief} />}
+
+      <div className="informal-text-brief-wrapper">
+        <div className="informal-text-brief-1">
+          <h6>{ role1 === player.get("name") ? "As "+role1+", you" : "When time is up, "+role1 } will submit a final proposal.{ role1 === player.get("name") ? "when time is up" : "" }</h6>
+          <h6><br/><strong>You ALL must agree for the final proposal to pass!</strong></h6>
+        </div>
+        <br />
+        <div className="informal-text-brief-2">
+          <h6>On this page, make as many informal proposals as you want.</h6>
+          <h6><br/>The calculator shows your bonus for any given proposal.</h6>
+          <h6><br/>You preferred features are highlighted in blue.</h6>
+        </div>
+      </div>
+      <br />
+      <br />
+      <div className="table-container">
+      
+        
+        {strawPollContent}
+        {calculatorContent}
   
         
       </div>
       <br />
+      {isDevelopment&&(
+              <>
+                <Button handleClick={() => player.stage.set("submit", true)}>
+                  Continue
+                </Button>
+              </>
+            )}
     </div>
   );  
 }

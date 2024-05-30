@@ -16,23 +16,9 @@ export function Introduction({ next }) {
 
   return (
     <div className="mt-3 sm:mt-5 p-20">
-      <h3 className="text-lg leading-6 font-medium text-gray-900">
- 
-       
-      </h3>
-      <div className="mt-2 mb-6">
-        <p className="text-sm text-black-500">
-          
-
-          <h2 className="text-lg leading-6 font-bold text-gray-900">Instructions</h2>
-          <div className="mt-2 mb-6">
-
-              <div dangerouslySetInnerHTML={instructionsHtml} />
-
-          </div>
-
-        </p>
-      </div>
+      <h1 style={{fontWeight:"bold",fontSize:"larger",marginBottom:"20px"}}>Instructions</h1>
+      <div dangerouslySetInnerHTML={instructionsHtml} />
+      <br/><br/>
       <Button handleClick={next} autoFocus >
         <p>Next</p>
       </Button>

@@ -103,50 +103,70 @@ export function Walkthrough({ next }) {
 
   onLoad();
 
-  window.treatment=treatment;
+  const header = 
+    <>
 
-  return (
-    <div className="h-full w-full flex">
-      <div className="container">
-        <div>
-          {showNextButton&&(<center>
-            <br/>
-            <Button handleClick={next} autoFocus >
-              <p>Next (Continue To Game)</p>
-            </Button>
-          </center>)}
+      <div className="informal-text-brief-wrapper">
+        <div className="next-button-container">
+        {player.get("currentVote")&&(
+            <button onClick={next} className="next-button wiggle">
+              <strong>Next (Continue to Game)</strong>
+            </button>
+        )}
         </div>
-        <div className="informal-text-brief-wrapper">
+        
         <div className="informal-text-brief-1">
-          <h6>When time is up, {role1} will submit a final proposal.</h6>
-          <h6><br/><strong>You ALL must agree for the proposal to pass!</strong></h6>
-        </div>
-        <br />
-        <div className="informal-text-brief-2">
           <h6>On this page, make as many informal proposals as you want.</h6>
           <h6><br/>The calculator shows your bonus for any given proposal.</h6>
           <h6><br/>You preferred features are highlighted in blue.</h6>
         </div>
+        <br/>
+        <div className="informal-text-brief-1">
+          <h6>THIS IS A DEMO.</h6>
+          <br/>
+          <h6>In the game, when time is up, {role1} will submit a final proposal.</h6>
+          <h6><br/><strong>You ALL must agree for the final proposal to pass!</strong></h6>
         </div>
+      </div>
+    </>
+  
 
+  const walkThroughContent = 
+  <>
+    <div className="flex-container walkthrough-content">    
+      <div className="flex-child">
         <StrawPoll 
           featureUrl="https://raw.githubusercontent.com/joshua-a-becker/RTools/master/testscoresheet.json" 
           submissionData = {submissionData}
           handleVoteSubmission = {handleVoteSubmission}
-          WaitingMessage = "If this were a real game, you'd be waiting for other players to vote."
+          WaitingMessage = "If this were a real game, you'd be waiting for other players to vote.<br/><br/>Note: this vote doesn't count!  Only the final vote counts."
           CurrentVote = {player.get("currentVote")}
         />
+      </div>
 
-
+      <div className="flex-child">
         <Calculator 
           featureUrl={treatment.featureUrl}
           handleProposalSubmission={handleProposalSubmission}
           showVoteButton={true}
           roleName = {"role1"}
-          voteButtonActive = {voteButtonActive}
+          displaySubmit = {!player.get("submissionData")}
           propSelectedFeatures = {player.get("selectedFeatures") ? player.get("selectedFeatures") : {} }
           handleOptionChange = {handleCalcOptionChange}
         />
+      </div>
+    </div>
+  </>
+
+  return (
+    <div className="h-full w-full flex">
+      <div className="h-full w-full flex flex-col">
+        <div className="h-full flex items-center justify-center">
+          {header}
+        </div>
+        <div className="h-full flex items-center justify-center">
+          {walkThroughContent}
+        </div>
       </div>
       <div className="h-full w-256 border-l flex justify-center items-center">
         <Chat scope={player} attribute="mychat" />

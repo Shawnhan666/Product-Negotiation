@@ -195,7 +195,7 @@
       <div>
         <div className="text-brief-wrapper">
           <div className="text-brief">
-            <h5>The {role1} has made their final proposal.<br/><br/>Time to cast your final vote!</h5>
+            <h5>{role1} has made their final proposal.<br/><br/>Time to cast your final vote!</h5>
           </div>
         </div>
         <br />

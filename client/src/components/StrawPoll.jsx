@@ -71,9 +71,10 @@ function StrawPoll(props) {
 
     const submissionInfo = getSubmittedFeaturesAndBonuses();
 
+    
+
     const proposalForVote = submittedData_informal ?
         <>
-            <div className="table-container">
             <div className="second-styled-table thead th">
                 <table className="styled-table"  >
                 <thead>
@@ -98,19 +99,20 @@ function StrawPoll(props) {
                 </tr>
                 </tbody>
                 </table>
-            <div className="total-points-display"> 
-                Your bonus: ${submissionInfo && Math.round(submissionInfo.totalBonus*100)/100}</div>
+                <div className="total-points-display"> 
+                    Your bonus: ${submissionInfo && Math.round(submissionInfo.totalBonus*100)/100}
+                </div>
             </div>
             <div className="voting-section">
                 {currentVote && (
-                     <div style={{ color: 'red' }}>
+                    <div style={{ color: 'red' }}>
                         {
                             currentVote === "For" ? 
                                 <>You voted Accept of this informal proposal.</>
                                 :
                                 <>You voted Reject of this informal proposal.</>
                         } 
-                        <br/><br/>{WaitingMessage}
+                        <br/><br/><div dangerouslySetInnerHTML={{__html: WaitingMessage}}/>
                     </div>
                 )}
             </div>
@@ -121,44 +123,41 @@ function StrawPoll(props) {
                 <Button className="vote-button" handleClick={() => handleVoteSubmit("Against")}>Reject</Button> 
                 </div>
             )}
-            </div>
+        
         </>
         :
         <>
-            <div className="table-container">
-                <div className="second-styled-table thead th">
-                    <table className="styled-table"  >
-                    <thead>
-                    <tr  >
-                        <td colSpan="2" style={{borderTop:'0px',borderRight:'0px',borderLeft:'0px',fontWeight:'bold'}}>
-                        Informal Proposals Will Appear Here
-                        </td>
-                    </tr>
-                    <tr  >
-                        <th>Product Features</th>
-                        <th>Bonus</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    
-                        <tr>
-                        <td>(tbd)</td>
-                        <td>(tbd)</td>
-                        </tr>
-                    
+            <div className="second-styled-table thead th">
+                <table className="styled-table"  >
+                <thead>
+                <tr>
+                    <td colSpan="2" style={{borderTop:'0px',borderRight:'0px',borderLeft:'0px',fontWeight:'bold'}}>
+                    &lt;No Proposal Has Been Made Yet&gt;
+                    </td>
+                </tr>
+                <tr>
+                    <th>Product Features</th>
+                    <th>Bonus</th>
+                </tr>
+                </thead>
+                <tbody>
+                
                     <tr>
+                    <td>-</td>
+                    <td>-</td>
                     </tr>
-                    </tbody>
-                    </table>
-                </div>
-
+                
+                <tr>
+                </tr>
+                </tbody>
+                </table>
             </div>
         </>
             
 
     return (
-        <div className="container">
-            { proposalForVote }  
+        <div className="table-container">
+            { proposalForVote } 
         </div>
     );
 }

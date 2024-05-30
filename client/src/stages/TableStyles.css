@@ -166,7 +166,8 @@
     display: flex;
     justify-content: flex-end; /* 内容靠右对齐 */
     padding-right: 1px; /* 假设表格与容器右边的距离，可调整 */
-   
+    font-size: larger;
+    font-weight: bold;
     bottom: 0; /* 距离容器底部0 */
     right: 0; /* 距离容器右边0 */
   }
@@ -253,6 +254,15 @@
     border-radius: 5px;
   }
   
+  
+  .informal-text-brief {
+    width: 80%; 
+    text-align: left;
+    margin-top: 0px;
+    padding: 15px; /* 添加padding以在内容周围增加间距 */
+    background-color: #a4d2ef;
+    border-radius: 5px;
+  }
   
   
   /* 橙色表格样式 */

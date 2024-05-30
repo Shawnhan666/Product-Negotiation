@@ -8,7 +8,7 @@ import { useGame } from "@empirica/core/player/classic/react";
 import { useChat } from '../ChatContext'; 
 import { Timer } from "../components/Timer";
 import { useStageTimer } from "@empirica/core/player/classic/react";
-
+import Calculator from "../components/Calculator"
 
 
 
@@ -218,7 +218,11 @@ export function FormalSubmit() {
                                                 />
                                               </td>
                                               <td>
-                                                {selectedFeatures[feature.name] ? feature.bonus[player.get("role")] : 0}
+                                                {selectedFeatures[feature.name] ? 
+                                                  <strong>{feature.bonus[player.get("role")]}</strong> 
+                                                : 
+                                                  <div style={{color:"#888888"}}>{feature.bonus[player.get("role")]}</div>
+                                                }
                                               </td>
                                             </tr>
                                           );
@@ -244,10 +248,20 @@ export function FormalSubmit() {
 
   } else {
     return (
-      <div className="container">
-      <div className="waiting-section">
-          <div className="loader"></div> 
-        <p>Please wait while the {role1} enters a proposal for you to vote on.</p>
+      <div className="flex-container">  
+        <div className="flex-child">  
+        <div className="informal-text-brief-wrapper">
+          <div className="informal-text-brief-1">
+          <b>Your role:</b> {player.get("role")}
+          </div><br/><br/><br/>
+        </div>
+        <Calculator 
+            featureUrl={treatment.featureUrl}
+            showVoteButton={true}
+            roleName = {"role1"}
+            displaySubmit = {false}
+            propSelectedFeatures = { {} }
+          />
       </div>
     </div>
     );

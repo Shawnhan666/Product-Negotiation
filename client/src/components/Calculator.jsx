@@ -6,7 +6,10 @@ function Calculator(props) {
 
     //const totalPoints = 100
 
-    const { propSelectedFeatures = {}, ...restProps } = props;
+    const { propSelectedFeatures = {}, 
+    displaySubmit=true, 
+    handleOptionChange = () => {},
+    ...restProps } = props;
 
     const [totalPoints, setTotalPoints] = useState(0);
 
@@ -25,10 +28,10 @@ function Calculator(props) {
     .map(feature => feature.name)
     .join(", ");
 
-    const handleOptionChange = featureName => {
+    const localHandleOptionChange = featureName => {
         setSelectedFeatures(prev => {
             const newState = { ...prev, [featureName]: !prev[featureName] };
-            props.handleOptionChange(newState)
+            handleOptionChange(newState)
             return newState;
         });
     };
@@ -102,10 +105,16 @@ function Calculator(props) {
                 <input
                     type="checkbox"
                     checked={selectedFeatures[feature.name] || false}
-                    onChange={() => handleOptionChange(feature.name)}
+                    onChange={() => localHandleOptionChange(feature.name)}
                 />
                 </td>
-                <td>{feature.bonus[playerRole]}</td>
+                <td>
+                  {selectedFeatures[feature.name] ? 
+                    <strong>{feature.bonus[playerRole]}</strong> 
+                  : 
+                    <div style={{color:"#888888"}}>{feature.bonus[playerRole]}</div>
+                  }                  
+                </td>
             </tr>
             );
         })}
@@ -113,13 +122,14 @@ function Calculator(props) {
 
 
     const renderCalculator = 
-        <div className="table-container">
-            <div className="mt-3 sm:mt-5 p-20">
-                <div className="table-wrapper">        
+        
+                <>
                     <table className="styled-table">
                         <thead>
                             <tr>
-                                <td colSpan="3" style={{borderTop:'0px',borderRight:'0px',borderLeft:'0px',fontWeight:'bold'}}>Calculator</td>
+                                <td colSpan="3" style={{borderTop:'0px',borderRight:'0px',borderLeft:'0px',fontWeight:'bold'}}>
+                                    Calculator (Your Bonus)
+                                </td>
                             </tr>
                             <tr style={{ backgroundColor: 'lightblue' }}>
                                 <th>Product Features</th>
@@ -135,25 +145,25 @@ function Calculator(props) {
                     <div className="total-points-display">
                         Total Bonus: ${Math.round(totalPoints*100)/100}
                     </div>
-                </div>
-            </div>
-        </div>
+                    {props.displaySubmit&&(
+                        <div className="button-container">
+                            <button onClick={handleSubmitProposal} 
+                                className="submit-button"
+                            >
+                                Submit for Informal Vote
+                            </button>
+                        </div>
+                    )}
+                    
+                </>
+            
 
     return (
-        <>
+        <div className="table-wrapper">     
             { renderCalculator }
-            { props.voteButtonActive ? 
-                <div className="button-container">
-                    <button onClick={handleSubmitProposal} 
-                        className={props.voteButtonActive ? "submit-button" : "submit-button-disabled"}
-                    >
-                        Submit for Informal Vote
-                    </button>
-                </div>
-                : 
-                ""
-            }
-        </>
+        
+            
+        </div> 
     );
 }
 
