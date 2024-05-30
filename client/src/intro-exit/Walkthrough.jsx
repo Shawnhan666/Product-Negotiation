@@ -137,7 +137,6 @@ export function Walkthrough({ next }) {
     <div className="flex-container walkthrough-content">    
       <div className="flex-child">
         <StrawPoll 
-          featureUrl="https://raw.githubusercontent.com/joshua-a-becker/RTools/master/testscoresheet.json" 
           featureData = {walkThroughFeatures}
           submissionData = {submissionData}
           handleVoteSubmission = {handleVoteSubmission}
@@ -148,7 +147,6 @@ export function Walkthrough({ next }) {
 
       <div className="flex-child">
         <Calculator 
-          featureUrl={treatment.featureUrl}
           featureData = {walkThroughFeatures}
           handleProposalSubmission={handleProposalSubmission}
           showVoteButton={true}
