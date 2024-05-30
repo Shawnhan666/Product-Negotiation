@@ -19,8 +19,7 @@ const game = useGame();
   const round = useRound();
 
 
-  const roundStartTime = round.get("roundStartTime"); // 从回合状态获取开始时间
-
+  const roundStartTime = scope.get("roundStartTime")//round.get("roundStartTime"); // 从回合状态获取开始时间
 
   const startTimeRef = useRef(Date.now());
 
@@ -29,7 +28,7 @@ const game = useGame();
 
 
   const [firstLoadTime, setFirstLoadTime] = useState(null);
-  const roundIndex = round.get("index");  
+
   const { systemMessages } = useChat();
   const playerMessages = scope.getAttribute(attribute)?.items || [];
   const [lastMessageId, setLastMessageId] = useState(null); 
@@ -188,6 +187,7 @@ const roleColors = {
   const ts = attribute.createdAt;
   const textColor = isSystemMessage ? "#FF4500" : roleColors[msg.sender.role] || "#000000";
  
+  window.relativeTime=relativeTime;
 
 
   return (
@@ -198,7 +198,7 @@ const roleColors = {
           <span className="font-semibold" style={{ color: textColor }}>
             {msg.sender.name}
           </span>
-          <span className="pl-2 text-gray-400">{relativeTime}</span>
+          <span className="pl-2 text-gray-400">{!isNaN(relativeTime) ? relativeTime : ""}</span>
         </p>
         <p style={{ color: textColor }}>{msg.text}</p>
       </div>

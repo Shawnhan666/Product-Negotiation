@@ -181,7 +181,7 @@ const handleOptionChange = featureName => {
   };
 
   useEffect(() => {
-    setTotalPoints(calculateTotal());
+      setTotalPoints(calculateTotal());
   }, [selectedFeatures, player]);
 
 
@@ -334,12 +334,15 @@ useEffect(() => {
 
   const saveChoices = () => {
     const role = player.get("role");
-    return features.reduce((choices, feature) => {
+    const returnChoices = features.reduce((choices, feature) => {
       if (selectedFeatures[feature.name]) {
         choices[feature.name] = feature.bonus[role];
       }
       return choices;
     }, {});
+    console.log("choices")
+    console.log(returnChoices);
+    return returnChoices;
   };
 
 

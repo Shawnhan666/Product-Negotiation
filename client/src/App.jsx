@@ -6,6 +6,8 @@ import { Game } from "./Game";
 import { ExitSurvey } from "./intro-exit/ExitSurvey";
 import { Summary } from "./intro-exit/Summary";
 import { Introduction } from "./intro-exit/Introduction";
+import { WaitingPage } from "./intro-exit/WaitingPage";
+import { Walkthrough } from "./intro-exit/Walkthrough";
 import { ChatProvider } from "./ChatContext";  
 import { AutoPlayerIdForm } from "./autoPlayerIdForm";
 import { MyConsent } from "./intro-exit/MyConsent.jsx"; 
@@ -21,7 +23,8 @@ export default function App() {
   const url = `${protocol}//${host}/query`;
 
   function introSteps({ game, player }) {
-    return [MyConsent, Introduction];
+    //return [MyConsent, Introduction, Walkthrough, WaitingPage];
+    return [Walkthrough, WaitingPage];
   }
 
   function exitSteps({ game, player }) {
