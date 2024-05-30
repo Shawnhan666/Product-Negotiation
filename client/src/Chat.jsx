@@ -35,8 +35,6 @@ const game = useGame();
   const systemMessagesLengthRef = useRef(systemMessages.length); 
 
   const displaySystemMessage = (text, id) => {
-    console.log(`Displaying system message: ${text} with ID: ${id}`);
-    console.log("System Messages: ", systemMessages);
   
     scope.append(attribute, {
       text,
@@ -50,14 +48,13 @@ const game = useGame();
 
   useEffect(() => {
     startTimeRef.current = Date.now();
-    //console.log("Game Start Time initialized:", startTimeRef.current);
   }, []);
   
 
 
   useEffect(() => {
     const currentLength = systemMessages.length;
-    console.log("System Messages: ", systemMessages);
+
     if (currentLength !== systemMessagesLengthRef.current && currentLength > 0) {
       const latestMessage = systemMessages[currentLength - 1];
       const messageId = latestMessage.id || Date.now().toString();

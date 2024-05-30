@@ -35,7 +35,6 @@ export const ChatProvider = ({ children }) => {
     // 为新的系统消息添加编号
     const taggedMessage = { ...message, number: messageCounter };
 
-    console.log(taggedMessage); // 查看消息和编号
     
     setSystemMessages((currentMessages) => [...currentMessages, taggedMessage]);
     // 消息编号递增

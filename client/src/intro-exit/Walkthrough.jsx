@@ -1,28 +1,31 @@
 import React, { useState } from "react";
 import { Button } from "../components/Button";
 import { usePlayer, useGame } from "@empirica/core/player/classic/react";
-import { Calculator } from "../components/Calculator"
-import { StrawPoll } from "../components/StrawPoll"
+import Calculator from "../components/Calculator"
+import StrawPoll from "../components/StrawPoll"
 import { useEffect} from 'react';
 import Chat from "../Chat";
 import { useChat } from '../ChatContext'; 
 
 export function Walkthrough({ next }) {
 
-
-
   const game = useGame(); 
   const player = usePlayer();
   const treatment = game.get("treatment");
+  const role1 = treatment.role1;
   const {instructionPage} = treatment;
   const { appendSystemMessage } = useChat();
 
-  const [submissionData, setSubmissionData] = useState(null); 
+  const [submissionData, setSubmissionData] = useState(player.get("submissionData")); 
   const [voteButtonActive, setVoteButtonActive] = useState(true); 
   const [showNextButton, setShowNextButton] = useState(false); 
 
   const handleProposalSubmission = (submission_data) => {
     setSubmissionData(submission_data)
+    console.log("submission data")
+    console.log(submission_data)
+    player.set("submissionData", submission_data)
+    console.log(player.get("submissionData"))
     sendSystemMessage("Good!  Now, even though this is your own proposal, you still need to vote.")
 
     setTimeout(
@@ -34,6 +37,11 @@ export function Walkthrough({ next }) {
     setVoteButtonActive(false)
   }
 
+  const handleCalcOptionChange = (selectedFeatures) => {
+    player.set("selectedFeatures", selectedFeatures)
+    console.log(player.get("selectedFeatures"))
+  }
+
   const handleVoteSubmission = (vote) => {
     sendSystemMessage("Good job!  You'll see the same thing when someone else offers a proposal.")
     setTimeout(
@@ -43,6 +51,7 @@ export function Walkthrough({ next }) {
       ,"All done!  Click 'next' to continue to the game."
     )
     setShowNextButton(true);
+    player.set("currentVote", vote)
     
     return(0);
   }
@@ -88,42 +97,60 @@ export function Walkthrough({ next }) {
         ,"To do this, pick a proposal and then click 'submit for informal vote'."
       )
 
-      console.log("ok");
-  
-      console.log("onLoad run")
       player.set("walkThroughStatus", 1)
     }
   }
 
   onLoad();
 
+  window.treatment=treatment;
+
   return (
     <div className="h-full w-full flex">
       <div className="container">
-        {showNextButton&&(<center>
-          <br/>
-          <Button handleClick={next} autoFocus >
-            <p>Next (Continue To Game)</p>
-          </Button>
-        </center>)}
-        {player.get("name")}
-        <Calculator 
-          featureUrl="https://raw.githubusercontent.com/joshua-a-becker/RTools/master/testscoresheet.json" 
-          handleProposalSubmission={handleProposalSubmission}
-          showVoteButton={true}
-          roleName = {"role1"}
-          voteButtonActive = {voteButtonActive}
-        />
+        <div>
+          {showNextButton&&(<center>
+            <br/>
+            <Button handleClick={next} autoFocus >
+              <p>Next (Continue To Game)</p>
+            </Button>
+          </center>)}
+        </div>
+        <div className="informal-text-brief-wrapper">
+        <div className="informal-text-brief-1">
+          <h6>When time is up, {role1} will submit a final proposal.</h6>
+          <h6><br/><strong>You ALL must agree for the proposal to pass!</strong></h6>
+        </div>
+        <br />
+        <div className="informal-text-brief-2">
+          <h6>On this page, make as many informal proposals as you want.</h6>
+          <h6><br/>The calculator shows your bonus for any given proposal.</h6>
+          <h6><br/>You preferred features are highlighted in blue.</h6>
+        </div>
+        </div>
+
         <StrawPoll 
           featureUrl="https://raw.githubusercontent.com/joshua-a-becker/RTools/master/testscoresheet.json" 
           submissionData = {submissionData}
           handleVoteSubmission = {handleVoteSubmission}
+          WaitingMessage = "If this were a real game, you'd be waiting for other players to vote."
+          CurrentVote = {player.get("currentVote")}
+        />
+
+
+        <Calculator 
+          featureUrl={treatment.featureUrl}
+          handleProposalSubmission={handleProposalSubmission}
+          showVoteButton={true}
+          roleName = {"role1"}
+          voteButtonActive = {voteButtonActive}
+          propSelectedFeatures = {player.get("selectedFeatures") ? player.get("selectedFeatures") : {} }
+          handleOptionChange = {handleCalcOptionChange}
         />
       </div>
       <div className="h-full w-256 border-l flex justify-center items-center">
         <Chat scope={player} attribute="mychat" />
       </div>
     </div>
-
   );
 }

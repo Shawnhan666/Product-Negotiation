@@ -2,9 +2,11 @@
 import React from "react";
 import { useState, useEffect} from 'react';
 import { Button } from "../components/Button";
-export function Calculator(props) {
+function Calculator(props) {
 
     //const totalPoints = 100
+
+    const { propSelectedFeatures = {}, ...restProps } = props;
 
     const [totalPoints, setTotalPoints] = useState(0);
 
@@ -12,7 +14,7 @@ export function Calculator(props) {
     const [productName, setProductName] = useState([]);
 
 
-    const [selectedFeatures, setSelectedFeatures] = useState({});
+    const [selectedFeatures, setSelectedFeatures] = useState(propSelectedFeatures);
 
     const featureUrl = props.featureUrl;
     const playerRole = props.roleName;
@@ -26,6 +28,7 @@ export function Calculator(props) {
     const handleOptionChange = featureName => {
         setSelectedFeatures(prev => {
             const newState = { ...prev, [featureName]: !prev[featureName] };
+            props.handleOptionChange(newState)
             return newState;
         });
     };
@@ -153,3 +156,5 @@ export function Calculator(props) {
         </>
     );
 }
+
+export default Calculator;

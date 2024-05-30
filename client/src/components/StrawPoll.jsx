@@ -2,7 +2,10 @@
 import React from "react";
 import { useState, useEffect} from 'react';
 import { Button } from "../components/Button";
-export function StrawPoll(props) {
+function StrawPoll(props) {
+
+
+    const { WaitingMessage = 'Waiting for other players.', ...restProps } = props;
 
     const [features, setFeatures] = useState([]);
 
@@ -10,7 +13,7 @@ export function StrawPoll(props) {
 
     const playerRole = "role1";//player.get("role");
 
-    const [currentVote, setCurrentVote] = useState(null);
+    const [currentVote, setCurrentVote] = useState(props.CurrentVote);
 
     var submittedData_informal  = props.submissionData;
     /*var submittedData_informal  = {
@@ -100,9 +103,14 @@ export function StrawPoll(props) {
             </div>
             <div className="voting-section">
                 {currentVote && (
-                    <div>
-                        {currentVote === "For" && <div style={{ color: 'red' }}>You voted Accept of this informal proposal. Waiting for other votes.</div>}
-                        {currentVote === "Against" && <div style={{ color: 'red' }}>You voted Reject of this informal proposal. Waiting for other votes.</div>}
+                     <div style={{ color: 'red' }}>
+                        {
+                            currentVote === "For" ? 
+                                <>You voted Accept of this informal proposal.</>
+                                :
+                                <>You voted Reject of this informal proposal.</>
+                        } 
+                        <br/><br/>{WaitingMessage}
                     </div>
                 )}
             </div>
@@ -114,9 +122,38 @@ export function StrawPoll(props) {
                 </div>
             )}
             </div>
-            </>
+        </>
         :
-            ""
+        <>
+            <div className="table-container">
+                <div className="second-styled-table thead th">
+                    <table className="styled-table"  >
+                    <thead>
+                    <tr  >
+                        <td colSpan="2" style={{borderTop:'0px',borderRight:'0px',borderLeft:'0px',fontWeight:'bold'}}>
+                        Informal Proposals Will Appear Here
+                        </td>
+                    </tr>
+                    <tr  >
+                        <th>Product Features</th>
+                        <th>Bonus</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    
+                        <tr>
+                        <td>(tbd)</td>
+                        <td>(tbd)</td>
+                        </tr>
+                    
+                    <tr>
+                    </tr>
+                    </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </>
             
 
     return (
@@ -125,3 +162,6 @@ export function StrawPoll(props) {
         </div>
     );
 }
+
+
+export default StrawPoll;
