@@ -132,15 +132,13 @@ export function Walkthrough({ next }) {
       </div>*/}
         
         <div className="informal-text-brief-1">
-        <h6>THIS IS A DEMO.</h6>  Imagine that you are in a discussion to plan lunch.  You may use this interactive platform to help your group agree on a plan.  The "calculator and proposal" feature lets you try out as many proposals as you want, to find out how people feel.  You can use the chat to discuss the proposals as you proceed.
-          <h6>On this page, make as many informal proposals as you want.</h6>
-          <h6><br/>The calculator shows your bonus for any given proposal.</h6>
-          <h6><br/>You preferred features are highlighted in blue.</h6>
+          <h6><strong>THIS IS A DEMO.</strong></h6>
+          <h6><br/>This platform will help your group agree on a plan for lunch.  Try out proposals using the informal vote, to find out how people feel</h6>
+          <h6><br/>Use the chat to discuss the proposals as you proceed.</h6>
+          <h6><br/>This calculator shows your bonus different options and let's you make informal proposals.  They don't count, though!  Only the final vote counts.</h6>
         </div>
         <br/>
-        <div className="informal-text-brief-1">
-          
-          <br/>
+        <div className="informal-text-brief-1">          
           <h6>In the game, when time is up, {role1} will submit a final proposal.</h6>
           <h6><br/><strong>You ALL must agree for the final proposal to pass!</strong></h6>
         </div>
