@@ -100,50 +100,17 @@ export function Choice() {
   }, [remainingSeconds, appendSystemMessage]); // 在依赖数组中添加 appendSystemMessage
 
 
-const [showTaskBrief, setShowTaskBrief] = useState(false);
-const handleShowTaskBrief = () => setShowTaskBrief(true);
-const handleCloseTaskBrief = () => setShowTaskBrief(false);
-const treatment = game.get("treatment");
+  const [showTaskBrief, setShowTaskBrief] = useState(false);
+  const handleShowTaskBrief = () => setShowTaskBrief(true);
+  const handleCloseTaskBrief = () => setShowTaskBrief(false);
+  const treatment = game.get("treatment");
 
-const {featureUrl}= treatment;
-const {role1} = treatment;
+  const {featureUrl}= treatment;
+  const {role1} = treatment;
 
-  // 添加一个状态来存储 features 数据
-const [features, setFeatures] = useState([]);
-const [productName, setProductName] = useState([]);
-
-
-  useEffect(() => {
-    fetch(featureUrl)
-      .then(response => response.json()) // 将响应转换为 JSON
-      .then(data => {
-        setFeatures(data.features); // 更新特性
-        setProductName(data.product_name); // 存储产品名称
-      })
-
-      .catch(error => console.error("Failed to load features:", error)); // 处理可能的错误
-  }, []); 
-
-
-
-const [selectedFeatures, setSelectedFeatures] = useState({});
-
-const handleOptionChange = featureName => {
-  setSelectedFeatures(prev => {
-    const newState = { ...prev, [featureName]: !prev[featureName] };
-    return newState;
-  });
-};
-
-  const calculateTotal = () => {
-    const role = player.get("role");
-    return features.reduce((total, feature) => {
-      const isSelected = selectedFeatures[feature.name];
-      const roleBonus = feature.bonus[role] || 0;
-      return (total + (isSelected ? roleBonus : 0));
-    }, 0);
-  };
-
+    // 添加一个状态来存储 features 数据
+  const [features, setFeatures] = useState([]);
+  const [productName, setProductName] = useState([]);
 
 
   const generateUniqueId = () => `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
@@ -159,10 +126,55 @@ const handleOptionChange = featureName => {
   const votingCompleted = round.get("votingCompleted");
   const submittedInformalVote = round.get("submittedInformalVote")
 
+  useEffect(() => {
+    fetch(featureUrl)
+      .then(response => response.json()) // 将响应转换为 JSON
+      .then(data => {
+        setFeatures(data.features); // 更新特性
+        setProductName(data.product_name); // 存储产品名称
+      })
+
+      .catch(error => console.error("Failed to load features:", error)); // 处理可能的错误
+  }, []); 
+
+
+
+  const [selectedFeatures, setSelectedFeatures] = useState({});
+
+  const handleOptionChange = featureName => {
+    setSelectedFeatures(prev => {
+      const newState = { ...prev, [featureName]: !prev[featureName] };
+      return newState;
+    });
+  };
+
+  const calculateTotal = () => {
+    const role = player.get("role");
+    return features.reduce((total, feature) => {
+      const isSelected = selectedFeatures[feature.name];
+      const roleBonus = feature.bonus[role] || 0;
+      return (total + (isSelected ? roleBonus : 0));
+    }, 0);
+  };
+
+
+
   const getSubmitterRoleName = () => {
     return submittedData_informal ? submittedData_informal.submitterRole : "None";
   };
 
+  const MyMessageFunc = () => {
+    console.log("ok")
+    if(typeof player.get("my_value") !== 'undefined') {
+      player.set("my_value", player.get("my_value")+1)
+      console.log(player.get("my_value"))
+      return;
+    }
+    console.log("here")
+    player.set("my_value",0)
+    console.log(player.get("my_value"))
+    return;
+  }
 
   const handleNext = () => {
     // Reset round-related state
@@ -228,58 +240,6 @@ const handleOptionChange = featureName => {
    
   }, [ nextClicked, round]);  
 
-
-//---------------------------------------------------------------------------------------------------------重制状态
-
-
-
-// useEffect(() => {
-//   const role = player.get("name");
-//   const roleIdentifier = player.get("role");
-//   console.log("player role", role);
-//   console.log("player roleIdentifier", roleIdentifier);
-
-//   // Check if the vote is complete and only allow a specific role to send the system message
-//   if (votingCompleted && roleIdentifier === "role1") {
-//     const acceptVotes = players.filter(p => p.get("vote") === "For").length;
-//     const rejectVotes = players.filter(p => p.get("vote") === "Against").length;
-
-//          // total votes number 
-//     const totalVotes = acceptVotes + rejectVotes;
-
-//     // 检查总投票数是否等于玩家总数
-//     if (totalVotes === players.length) {
-//         const votePassed = acceptVotes === 3 && rejectVotes === 0;
-//         const voteStatus = votePassed ? "passed" : "failed";
-
-//     // Retrieve the selected features for this vote
-//     const selectedFeatures = round.get("selectedFeaturesForInformalVote") || [];
-
-//     // Build the result message including the selected features
-//     const resultsMessage = `This vote has ${voteStatus} with ${acceptVotes} accept, ${rejectVotes} reject. Features Included: ${selectedFeatures.join(", ")}.`;
-
-//     // Send the system message
-//     appendSystemMessage({
-//       id: generateUniqueId(), // Use a unique ID
-//       text: resultsMessage,
-//       sender: {
-//         id: Date.now(),
-//         name: "Notification",
-//         avatar: "",
-//         role: "Notification",
-//       }
-//     });
-//     console.log(resultsMessage);
-  
-// } else {
-//   console.log("Not all players have voted. No system message sent.");
-// }
-// }
-
-// }, [votingCompleted,players]); 
-
-
-// 新创建的函数，用于处理投票完成后的逻辑
 const handleVoteResults = () => {
   const role = player.get("name");
   const roleIdentifier = player.get("role");
@@ -465,7 +425,7 @@ useEffect(() => {
               <table className="styled-table"  >
               <thead>
                 <tr  >
-                  <td colspan="2" style={{borderTop:'0px',borderRight:'0px',borderLeft:'0px',fontWeight:'bold'}}>
+                  <td colSpan="2" style={{borderTop:'0px',borderRight:'0px',borderLeft:'0px',fontWeight:'bold'}}>
                     Informal Proposal by {getSubmitterRoleName()}
                   </td>
                 </tr>
@@ -537,7 +497,7 @@ useEffect(() => {
     <div className="table-wrapper">        
       <table className="styled-table">
         <thead>
-          <tr><td colspan="3" style={{borderTop:'0px',borderRight:'0px',borderLeft:'0px',fontWeight:'bold'}}>Calculator (Role: {player.get("role")})</td></tr>
+          <tr><td colSpan="3" style={{borderTop:'0px',borderRight:'0px',borderLeft:'0px',fontWeight:'bold'}}>Calculator (Role: {player.get("role")})</td></tr>
           <tr style={{ backgroundColor: 'lightblue' }}>
             <th>Product Features</th>
             <th>Include</th>
@@ -619,6 +579,9 @@ useEffect(() => {
               <>
                 <Button handleClick={() => player.stage.set("submit", true)}>
                   Continue
+                </Button>
+                <Button handleClick={() => MyMessageFunc() }>
+                  Message Click
                 </Button>
               </>
             )}

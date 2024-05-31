@@ -136,5 +136,18 @@ Empirica.onRoundEnded(({ round }) => {
 Empirica.onGameEnded(({ game }) => {});
 
  
+Empirica.on("player", "my_value", (ctx, { player, my_value }) => {
+
+  const text = "This is a server side message";
+  console.log(my_value)
+  player.currentRound.append("chat", {
+    text,
+    sender: {
+      id: Date.now(), 
+      name: "Notification",
+      role: "Notification", 
+    },
+  });
+});
 
  
