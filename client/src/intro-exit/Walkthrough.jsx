@@ -158,6 +158,7 @@ export function Walkthrough({ next }) {
           handleVoteSubmission = {handleVoteSubmission}
           message = {playerMessage}
           CurrentVote = {player.get("currentVote")}
+          playerRole = "role1"
         />
       </div>
 
@@ -166,7 +167,8 @@ export function Walkthrough({ next }) {
           featureData = {walkThroughFeatures}
           handleProposalSubmission={handleProposalSubmission}
           showVoteButton={true}
-          roleName = {"role1"}
+          roleName = "Lunch Attendee"
+          playerRole = "role1"
           displaySubmit = {!player.get("submissionData")}
           propSelectedFeatures = {player.get("selectedFeatures") ? player.get("selectedFeatures") : {} }
           handleOptionChange = {handleCalcOptionChange}

@@ -25,7 +25,7 @@ export default function App() {
   const url = `${protocol}//${host}/query`;
 
   function introSteps({ game, player }) {
-    if(isDevelopment) return [];
+    //if(isDevelopment) return [];
     
     if(skipIntro) return [];
     //return [Walkthrough, WaitingPage];

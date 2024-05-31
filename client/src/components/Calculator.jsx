@@ -73,7 +73,7 @@ function Calculator(props) {
         
         const submission_data = {
             decisions: choices,
-            submitterRole: playerRole
+            submitterRole: props.roleName
         };
 
         
