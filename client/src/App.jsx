@@ -17,13 +17,17 @@ import { isDevelopment } from "@empirica/core/player"
 
 
 export default function App() {
+
   const urlParams = new URLSearchParams(window.location.search);
   const playerKey = urlParams.get("participantKey") || "";
+  const skipIntro = urlParams.get("skipIntro");
   const { protocol, host } = window.location;
   const url = `${protocol}//${host}/query`;
 
   function introSteps({ game, player }) {
     //if(isDevelopment) return [];
+    
+    if(skipIntro) return [];
     //return [Walkthrough, WaitingPage];
     return [MyConsent, Introduction, Walkthrough, WaitingPage];
     
