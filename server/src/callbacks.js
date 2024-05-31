@@ -140,14 +140,14 @@ Empirica.onGameEnded(({ game }) => {});
 
 
   Empirica.on("round", "proposalStatus", (ctx, {round, proposalStatus}) => {
-    console.log("status update")
+    
     
     playerCount=round.currentGame.get("treatment").playerCount
 
     if(proposalStatus.status && proposalStatus.content.proposal.vote){
       countVotes = proposalStatus.content.proposal.vote.length
       if(countVotes>=playerCount) {
-        console.log("voting complete")
+        
        
         const resultingProposal = proposalStatus.content.proposal
 
@@ -158,9 +158,7 @@ Empirica.onGameEnded(({ game }) => {});
         resultingProposal.result = {for: votes_for, against: votes_against}
         
         const  proposalItems = Object.keys(proposalStatus.content.proposal.decisions).join(", ")
-        console.log(proposalItems)
-
-        console.log("setting status server callback")
+        
 
         round.set("proposalStatus", {
           status: false, 

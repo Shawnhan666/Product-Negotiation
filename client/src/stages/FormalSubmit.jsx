@@ -266,7 +266,7 @@ export function FormalSubmit() {
         <Calculator 
             featureData = {treatmentFeatureData}
             showVoteButton={true}
-            roleName = {"role1"}
+            roleName = {player.get("role")}
             displaySubmit = {false}
             propSelectedFeatures = { {} }
           />
