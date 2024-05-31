@@ -23,7 +23,7 @@ function Calculator(props) {
 
     const [selectedFeatures, setSelectedFeatures] = useState(propSelectedFeatures);
 
-    const playerRole = props.roleName;
+    const playerRole = props.playerRole;
 
 
     const desiredFeaturesForRole = features
@@ -120,7 +120,7 @@ function Calculator(props) {
                         <thead>
                             <tr>
                                 <td colSpan="3" style={{borderTop:'0px',borderRight:'0px',borderLeft:'0px',fontWeight:'bold'}}>
-                                    Calculator (Your Bonus)
+                                    Calculator (You: {props.roleName})
                                 </td>
                             </tr>
                             <tr style={{ backgroundColor: 'lightblue' }}>

@@ -96,7 +96,7 @@ function StrawPoll(props) {
                 <thead>
                 <tr  >
                     <td colSpan="2" style={{borderTop:'0px',borderRight:'0px',borderLeft:'0px',fontWeight:'bold'}}>
-                    Informal Proposal by {submittedData_informal['submitterRole']}
+                    Proposal by {submittedData_informal['submitterRole']}
                     </td>
                 </tr>
                 <tr  >

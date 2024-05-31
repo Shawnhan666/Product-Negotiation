@@ -199,28 +199,9 @@ export function Choice() {
     
   }
 
-
-
   const handleOptionChange = featureName => {
     
   };
-
-  const calculateTotal = () => {
-    const role = player.get("role");
-    return features.reduce((total, feature) => {
-      const isSelected = selectedFeatures[feature.name];
-      const roleBonus = feature.bonus[role] || 0;
-      return (total + (isSelected ? roleBonus : 0));
-    }, 0);
-  };
-
-
-
-  const getSubmitterRoleName = () => {
-    return submittedData_informal ? submittedData_informal.submitterRole : "None";
-  };
-
-
 
 
   const handleSubmitProposal = (submission_data) => {
@@ -282,8 +263,8 @@ export function Choice() {
         <br />
         <div className="informal-text-brief-2">
           <h6>On this page, make as many informal proposals as you want.</h6>
-          <h6><br/>The calculator shows your bonus for any given proposal.</h6>
-          <h6><br/>You preferred features are highlighted in blue.</h6>
+          <h6><br/>The calculator shows how  proposal.</h6>
+          <h6><br/>You preferred features as {player.get("name")} are highlighted.</h6>
         </div>
       </div>
       <br />
@@ -302,7 +283,7 @@ export function Choice() {
         <Calculator 
           featureData = {featureData}
           handleProposalSubmission={handleSubmitProposal}
-          roleName = {player.get("role")}
+          roleName = {player.get("name")}
           displaySubmit = { !proposalStatusData.status }
           propSelectedFeatures = {player.get("selectedFeatures") ? player.get("selectedFeatures") : {} }
           handleOptionChange = {handleOptionChange}

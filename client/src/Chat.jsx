@@ -90,7 +90,7 @@ const game = useGame();
   return (
     <div className="h-full w-full flex flex-col">  
       <Messages msgs={playerMessages } playerRole={player.get("name")}  gameStartTime={roundStartTime}/>
-      <Input onNewMessage={handleNewMessage} playerRole={player.get("role")} />
+      <Input onNewMessage={handleNewMessage} playerRole={player.get("role")} playerName={player.get("name")} />
     </div> 
   );
 }
@@ -206,7 +206,7 @@ const roleColors = {
 
 
 
-function Input({ onNewMessage, playerRole }) {
+function Input({ onNewMessage, playerRole, playerName }) {
   const [text, setText] = useState("");
   const resize = (e) => {
     const target = e.target;
@@ -246,7 +246,7 @@ function Input({ onNewMessage, playerRole }) {
         id="message"
         rows={1}
         className="peer resize-none bg-transparent block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-200 placeholder:text-gray-300 focus:ring-2 focus:ring-inset focus:ring-empirica-500 sm:text-sm sm:leading-6"
-        placeholder={ playerRole ? "Say something as "+playerRole : "Say something..."}
+        placeholder={ playerName ? ("Say something as " + playerName) : "Say something..."}
         onKeyDown={handleKeyDown}
         onKeyUp={handleKeyUp}
         value={text}
