@@ -116,7 +116,7 @@ export function Choice() {
       proposalStatusData.content.proposal===undefined ? 
         "status false undefined" 
       : <>
-          PROPOSAL {proposalStatusData.content.proposal.result.for===treatment.playerCount ? "PASSED" : "REJECTED"}
+          PROPOSAL {proposalStatusData.content.proposal.result.for===treatment.playerCount ? "PASSED (unofficial)" : "REJECTED"}
           <br/>Yes: {proposalStatusData.content.proposal.result.for} &nbsp;&nbsp;&nbsp;&nbsp; No: {proposalStatusData.content.proposal.result.against}
         </>
       
