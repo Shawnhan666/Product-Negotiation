@@ -46,27 +46,31 @@ factors:
         - value: 300
         - value: 600
         - value: 60000
+        - value: 3000
     - name: formalVoteDuration
       desc: Duration of the Formal Submit stage in seconds
       values:
         - value: 60
         - value: 600
         - value: 60000
+        - value: 609
     - name: informalSubmitDuration
       desc: Duration of the Informal Submit stage in seconds
       values:
         - value: 60
         - value: 300
         - value: 30000
+        - value: 600
+        - value: 6000
 treatments:
     - name: pilot 5 min
       desc: pilot test
       factors:
         basicpay: 2.5
         featureUrl: https://raw.githubusercontent.com/joshua-a-becker/RTools/master/testscoresheet.json
-        formalSubmitDuration: 300
-        formalVoteDuration: 60
-        informalSubmitDuration: 60
+        formalSubmitDuration: 3000
+        formalVoteDuration: 609
+        informalSubmitDuration: 6000
         numRounds: 1
         playerCount: 3
         resultDuration: 60

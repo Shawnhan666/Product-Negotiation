@@ -31,7 +31,7 @@ export function Choice() {
   const treatment = game.get("treatment");
 
   const {featureUrl}= treatment;
-  const {role1} = treatment;
+  
 
     // 添加一个状态来存储 features 数据
   const [featureData, setFeatureData] = useState({});
@@ -54,8 +54,9 @@ export function Choice() {
 
   const [loading, setLoading] = useState(true);
 
-
-
+  window.featureData = featureData
+  
+  const role1 = featureData.roleNames === undefined ? "" : featureData.roleNames['role1']
   const [selectedFeatures, setSelectedFeatures] = useState({});
 
   const allVoted = players.every(player => player.get("vote"));
@@ -123,18 +124,23 @@ export function Choice() {
 
 
   // load negotiation scenario features
-  useEffect(() => {
-    fetch(featureUrl)
-      .then(response => response.json()) // 将响应转换为 JSON
-      .then(data => {
-        setFeatureData(data[treatment.scenario]); // 更新特性
-        setFeatures(data[treatment.scenario].features)
-        setProductName(data[treatment.scenario].product_name); // 存储产品名称
-        setLoading(false);
-      })
-      .catch(error => console.error("Failed to load features:", error)); // 处理可能的错误
+  
+    useEffect(() => {
 
-  }, []); 
+      if(loading){
+        fetch(featureUrl, {cache: "no-store"})
+          .then(response => response.json()) // 将响应转换为 JSON
+          .then(data => {
+            setFeatureData(data[treatment.scenario]); // 更新特性
+            setFeatures(data[treatment.scenario].features)
+            setProductName(data[treatment.scenario].product_name); // 存储产品名称
+            setLoading(false);
+          })
+          .catch(error => console.error("Failed to load features:", error)); // 处理可能的错误
+      }
+    }, []); 
+  
+  
   
   // code for handling countdown reminder notifications
   useEffect(() => {
@@ -263,7 +269,7 @@ export function Choice() {
         </div>
         <br />
         <div className="informal-text-brief-1">
-          <h6>{ role1 === player.get("name") ? "As "+role1+", you" : "At the end, "+role1 } will submit a final proposal.{ role1 === player.get("name") ? "at the end." : "" }</h6>
+          <h6>{ 'role1' === player.get("role") ? "As "+role1+", you" : "At the end, "+role1 } will submit a final proposal { 'role1' === player.get("role") ? "at the end." : "" }</h6>
           <h6><br/><strong>You ALL must agree for the final proposal to pass!</strong></h6>
         </div>
       </div>
@@ -283,7 +289,7 @@ export function Choice() {
         <Calculator 
           featureData = {featureData}
           handleProposalSubmission={handleSubmitProposal}
-          roleName = {player.get("name")}
+          roleName = {featureData.roleNames[player.get("role")]}
           displaySubmit = { !proposalStatusData.status }
           propSelectedFeatures = {player.get("selectedFeatures") ? player.get("selectedFeatures") : {} }
           handleOptionChange = {handleOptionChange}
