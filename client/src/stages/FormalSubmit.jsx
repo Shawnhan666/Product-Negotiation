@@ -260,13 +260,14 @@ export function FormalSubmit() {
         <div className="flex-child">  
         <div className="informal-text-brief-wrapper">
           <div className="informal-text-brief-1">
-          <b>Your role:</b> {player.get("role")}
+          <b>Your role:</b> {player.get("name")}
           </div><br/><br/><br/>
         </div>
         <Calculator 
             featureData = {treatmentFeatureData}
             showVoteButton={true}
-            roleName = {player.get("role")}
+            roleName = {player.get("name")}
+            playerRole = {player.get("role")}
             displaySubmit = {false}
             propSelectedFeatures = { {} }
           />

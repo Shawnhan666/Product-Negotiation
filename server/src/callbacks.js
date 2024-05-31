@@ -54,6 +54,7 @@ Empirica.onGameStart(({ game }) => {
 Empirica.onRoundStart(({ round }) => { 
 
   round.set("systemMessages", []);
+  round.set("proposalHistory", [])
   const startTime = Date.now();
   round.set("roundStartTime", startTime);
   console.log(`Round ${round.get("index")} Start: Round start time set at ${new Date(startTime).toISOString()}`);
@@ -61,17 +62,17 @@ Empirica.onRoundStart(({ round }) => {
  
 Empirica.onStageStart(({ stage }) => {
   if (stage.get("name") === "Informal Submit") {
-    console.log("start of informal submit");
+   
     const players = stage.currentGame.players;
     for (const player of players) {
-      player.set("vote", null);
-      player.set("currentVote", null); // 如果你有这个状态的话
-      player.set("allVoted", false)
-         // 重置与投票相关的轮次状态
-    stage.set("anySubmitted", false);
-    stage.set("votingCompleted", false);
-    stage.set("submittedData_informal", null);
-    stage.set("allVoted", false)
+//    player.set("vote", null);
+ //   player.set("currentVote", null); // 如果你有这个状态的话
+  //  player.set("allVoted", false)
+        // 重置与投票相关的轮次状态
+  //  stage.set("anySubmitted", false);
+  //  stage.set("votingCompleted", false);
+  //  stage.set("submittedData_informal", null);
+  //  stage.set("allVoted", false)
       console.log(`Reset vote for player ${player.id}`);
     }
   }
@@ -80,8 +81,9 @@ Empirica.onStageStart(({ stage }) => {
 
 
 Empirica.onStageEnded(({ stage, game }) => {
+ 
+  // only needed for the formal vote
   if (stage.get("name") !== "Formal Vote") return;
-  console.log("End of formal vote stage");
 
   const players = stage.currentGame.players;
   const round = stage.round;
@@ -167,6 +169,7 @@ Empirica.onGameEnded(({ game }) => {});
             proposal: resultingProposal
           }
         })
+
 
 
         const passtext = votes_for >= playerCount ? "Proposal passed." : "Proposal rejected with " + votes_for + " yes votes."
