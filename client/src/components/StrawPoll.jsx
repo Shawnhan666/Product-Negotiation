@@ -6,7 +6,7 @@ function StrawPoll(props) {
 
 
     const { WaitingMessage = 'Waiting for other players.',
-    playerRole = "role1",
+    playerRole = props.playerRole,
     ...restProps } = props;
 
     //const [features, setFeatures] = useState([]);
@@ -77,7 +77,16 @@ function StrawPoll(props) {
 
     const submissionInfo = getSubmittedFeaturesAndBonuses();
 
-    
+    window.features=features
+
+    const selectedFeatureNames = submittedData_informal ? Object.keys(submittedData_informal.decisions).join(", ") : "No features selected";
+
+
+    const desiredFeaturesForRole = features
+        .filter(feature => feature.bonus[playerRole] === 1)
+        .map(feature => feature.name)
+        .join(", ");
+
 
     const proposalForVote = submittedData_informal ?
         <>
@@ -91,11 +100,12 @@ function StrawPoll(props) {
                     </td>
                 </tr>
                 <tr  >
-                    <th>Product Features</th>
+                    <th>Feature</th>
+                    <th>Included</th>
                     <th>Bonus</th>
                 </tr>
                 </thead>
-                <tbody>
+                {/*<tbody>
                 {submissionInfo && submissionInfo.featuresAndBonuses.map(({ featureName, bonus }, index) => (
                     <tr key={index}>
                     <td>{featureName}</td>
@@ -104,7 +114,23 @@ function StrawPoll(props) {
                 ))}
                 <tr>
                 </tr>
-                </tbody>
+                </tbody>*/}
+                <tbody>
+                    {features.map((feature, index) => {
+                    const isSelected = selectedFeatureNames.includes(feature.name); // 检查特性是否被选中
+                    const isDesiredFeature = desiredFeaturesForRole.includes(feature.name);
+                    // 根据当前玩家角色计算奖励
+                    const bonusForCurrentPlayer = isSelected ? feature.bonus[playerRole] : "-";
+        
+                    return (
+                        <tr key={index}>
+                        <td className={isDesiredFeature ? "selected-feature" : ""}>{feature.name}</td>
+                        <td>{isSelected ? <span>&#10003;</span> : <span>&nbsp;</span>}</td>
+                        <td>{bonusForCurrentPlayer}</td>
+                        </tr>
+                    );
+                    })}
+               </tbody>
                 </table>
                 {(currentVote===undefined) && (<div className="total-points-display"> Total bonus: ${submissionInfo && Math.round(submissionInfo.totalBonus*100)/100}</div>)}
             {(currentVote===undefined) && (

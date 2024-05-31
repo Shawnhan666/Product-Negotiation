@@ -189,7 +189,7 @@
   
     
     
-    
+    window.features=features
     
   
     return (
@@ -216,7 +216,7 @@
                   const isSelected = selectedFeatureNames.includes(feature.name); // 检查特性是否被选中
                   const isDesiredFeature = desiredFeaturesForRole.includes(feature.name);
                   // 根据当前玩家角色计算奖励
-                  const bonusForCurrentPlayer = isSelected ? feature.bonus[player.get("role")] : 0;
+                  const bonusForCurrentPlayer = isSelected ? feature.bonus[player.get("role")] : "-";
     
                   return (
                     <tr key={index} className={isDesiredFeature ? "selected-feature" : ""}>

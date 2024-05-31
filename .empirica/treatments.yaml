@@ -7,19 +7,6 @@ factors:
       desc: How many times participants will make a choice
       values:
         - value: 1
-        - value: 2
-        - value: 3
-        - value: 4
-        - value: 5
-        - value: 10
-        - value: 7
-    - name: resultDuration
-      desc: Duration of the result stage in seconds
-      values:
-        - value: 20
-        - value: 200
-        - value: 2000
-        - value: 60
     - name: instructionPage
       desc: 1st sentence, Instructions displayed before the CandyCount game starts.
       values:
@@ -28,132 +15,62 @@ factors:
     - name: role1
       desc: Role configuration for the first player.
       values:
-        - value: BigCEO
-        - value: CEOO
-        - value: CEO
-        - value: Head Chef
-        - value: ONE
+        - value: Head of Product
     - name: role2
       desc: Role configuration for the second player.
       values:
-        - value: DepartmentHeadA
-        - value: Department-A
-        - value: Department-Head-A
-        - value: Soux Chef
-        - value: TWO
-    - name: role3
-      desc: Role configuration for the third player.
-      values:
-        - value: DepartmentHeadB
-        - value: Department-B
-        - value: Department-Head-B
-        - value: Pastry Maker
-        - value: THREE
+        - value: Design Lead
     - name: basicpay
       desc: basic payment.
       values:
-        - value: 3
-        - value: 999
-        - value: 1.99
         - value: 2.5
-    - name: informalSubmitDuration
-      desc: Duration of the Informal Submit stage in seconds
-      values:
-        - value: 5
-        - value: 180
-        - value: 300
-        - value: 600
-        - value: 2000
-        - value: 3
-        - value: 60
-        - value: 310
-        - value: 2
-        - value: 1
-        - value: 1000
-        - value: 3000
-        - value: 1800
-        - value: 15
-        - value: 10000
-    - name: formalSubmitDuration
-      desc: Duration of the Formal Submit stage in seconds
-      values:
-        - value: 300
-        - value: 600
-        - value: 1200
-        - value: 60
-        - value: 2000
-        - value: 30
-        - value: 310
-        - value: 5
-        - value: 2
-        - value: 1000
-        - value: 10000
-    - name: formalVoteDuration
-      desc: Duration of the Formal Submit stage in seconds
-      values:
-        - value: 300
-        - value: 600
-        - value: 1200
-        - value: 60
-        - value: 2000
-        - value: 30
-        - value: 20
-        - value: 5
-        - value: 2
-        - value: 1000
-        - value: 10000
     - name: scenario
       values:
         - value: pilot_complex
     - name: featureUrl
       desc: URL of the pay off matrix
       values:
-        - value: https://raw.githubusercontent.com/Shawnhan666/Product-Negotiation/main/client/src/stages/features.json
         - value: https://raw.githubusercontent.com/joshua-a-becker/RTools/master/testscoresheet.json
-        - value: http://127.0.0.1:5000/json/feature_data.json
         - value: http://139.59.181.178:5000/json/feature_data.json
+    - name: resultDuration
+      values:
+        - value: 60
+    - name: role3
+      desc: Role configuration for the third player.
+      values:
+        - value: Technical Lead
+        - value: Technical Specialist
+    - name: formalSubmitDuration
+      desc: Duration of the Formal Submit stage in seconds
+      values:
+        - value: 300
+        - value: 600
+        - value: 60000
+    - name: formalVoteDuration
+      desc: Duration of the Formal Submit stage in seconds
+      values:
+        - value: 60
+        - value: 600
+        - value: 60000
+    - name: informalSubmitDuration
+      desc: Duration of the Informal Submit stage in seconds
+      values:
+        - value: 60
+        - value: 300
+        - value: 30000
 treatments:
-    - name: becker-test
-      desc: this is a test treatment
-      factors:
-        basicpay: 3
-        featureUrl: https://raw.githubusercontent.com/Shawnhan666/Product-Negotiation/main/client/src/stages/features.json
-        formalSubmitDuration: 60
-        formalVoteDuration: 60
-        informalSubmitDuration: 600
-        instructionPage: You will take part in <strong>five</strong> product design deliberations, each lasting 10 minutes and focusing on a different product from a technology company's portfolio. At the start of each deliberation, you will learn which features are your <strong>"desired features"</strong> for that product.           <br /><br />           <ul>         <li>Including a desired product feature nets you $1.</li>         <li>Including an undesired product feature costs you $0.50.</li>         <li>Excluding any feature has no impact on earnings.</li>         <li>To maximize earnings, you should persuade others to include your desired features and exclude undesired ones. A payoff calculator is provided for your convenience.</li>         <li>The total earnings you make across all design discussions equal your “bonus.”</li>         <li>If you finish all five, you earn a fixed $10 plus your accumulated “bonus” earnings.</li>       </ul>       <br />           In each deliberation, there will be two department heads and one CEO. You are randomly assigned one of these roles each time, which means your role can change from one deliberation to another. Anyone can suggest an <strong>unofficial vote</strong> to gauge each other's interest in including or excluding product features. After 10 minutes, an <strong>official vote</strong> will be conducted where the CEO will propose a set of product features and the two department heads will vote “YES” or “NO” to them. Only official vote results will affect earnings.           <br />           <br />           You can see your role and priority features at the bottom of the main negotiations page.
-        numRounds: 1
-        playerCount: 3
-        resultDuration: 60
-        role1: Head Chef
-        role2: Soux Chef
-        role3: Pastry Maker
-    - name: shawntest
-      factors:
-        basicpay: 999
-        featureUrl: https://raw.githubusercontent.com/Shawnhan666/Product-Negotiation/main/client/src/stages/features.json
-        formalSubmitDuration: 600
-        formalVoteDuration: 600
-        informalSubmitDuration: 600
-        instructionPage: You will take part in <strong>five</strong> product design deliberations, each lasting 10 minutes and focusing on a different product from a technology company's portfolio. At the start of each deliberation, you will learn which features are your <strong>"desired features"</strong> for that product.           <br /><br />           <ul>         <li>Including a desired product feature nets you $1.</li>         <li>Including an undesired product feature costs you $0.50.</li>         <li>Excluding any feature has no impact on earnings.</li>         <li>To maximize earnings, you should persuade others to include your desired features and exclude undesired ones. A payoff calculator is provided for your convenience.</li>         <li>The total earnings you make across all design discussions equal your “bonus.”</li>         <li>If you finish all five, you earn a fixed $10 plus your accumulated “bonus” earnings.</li>       </ul>       <br />           In each deliberation, there will be two department heads and one CEO. You are randomly assigned one of these roles each time, which means your role can change from one deliberation to another. Anyone can suggest an <strong>unofficial vote</strong> to gauge each other's interest in including or excluding product features. After 10 minutes, an <strong>official vote</strong> will be conducted where the CEO will propose a set of product features and the two department heads will vote “YES” or “NO” to them. Only official vote results will affect earnings.           <br />           <br />           You can see your role and priority features at the bottom of the main negotiations page.
-        numRounds: 1
-        playerCount: 3
-        resultDuration: 60
-        role1: Head Chef
-        role2: Soux Chef
-        role3: Pastry Maker
-    - name: experimental
+    - name: pilot 5 min
       desc: pilot test
       factors:
         basicpay: 2.5
-        featureUrl: http://139.59.181.178:5000/json/feature_data.json
-        formalSubmitDuration: 10000
-        formalVoteDuration: 10000
-        informalSubmitDuration: 10000
+        featureUrl: https://raw.githubusercontent.com/joshua-a-becker/RTools/master/testscoresheet.json
+        formalSubmitDuration: 300
+        formalVoteDuration: 60
+        informalSubmitDuration: 60
         numRounds: 1
         playerCount: 3
         resultDuration: 60
-        role1: ONE
-        role2: TWO
-        role3: THREE
+        role1: Head of Product
+        role2: Design Lead
+        role3: Technical Specialist
         scenario: pilot_complex

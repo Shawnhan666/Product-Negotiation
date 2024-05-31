@@ -297,6 +297,7 @@ export function Choice() {
           handleVoteSubmission = {handleVoteSubmit}
           CurrentVote = {currentVote}
           message = {strawPollMessage}
+          playerRole = {player.get("role")}
         />
         <Calculator 
           featureData = {featureData}
