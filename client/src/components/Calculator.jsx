@@ -9,6 +9,7 @@ function Calculator(props) {
     const { propSelectedFeatures = {}, 
     displaySubmit=true, 
     handleOptionChange = () => {},
+    featureData = {},
     ...restProps } = props;
 
     const [totalPoints, setTotalPoints] = useState(0);
@@ -17,7 +18,8 @@ function Calculator(props) {
     //const [productName, setProductName] = useState([]);
 
     const features = props.featureData.features;
-    const productName = props.featureData.productName;
+    //const productName = props.featureData.productName;
+    
 
     const [selectedFeatures, setSelectedFeatures] = useState(propSelectedFeatures);
 
@@ -74,6 +76,7 @@ function Calculator(props) {
             submitterRole: playerRole
         };
 
+        
         props.handleProposalSubmission(submission_data);
     };
 

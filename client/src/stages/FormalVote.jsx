@@ -36,6 +36,7 @@
     
  
 
+    
 
 
     const desiredFeaturesForRole = features
@@ -50,8 +51,8 @@
         fetch(featureUrl)
           .then(response => response.json()) // 将响应转换为 JSON
           .then(data => {
-            setFeatures(data.features); // 更新特性
-            setProductName(data.product_name); // 存储产品名称
+            setFeatures(data[treatment.scenario].features); // 更新特性
+            //setProductName(data.product_name); // 存储产品名称
           })
           .catch(error => console.error("Failed to load features:", error)); // 处理可能的错误
       }, []); // 空依赖数组意味着这个 useEffect 只在组件首次渲染时执行

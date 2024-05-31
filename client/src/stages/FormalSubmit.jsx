@@ -9,7 +9,7 @@ import { useChat } from '../ChatContext';
 import { Timer } from "../components/Timer";
 import { useStageTimer } from "@empirica/core/player/classic/react";
 import Calculator from "../components/Calculator"
-
+//import featureData from "../featureData"
 
 
 export function FormalSubmit() {
@@ -32,6 +32,11 @@ export function FormalSubmit() {
   const {featureUrl}= treatment;
   const [features, setFeatures] = useState([]);
 
+  //const treatmentFeatureData = featureData[treatment.scenario]
+
+  const [treatmentFeatureData, setTreatmentFeatureData] = useState({features:[]});
+
+  //window.treatmentFeatureData=treatmentFeatureData
 
   const desiredFeaturesForRole = features
   .filter(feature => feature.bonus[player.get("role")] === 1)
@@ -43,12 +48,15 @@ export function FormalSubmit() {
     fetch(featureUrl)
       .then(response => response.json()) // 将响应转换为 JSON
       .then(data => {
-        setFeatures(data.features); // 更新特性
-        setProductName(data.product_name); // 存储产品名称
+        //setFeatures(data.features); // 更新特性
+        //setProductName(data.product_name); // 存储产品名称
+        setTreatmentFeatureData(data[treatment.scenario])
+        setFeatures(data[treatment.scenario].features)
       })
       .catch(error => console.error("Failed to load features:", error)); // 处理可能的错误
   }, []); // 空依赖数组意味着这个 useEffect 只在组件首次渲染时执行
       
+
 
   useEffect(() => {
    
@@ -159,7 +167,7 @@ export function FormalSubmit() {
       count: currentCount + 1
     });
     game.set("submissions", submissions);
-    console.log(`Submission #${currentCount + 1}:`, choices);
+    
   }
 
   const selectedFeatureNames = Object.entries(selectedFeatures).filter(([_, isSelected]) => isSelected).map(([featureName]) => featureName);
@@ -181,7 +189,7 @@ export function FormalSubmit() {
     return;
   }
 
-
+  
   if (player.get("role") === "role1") {
     return (
       <div className="container">
@@ -256,7 +264,7 @@ export function FormalSubmit() {
           </div><br/><br/><br/>
         </div>
         <Calculator 
-            featureUrl={treatment.featureUrl}
+            featureData = {treatmentFeatureData}
             showVoteButton={true}
             roleName = {"role1"}
             displaySubmit = {false}

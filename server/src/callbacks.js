@@ -1,7 +1,7 @@
 //callbacks.js
 import { ClassicListenersCollector } from "@empirica/core/admin/classic";
 export const Empirica = new ClassicListenersCollector();
-import { usePlayer, useGame } from "@empirica/core/player/classic/react";
+//import { usePlayer, useGame } from "@empirica/core/player/classic/react";
 
 Empirica.onGameStart(({ game }) => {
   const treatment = game.get("treatment");
@@ -52,6 +52,7 @@ Empirica.onGameStart(({ game }) => {
   game.set("roundResults", []);
 });
 Empirica.onRoundStart(({ round }) => { 
+
   round.set("systemMessages", []);
   const startTime = Date.now();
   round.set("roundStartTime", startTime);
@@ -136,10 +137,65 @@ Empirica.onRoundEnded(({ round }) => {
 Empirica.onGameEnded(({ game }) => {});
 
  
-Empirica.on("player", "my_value", (ctx, { player, my_value }) => {
+
+
+  Empirica.on("round", "proposalStatus", (ctx, {round, proposalStatus}) => {
+    console.log("status update")
+    
+    playerCount=round.currentGame.get("treatment").playerCount
+
+    if(proposalStatus.status && proposalStatus.content.proposal.vote){
+      countVotes = proposalStatus.content.proposal.vote.length
+      if(countVotes>=playerCount) {
+        console.log("voting complete")
+       
+        const resultingProposal = proposalStatus.content.proposal
+
+        
+        const votes_for = resultingProposal.vote.filter(v=>Object.values(v)==1).length
+        const votes_against = resultingProposal.vote.filter(v=>Object.values(v)==0).length
+
+        resultingProposal.result = {for: votes_for, against: votes_against}
+        
+        const  proposalItems = Object.keys(proposalStatus.content.proposal.decisions).join(", ")
+        console.log(proposalItems)
+
+        console.log("setting status server callback")
+
+        round.set("proposalStatus", {
+          status: false, 
+          content: {
+            message: "this is a message", 
+            proposal: resultingProposal
+          }
+        })
+
+
+        const passtext = votes_for >= playerCount ? "Proposal passed." : "Proposal rejected with " + votes_for + " yes votes."
+        const text = passtext + " Items included: " + proposalItems
+        round.append("chat", {
+          text,
+          sender: {
+            id: Date.now(), 
+            name: "Notification",
+            role: "Notification", 
+          },
+        });
+        
+
+      }
+    } else {
+      console.log("resetting vote")
+    }
+  });
+
+
+ Empirica.on("player", "my_value", (ctx, { player, my_value }) => {
 
   const text = "This is a server side message";
   console.log(my_value)
+
+  /*
   player.currentRound.append("chat", {
     text,
     sender: {
@@ -148,6 +204,5 @@ Empirica.on("player", "my_value", (ctx, { player, my_value }) => {
       role: "Notification", 
     },
   });
+  */
 });
-
- 

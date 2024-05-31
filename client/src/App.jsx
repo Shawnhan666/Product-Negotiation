@@ -11,7 +11,7 @@ import { Walkthrough } from "./intro-exit/Walkthrough";
 import { ChatProvider } from "./ChatContext";  
 import { AutoPlayerIdForm } from "./autoPlayerIdForm";
 import { MyConsent } from "./intro-exit/MyConsent.jsx"; 
- 
+import { isDevelopment } from "@empirica/core/player"
 
 
 
@@ -23,7 +23,7 @@ export default function App() {
   const url = `${protocol}//${host}/query`;
 
   function introSteps({ game, player }) {
-    //return [];
+    if(isDevelopment) return [];
     //return [Walkthrough, WaitingPage];
     return [MyConsent, Introduction, Walkthrough, WaitingPage];
     

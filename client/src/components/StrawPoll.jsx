@@ -5,16 +5,18 @@ import { Button } from "../components/Button";
 function StrawPoll(props) {
 
 
-    const { WaitingMessage = 'Waiting for other players.', ...restProps } = props;
+    const { WaitingMessage = 'Waiting for other players.',
+    playerRole = "role1",
+    ...restProps } = props;
 
     //const [features, setFeatures] = useState([]);
     const features = props.featureData.features;
 
     //const featureUrl = props.featureUrl;
 
-    const playerRole = "role1";//player.get("role");
 
-    const [currentVote, setCurrentVote] = useState(props.CurrentVote);
+    const currentVote = props.CurrentVote
+    //console.log("current vite: "+currentVote)
 
     var submittedData_informal  = props.submissionData;
     /*var submittedData_informal  = {
@@ -25,7 +27,7 @@ function StrawPoll(props) {
 
 
     const handleVoteSubmit = (vote) => {
-        setCurrentVote(vote);
+        
         props.handleVoteSubmission(vote);
     };
      
@@ -53,6 +55,7 @@ function StrawPoll(props) {
 
         const { decisions } = submittedData_informal;
 
+
         const featuresAndBonuses = features.reduce((acc, feature) => {
             if (decisions[feature.name]) {
                     acc.push({
@@ -78,6 +81,7 @@ function StrawPoll(props) {
 
     const proposalForVote = submittedData_informal ?
         <>
+            
             <div className="second-styled-table thead th">
                 <table className="styled-table"  >
                 <thead>
@@ -102,30 +106,22 @@ function StrawPoll(props) {
                 </tr>
                 </tbody>
                 </table>
-                <div className="total-points-display"> 
-                    Your bonus: ${submissionInfo && Math.round(submissionInfo.totalBonus*100)/100}
-                </div>
-            </div>
-            <div className="voting-section">
-                {currentVote && (
-                    <div style={{ color: 'red' }}>
-                        {
-                            currentVote === "For" ? 
-                                <>You voted Accept of this informal proposal.</>
-                                :
-                                <>You voted Reject of this informal proposal.</>
-                        } 
-                        <br/><br/><div dangerouslySetInnerHTML={{__html: WaitingMessage}}/>
-                    </div>
-                )}
-            </div>
-            {!currentVote && (
+                {(currentVote===undefined) && (<div className="total-points-display"> Total bonus: ${submissionInfo && Math.round(submissionInfo.totalBonus*100)/100}</div>)}
+            {(currentVote===undefined) && (
                 <div className="voting-buttons-container">
-                <Button className="vote-button" handleClick={() => handleVoteSubmit("For")}>Accept</Button>
+                <Button className="vote-button" handleClick={() => handleVoteSubmit(1)}>Accept</Button>
                 
-                <Button className="vote-button" handleClick={() => handleVoteSubmit("Against")}>Reject</Button> 
+                <Button className="vote-button" handleClick={() => handleVoteSubmit(0)}>Reject</Button> 
                 </div>
             )}
+                
+        
+                 
+                <div className="total-points-display" style={{ color: 'red' }}>{props.message}</div>
+                 
+            </div>
+
+                
         
         </>
         :

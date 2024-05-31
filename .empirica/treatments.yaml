@@ -20,11 +20,6 @@ factors:
         - value: 200
         - value: 2000
         - value: 60
-    - name: featureUrl
-      desc: URL of the pay off matrix
-      values:
-        - value: https://raw.githubusercontent.com/Shawnhan666/Product-Negotiation/main/client/src/stages/features.json
-        - value: https://raw.githubusercontent.com/joshua-a-becker/RTools/master/testscoresheet.json
     - name: instructionPage
       desc: 1st sentence, Instructions displayed before the CandyCount game starts.
       values:
@@ -107,6 +102,16 @@ factors:
         - value: 2
         - value: 1000
         - value: 10000
+    - name: scenario
+      values:
+        - value: pilot_complex
+    - name: featureUrl
+      desc: URL of the pay off matrix
+      values:
+        - value: https://raw.githubusercontent.com/Shawnhan666/Product-Negotiation/main/client/src/stages/features.json
+        - value: https://raw.githubusercontent.com/joshua-a-becker/RTools/master/testscoresheet.json
+        - value: http://127.0.0.1:5000/json/feature_data.json
+        - value: http://139.59.181.178:5000/json/feature_data.json
 treatments:
     - name: becker-test
       desc: this is a test treatment
@@ -137,18 +142,18 @@ treatments:
         role1: Head Chef
         role2: Soux Chef
         role3: Pastry Maker
-    - name: superlong
+    - name: experimental
       desc: pilot test
       factors:
         basicpay: 2.5
-        featureUrl: https://raw.githubusercontent.com/joshua-a-becker/RTools/master/testscoresheet.json
+        featureUrl: http://139.59.181.178:5000/json/feature_data.json
         formalSubmitDuration: 10000
         formalVoteDuration: 10000
         informalSubmitDuration: 10000
-        instructionPage: 'You will be randomly assigned a role in a product design discussion lasting 10 minutes.   <br/> </br>You will be given a list of priorities for feature inclusion, and the bonus that you earn (or lose) for each feature. <br/> <br/><b>How you earn a bonus</b>: <br/>• Desired features earn you money. <br/>• Undesired features costs you money. <br/>• Excluding features has no impact on earnings. <br/>• A calculator is provided to assess tradeoffs. <br/> <br/>Try to earn as much as you can!   Use the chat to persuade others to include your desired features. <br/> <br/><b>How it works</b>: <br/>• Any player may propose an <strong>unofficial vote</strong> at any time.  <br/>• One player is randomly assigned project leader.   <br/>• After 10 minutes, this project leader will propose a final, <strong>official vote</strong>.  <br/>• Only the final vote will determine your earnings.'
         numRounds: 1
         playerCount: 3
         resultDuration: 60
         role1: ONE
         role2: TWO
         role3: THREE
+        scenario: pilot_complex

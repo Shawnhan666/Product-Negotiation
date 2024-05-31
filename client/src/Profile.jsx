@@ -8,6 +8,7 @@ import {
 import React, { useState } from "react";
 import { Avatar } from "./components/Avatar";
 import { Timer } from "./components/Timer";
+import featureData from "./featureData"
 
 export function Profile() {
   const game = useGame(); 
@@ -19,7 +20,7 @@ export function Profile() {
   const stage = useStage();
 
 // 状态用于控制 TaskBriefModal 的显示和隐藏
-const [showTaskBrief, setShowTaskBrief] = useState(false);
+const [showTaskBrief, setShowTaskBrief] = useState(stage.name=="Discussion and Informal Vote"?true:false);
 
 // 函数用于打开和关闭模态框
 const handleShowTaskBrief = () => setShowTaskBrief(true);
@@ -27,6 +28,9 @@ const handleCloseTaskBrief = () => setShowTaskBrief(false);
 
 // 内嵌的 TaskBriefModal 组件
 function TaskBriefModal({ onClose }) {
+
+  const task_brief = featureData[treatment.scenario].task_brief;
+
   return (
     <div
       className="task-brief-modal"
@@ -42,12 +46,12 @@ function TaskBriefModal({ onClose }) {
         backgroundColor: "#f0f0f0",
       }}
     >
-      <div className="task-brief">
+      <div className="task-brief text-black">
         <h2 className="task-brief-title">
-          <strong>Task Brief</strong>
+          <strong cstyle={{fontSize: "larger",textDecoration:"underline"}}>Task Brief</strong>
         </h2>
         <br />
-        <div dangerouslySetInnerHTML={instructionsHtml} />
+        <div dangerouslySetInnerHTML={{__html: task_brief}} />
       </div>
 
       {/* 关闭按钮，使用绝对定位 */}
@@ -89,7 +93,8 @@ function TaskBriefModal({ onClose }) {
       <div className="flex space-x-3 items-center justify-end">
         <button
           onClick={handleShowTaskBrief}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+          className={showTaskBrief ? "bg-red-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" 
+            : "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"}>
           Show Task Brief
         </button>
         {showTaskBrief && <TaskBriefModal onClose={handleCloseTaskBrief} />}

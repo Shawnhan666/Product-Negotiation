@@ -6,7 +6,7 @@ import StrawPoll from "../components/StrawPoll"
 import { useEffect} from 'react';
 import Chat from "../Chat";
 import { useChat } from '../ChatContext'; 
-import walkThroughFeatures from "../walkThroughFeatureData"
+import { IntroProfile } from "../IntroProfile";
 
 export function Walkthrough({ next }) {
   
@@ -17,16 +17,27 @@ export function Walkthrough({ next }) {
   const {instructionPage} = treatment;
   const { appendSystemMessage } = useChat();
 
+  //const walkThroughFeatures = featureData["walkthrough_features"];
+  //window.features=featureData
+
+  const [walkThroughFeatures, setWalkThroughFeatures] = useState({features:[]});
   const [submissionData, setSubmissionData] = useState(player.get("submissionData")); 
   const [voteButtonActive, setVoteButtonActive] = useState(true); 
   const [showNextButton, setShowNextButton] = useState(false); 
 
+
+  useEffect(() => {
+    fetch(treatment.featureUrl)
+      .then(response => response.json()) // 将响应转换为 JSON
+      .then(data => { setWalkThroughFeatures(data["walkthrough_features"]) })
+      .catch(error => console.error("Failed to load features:", error)); // 处理可能的错误
+  }, []); 
+  
+
+
   const handleProposalSubmission = (submission_data) => {
     setSubmissionData(submission_data)
-    console.log("submission data")
-    console.log(submission_data)
     player.set("submissionData", submission_data)
-    console.log(player.get("submissionData"))
     sendSystemMessage("Good!  Now, even though this is your own proposal, you still need to vote.")
 
     setTimeout(
@@ -40,7 +51,7 @@ export function Walkthrough({ next }) {
 
   const handleCalcOptionChange = (selectedFeatures) => {
     player.set("selectedFeatures", selectedFeatures)
-    console.log(player.get("selectedFeatures"))
+    
   }
 
   const handleVoteSubmission = (vote) => {
@@ -108,22 +119,23 @@ export function Walkthrough({ next }) {
     <>
 
       <div className="informal-text-brief-wrapper">
-        <div className="next-button-container">
-        {player.get("currentVote")&&(
+        {/*<div className="next-button-container">
+        player.get("currentVote")&&(
             <button onClick={next} className="next-button wiggle">
               <strong>Next (Continue to Game)</strong>
             </button>
-        )}
-        </div>
+        }
+      </div>*/}
         
         <div className="informal-text-brief-1">
+        <h6>THIS IS A DEMO.</h6>  Imagine that you are in a discussion to plan lunch.  You may use this interactive platform to help your group agree on a plan.  The "calculator and proposal" feature lets you try out as many proposals as you want, to find out how people feel.  You can use the chat to discuss the proposals as you proceed.
           <h6>On this page, make as many informal proposals as you want.</h6>
           <h6><br/>The calculator shows your bonus for any given proposal.</h6>
           <h6><br/>You preferred features are highlighted in blue.</h6>
         </div>
         <br/>
         <div className="informal-text-brief-1">
-          <h6>THIS IS A DEMO.</h6>
+          
           <br/>
           <h6>In the game, when time is up, {role1} will submit a final proposal.</h6>
           <h6><br/><strong>You ALL must agree for the final proposal to pass!</strong></h6>
@@ -141,7 +153,7 @@ export function Walkthrough({ next }) {
           submissionData = {submissionData}
           handleVoteSubmission = {handleVoteSubmission}
           WaitingMessage = "If this were a real game, you'd be waiting for other players to vote.<br/><br/>Note: this vote doesn't count!  Only the final vote counts."
-          CurrentVote = {player.get("currentVote")}
+          CurrentVote = {null}
         />
       </div>
 
@@ -162,6 +174,7 @@ export function Walkthrough({ next }) {
   return (
     <div className="h-full w-full flex">
       <div className="h-full w-full flex flex-col">
+      <IntroProfile featureData={walkThroughFeatures} showNextButton={player.get("currentVote")} onNext={next} />
         <div className="h-full flex items-center justify-center">
           {header}
         </div>
