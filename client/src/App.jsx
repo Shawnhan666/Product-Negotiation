@@ -23,7 +23,7 @@ export default function App() {
   const url = `${protocol}//${host}/query`;
 
   function introSteps({ game, player }) {
-    if(isDevelopment) return [];
+    //if(isDevelopment) return [];
     //return [Walkthrough, WaitingPage];
     return [MyConsent, Introduction, Walkthrough, WaitingPage];
     

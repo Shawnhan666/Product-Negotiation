@@ -25,6 +25,7 @@ export function Walkthrough({ next }) {
   const [voteButtonActive, setVoteButtonActive] = useState(true); 
   const [showNextButton, setShowNextButton] = useState(false); 
 
+  const [playerMessage, setPlayerMessage] = useState("")
 
   useEffect(() => {
     fetch(treatment.featureUrl)
@@ -47,6 +48,7 @@ export function Walkthrough({ next }) {
       ,"Go ahead and vote on your proposal."
     )
     setVoteButtonActive(false)
+
   }
 
   const handleCalcOptionChange = (selectedFeatures) => {
@@ -64,7 +66,9 @@ export function Walkthrough({ next }) {
     )
     setShowNextButton(true);
     player.set("currentVote", vote)
-    
+    setPlayerMessage(
+      <>If this were a real game, you'd be waiting for other players to vote.<br/><br/>Note: this vote doesn't count!  Only the final vote counts.</>
+    )
     return(0);
   }
 
@@ -152,8 +156,8 @@ export function Walkthrough({ next }) {
           featureData = {walkThroughFeatures}
           submissionData = {submissionData}
           handleVoteSubmission = {handleVoteSubmission}
-          WaitingMessage = "If this were a real game, you'd be waiting for other players to vote.<br/><br/>Note: this vote doesn't count!  Only the final vote counts."
-          CurrentVote = {null}
+          message = {playerMessage}
+          CurrentVote = {player.get("currentVote")}
         />
       </div>
 
@@ -171,10 +175,12 @@ export function Walkthrough({ next }) {
     </div>
   </>
 
+  
+
   return (
     <div className="h-full w-full flex">
       <div className="h-full w-full flex flex-col">
-      <IntroProfile featureData={walkThroughFeatures} showNextButton={player.get("currentVote")} onNext={next} />
+      <IntroProfile featureData={walkThroughFeatures} showNextButton={showNextButton} onNext={next} />
         <div className="h-full flex items-center justify-center">
           {header}
         </div>
