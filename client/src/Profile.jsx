@@ -20,7 +20,9 @@ export function Profile() {
   const stage = useStage();
 
 // 状态用于控制 TaskBriefModal 的显示和隐藏
-const [showTaskBrief, setShowTaskBrief] = useState(stage.name=="Discussion and Informal Vote"?true:false);
+const [showTaskBrief, setShowTaskBrief] = useState(stage.get("name")==="Discussion and Informal Vote");
+
+console.log(stage.get("name"))
 
 // 函数用于打开和关闭模态框
 const handleShowTaskBrief = () => setShowTaskBrief(true);
