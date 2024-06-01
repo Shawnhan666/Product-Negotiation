@@ -12,7 +12,6 @@ export function Game() {
   const [myState, setMyState] = useState(0);
 
   if(game.get("featureData")===undefined) {
-    setMyState(myState+1)
     console.log("triggering re-render..")
     useEffect(() => { 
       const timer = setTimeout(() => setMyState(myState+1), 3000); 
