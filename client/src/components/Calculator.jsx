@@ -32,6 +32,7 @@ function Calculator(props) {
     .join(", ");
 
     const localHandleOptionChange = featureName => {
+        console.log(selectedFeatures)
         setSelectedFeatures(prev => {
             const newState = { ...prev, [featureName]: !prev[featureName] };
             handleOptionChange(newState)
@@ -120,7 +121,7 @@ function Calculator(props) {
                         <thead>
                             <tr>
                                 <td colSpan="3" style={{borderTop:'0px',borderRight:'0px',borderLeft:'0px',fontWeight:'bold'}}>
-                                    Calculator (You: {props.roleName})
+                                    Your Role: {props.roleName}
                                 </td>
                             </tr>
                             <tr style={{ backgroundColor: 'lightblue' }}>

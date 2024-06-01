@@ -26,7 +26,7 @@ const [showTaskBrief, setShowTaskBrief] = useState(stage.get("name")==="Discussi
 const handleShowTaskBrief = () => setShowTaskBrief(true);
 const handleCloseTaskBrief = () => setShowTaskBrief(false);
 const featureData = game.get("featureData")===undefined ? undefined : game.get("featureData")[treatment.scenario]
-
+console.log(featureData)
 function interpolateString(template, variables) {
   return template.replace(/{(\w+)}/g, (match, key) => {
       return typeof variables[key] !== 'undefined' ? variables[key] : match;
@@ -37,7 +37,7 @@ function interpolateString(template, variables) {
 function TaskBriefModal({ onClose }) {
   //const task_brief = "hello"//featureData.task_brief === undefined ? undefined : featureData.task_brief.toString();
     
-    const task_brief = featureData.task_brief
+    const task_brief = featureData===undefined ? undefined : featureData.task_brief
     const parse_vars = {
       roleName: player.get("name"),
       productName: featureData.product_name

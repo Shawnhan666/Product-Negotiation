@@ -24,9 +24,6 @@ factors:
       desc: basic payment.
       values:
         - value: 2.5
-    - name: scenario
-      values:
-        - value: pilot_complex
     - name: featureUrl
       desc: URL of the pay off matrix
       values:
@@ -40,13 +37,6 @@ factors:
       values:
         - value: Technical Lead
         - value: Technical Specialist
-    - name: formalSubmitDuration
-      desc: Duration of the Formal Submit stage in seconds
-      values:
-        - value: 300
-        - value: 600
-        - value: 60000
-        - value: 3000
     - name: formalVoteDuration
       desc: Duration of the Formal Submit stage in seconds
       values:
@@ -62,6 +52,18 @@ factors:
         - value: 30000
         - value: 600
         - value: 6000
+    - name: scenario
+      values:
+        - value: pilot_complex
+        - value: pilot_simple
+    - name: formalSubmitDuration
+      desc: Duration of the Formal Submit stage in seconds
+      values:
+        - value: 300
+        - value: 600
+        - value: 60000
+        - value: 3000
+        - value: 60
 treatments:
     - name: pilot 5 min
       desc: pilot test
@@ -78,3 +80,12 @@ treatments:
         role2: Design Lead
         role3: Technical Specialist
         scenario: pilot_complex
+    - name: pilot_simple
+      factors:
+        featureUrl: https://raw.githubusercontent.com/joshua-a-becker/RTools/master/testscoresheet.json
+        formalSubmitDuration: 60
+        formalVoteDuration: 60
+        informalSubmitDuration: 300
+        numRounds: 1
+        playerCount: 3
+        scenario: pilot_simple
