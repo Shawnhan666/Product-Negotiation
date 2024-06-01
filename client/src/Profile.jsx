@@ -37,10 +37,11 @@ function interpolateString(template, variables) {
 function TaskBriefModal({ onClose }) {
   //const task_brief = "hello"//featureData.task_brief === undefined ? undefined : featureData.task_brief.toString();
     
+    const product_name = featureData === undefined ? undefined : featureData.product_name
     const task_brief = featureData===undefined ? undefined : featureData.task_brief
     const parse_vars = {
       roleName: player.get("name"),
-      productName: featureData.product_name
+      productName: product_name
     };
     const task_brief_parsed = task_brief === undefined ? undefined : interpolateString(task_brief, parse_vars);
 
