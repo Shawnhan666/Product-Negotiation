@@ -3,17 +3,19 @@ import Chat from "./Chat"; // 导入你的Chat组件，假设它和Game.jsx在�
 import React from "react";
 import { Profile } from "./Profile";
 import { Stage } from "./Stage";
-import { useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 
 export function Game() {
   const game = useGame();
   const round = useRound();
   const { playerCount } = game.get("treatment");
+  const [myState, setMyState] = useState(0);
 
   if(game.get("featureData")===undefined) {
+    setMyState(myState+1)
     console.log("triggering re-render..")
     useEffect(() => { 
-      const timer = setTimeout(() => setState(prev => !prev), 3000); 
+      const timer = setTimeout(() => setMyState(myState+1), 3000); 
       return () => clearTimeout(timer); 
     }, []);
   }
