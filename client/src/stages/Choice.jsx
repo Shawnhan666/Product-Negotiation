@@ -56,6 +56,9 @@ export function Choice() {
 
   window.featureData = featureData
   
+  player.set("name", 
+    featureData.roleNames === undefined ? player.get("name") : featureData.roleNames[player.get("role")]
+  )
   const role1 = featureData.roleNames === undefined ? "" : featureData.roleNames['role1']
   const [selectedFeatures, setSelectedFeatures] = useState({});
 

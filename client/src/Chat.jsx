@@ -78,7 +78,7 @@ const game = useGame();
       text,
       sender: {
         id: player.id,
-        name: player.get("name") || player.id,
+        name: player.get("name") || "Participant",
         avatar: player.get("avatar"),
         role: player.get("role"),
       },
@@ -87,6 +87,7 @@ const game = useGame();
  
 
 };
+
   return (
     <div className="h-full w-full flex flex-col">  
       <Messages msgs={playerMessages } playerRole={player.get("name")}  gameStartTime={roundStartTime}/>
@@ -185,8 +186,6 @@ const roleColors = {
   const textColor = isSystemMessage ? "#FF4500" : roleColors[msg.sender.role] || "#000000";
  
   window.relativeTime=relativeTime;
-
-
 
   return (
     <div className="flex items-start my-2">
