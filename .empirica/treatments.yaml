@@ -52,10 +52,6 @@ factors:
         - value: 30000
         - value: 600
         - value: 6000
-    - name: scenario
-      values:
-        - value: pilot_complex
-        - value: pilot_simple
     - name: formalSubmitDuration
       desc: Duration of the Formal Submit stage in seconds
       values:
@@ -64,6 +60,11 @@ factors:
         - value: 60000
         - value: 3000
         - value: 60
+    - name: scenario
+      values:
+        - value: pilot_complex
+        - value: pilot_simple
+        - value: pilot_complex_z17
 treatments:
     - name: pilot 5 min
       desc: pilot test
@@ -89,3 +90,12 @@ treatments:
         numRounds: 1
         playerCount: 3
         scenario: pilot_simple
+    - name: pilot_complex_z17
+      factors:
+        featureUrl: https://raw.githubusercontent.com/joshua-a-becker/RTools/master/testscoresheet.json
+        formalSubmitDuration: 60
+        formalVoteDuration: 60
+        informalSubmitDuration: 300
+        numRounds: 1
+        playerCount: 3
+        scenario: pilot_complex_z17

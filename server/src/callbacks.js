@@ -17,12 +17,20 @@ Empirica.onGameStart(({ game }) => {
   console.log("setting feature data...")
   
   console.log(new Date())
-  fetch(featureUrl, {cache: "no-store"})
+  fetch(featureUrl)
           .then(response => response.json()) // 将响应转换为 JSON
           .then(data => {
             game.set("featureData", data)
+            console.log(game.get("featureData"))
+            console.log("done inside")
           })
           .catch(error => console.error("Failed to load features:", error)); // 处理可能的错误
+  
+  const clr=game.get("featureData") === undefined ? "undefined" : Object.keys(game.get("featureData")).length
+  console.log(game.get("featureData"))
+  console.log('game get feature data lengh')
+  console.log(clr)
+  
   console.log("...done")
   console.log(new Date())
 
@@ -70,6 +78,11 @@ Empirica.onGameStart(({ game }) => {
 
 
 Empirica.onRoundStart(({ round }) => { 
+
+  const clr=round.currentGame.get("featureData") === undefined ? "undefined" : Object.keys(round.currentGame.get("featureData")).length
+  console.log('feature data lengh')
+  console.log(clr)
+  
   round.set("systemMessages", []);
   round.set("proposalHistory", [])
   const startTime = Date.now();
