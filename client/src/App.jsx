@@ -25,7 +25,7 @@ export default function App() {
 
 
   function introSteps({ game, player }) {
-    //if(isDevelopment) return [];
+    if(isDevelopment) return [];
     
     if(skipIntro) return [];
     //return [Walkthrough, WaitingPage];

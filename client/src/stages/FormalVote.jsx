@@ -30,34 +30,16 @@
     const formalresultText = `Formal Voting Results: ${forVotes+1} Accept, ${againstVotes} Reject. ` + (pass ? "The proposal has been accepted." : "The proposal has not been accepted.");
     const treatment = game.get("treatment");
     const {role1} = treatment;
-    const {featureUrl}= treatment;
-     const [features, setFeatures] = useState([]);
+    
+    const featureData = game.get("featureData")[treatment.scenario]
+     
+    const features = featureData===undefined ? undefined : featureData.features
 
     
- 
-
-    
-
-
-    const desiredFeaturesForRole = features
-    .filter(feature => feature.bonus[player.get("role")] === 1)
+    const desiredFeaturesForRole = features===undefined ? undefined : 
+    features.filter(feature => feature.bonus[player.get("role")] === 1)
     .map(feature => feature.name)
     .join(", ");
-
-
-
-       // 使用 useEffect 钩子来在组件加载时请求数据
-       useEffect(() => {
-        fetch(featureUrl)
-          .then(response => response.json()) // 将响应转换为 JSON
-          .then(data => {
-            setFeatures(data[treatment.scenario].features); // 更新特性
-            //setProductName(data.product_name); // 存储产品名称
-          })
-          .catch(error => console.error("Failed to load features:", error)); // 处理可能的错误
-      }, []); // 空依赖数组意味着这个 useEffect 只在组件首次渲染时执行
-
-
 
     const currentPlayerRole = player.get("role"); 
   

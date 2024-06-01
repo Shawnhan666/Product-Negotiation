@@ -29,8 +29,6 @@ export function Choice() {
   const handleShowTaskBrief = () => setShowTaskBrief(true);
   const handleCloseTaskBrief = () => setShowTaskBrief(false);
   const treatment = game.get("treatment");
-
-  const {featureUrl}= treatment;
   
 
     // 添加一个状态来存储 features 数据

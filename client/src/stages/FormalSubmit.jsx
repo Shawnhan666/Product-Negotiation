@@ -29,33 +29,14 @@ export function FormalSubmit() {
   const treatment = game.get("treatment");
   const {role1} = treatment;
  
-  const {featureUrl}= treatment;
-  const [features, setFeatures] = useState([]);
-
-  //const treatmentFeatureData = featureData[treatment.scenario]
-
-  const [treatmentFeatureData, setTreatmentFeatureData] = useState({features:[]});
-
-  //window.treatmentFeatureData=treatmentFeatureData
-
+  const treatmentFeatureData = game.get("featureData")[treatment.scenario]
+  const features = treatmentFeatureData.features
+  
   const desiredFeaturesForRole = features
-  .filter(feature => feature.bonus[player.get("role")] === 1)
-  .map(feature => feature.name)
-  .join(", ");
+    .filter(feature => feature.bonus[player.get("role")] === 1)
+    .map(feature => feature.name)
+    .join(", ");
 
-  // 使用 useEffect 钩子来在组件加载时请求数据
-  useEffect(() => {
-    fetch(featureUrl)
-      .then(response => response.json()) // 将响应转换为 JSON
-      .then(data => {
-        //setFeatures(data.features); // 更新特性
-        //setProductName(data.product_name); // 存储产品名称
-        setTreatmentFeatureData(data[treatment.scenario])
-        setFeatures(data[treatment.scenario].features)
-      })
-      .catch(error => console.error("Failed to load features:", error)); // 处理可能的错误
-  }, []); // 空依赖数组意味着这个 useEffect 只在组件首次渲染时执行
-      
 
 
   useEffect(() => {

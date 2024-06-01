@@ -25,7 +25,7 @@ const [showTaskBrief, setShowTaskBrief] = useState(stage.get("name")==="Discussi
 // 函数用于打开和关闭模态框
 const handleShowTaskBrief = () => setShowTaskBrief(true);
 const handleCloseTaskBrief = () => setShowTaskBrief(false);
-const featureData = game.get("featureData")[treatment.scenario]
+const featureData = game.get("featureData")===undefined ? undefined : game.get("featureData")[treatment.scenario]
 
 function interpolateString(template, variables) {
   return template.replace(/{(\w+)}/g, (match, key) => {
