@@ -72,3 +72,11 @@ animation: none;
 #message::placeholder {
   color: #888888;
 }
+
+.task-brief-text {
+  font-size: calc(0.8vw + 1.2vh);;
+}
+
+.task-brief-title {
+  font-size: calc(1.2vw + 1.2vh);;
+}

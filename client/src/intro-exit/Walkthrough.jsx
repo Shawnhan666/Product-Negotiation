@@ -180,7 +180,7 @@ export function Walkthrough({ next }) {
   return (
     <div className="h-full w-full flex">
       <div className="h-full w-full flex flex-col">
-      <IntroProfile featureData={walkThroughFeatures} showNextButton={showNextButton} onNext={next} />
+      <IntroProfile featureData={walkThroughFeatures} showNextButton={showNextButton} onNext={next} roleName={"Lunch Attendee"} />
         <div className="h-full flex items-center justify-center">
           {header}
         </div>

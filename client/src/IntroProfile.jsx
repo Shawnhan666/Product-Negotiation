@@ -1,3 +1,11 @@
+
+
+function interpolateString(template, variables) {
+  return template.replace(/{(\w+)}/g, (match, key) => {
+      return typeof variables[key] !== 'undefined' ? variables[key] : match;
+  });
+}
+
 import {
   usePlayer,
   useRound,
@@ -33,13 +41,18 @@ export function IntroProfile(props) {
   const featureData = props.featureData;
 
 
-
-
   // 内嵌的 TaskBriefModal 组件
   function TaskBriefModal({ onClose }) {
 
-    const task_brief = featureData.task_brief;
-    
+    const task_brief = featureData.task_brief === undefined ? undefined : featureData.task_brief.toString();
+    window.tb=featureData.task_brief
+    window.interpolateString=interpolateString
+    //const task_brief = "Hello my name is roleName.  I am here to negotiatiate."    
+    const parse_vars = {
+      roleName: props.roleName,
+      productName: featureData.product_name
+    };
+    const task_brief_parsed = task_brief === undefined ? undefined : interpolateString(task_brief, parse_vars);
     return (
       <div
         className="task-brief-modal"
@@ -77,7 +90,7 @@ export function IntroProfile(props) {
             <strong cstyle={{fontSize: "larger",textDecoration:"underline"}}>Task Brief</strong>
           </h2>
           <br />
-          <div dangerouslySetInnerHTML={{__html: task_brief}} />
+          <div className="task-brief-text" dangerouslySetInnerHTML={{__html: task_brief_parsed}} />
         </div>
 
         {/* 关闭按钮，使用绝对定位 */}
