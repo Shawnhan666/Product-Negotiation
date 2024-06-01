@@ -4,6 +4,7 @@ import {
   usePlayers,
   useRound,
   useStage,
+  useGame,
 } from "@empirica/core/player/classic/react";
 import { Loading } from "@empirica/core/player/react";
 import React from "react";
@@ -22,8 +23,12 @@ export function Stage() {
   const players = usePlayers();
   const round = useRound();
   const stage = useStage();
+  const game = useGame();
 
   const currentPhase = stage.get("name");
+
+  console.log(game.get("featureData"));
+  if(game.get("featureData")===undefined) return <Loading />;
 
   if (player.stage.get("submit")) {
     if (players.length !== 3) {

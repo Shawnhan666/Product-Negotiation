@@ -1,5 +1,7 @@
 //callbacks.js
 import { ClassicListenersCollector } from "@empirica/core/admin/classic";
+
+
 export const Empirica = new ClassicListenersCollector();
 //import { usePlayer, useGame } from "@empirica/core/player/classic/react";
 
@@ -13,13 +15,16 @@ Empirica.onGameStart(({ game }) => {
 
 
   console.log("setting feature data...")
+  
+  console.log(new Date())
   fetch(featureUrl, {cache: "no-store"})
           .then(response => response.json()) // 将响应转换为 JSON
           .then(data => {
             game.set("featureData", data)
           })
           .catch(error => console.error("Failed to load features:", error)); // 处理可能的错误
-console.log("...done")
+  console.log("...done")
+  console.log(new Date())
 
   // for (let i = 0; i < numRounds; i++) {
   //   const round = game.addRound({

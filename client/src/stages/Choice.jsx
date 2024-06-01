@@ -56,9 +56,13 @@ export function Choice() {
   window.featureData = featureData
   
   player.set("name", 
-    featureData.roleNames === undefined ? player.get("name") : featureData.roleNames[player.get("role")]
+    featureData === undefined ? "" : 
+      featureData.roleNames === undefined ? 
+        "" : featureData.roleNames[player.get("role")]
   )
-  const role1 = featureData.roleNames === undefined ? "" : featureData.roleNames['role1']
+  const role1 = featureData === undefined ? "" :
+    featureData.roleNames === undefined ? "" : 
+      featureData.roleNames['role1']
   const [selectedFeatures, setSelectedFeatures] = useState({});
 
   const allVoted = players.every(player => player.get("vote"));
@@ -274,7 +278,7 @@ export function Choice() {
         <Calculator 
           featureData = {featureData}
           handleProposalSubmission={handleSubmitProposal}
-          roleName = {featureData.roleNames[player.get("role")]}
+          roleName = {player.get("name")}
           displaySubmit = { !proposalStatusData.status }
           propSelectedFeatures = {player.get("selectedFeatures") ? player.get("selectedFeatures") : {} }
           handleOptionChange = {handleOptionChange}

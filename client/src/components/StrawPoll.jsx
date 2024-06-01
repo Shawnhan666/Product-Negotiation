@@ -9,7 +9,7 @@ function StrawPoll(props) {
     playerRole = props.playerRole,
     ...restProps } = props;
 
-    const features = props.featureData.features;
+    const features = props.featureData === undefined ? undefined : props.featureData.features;
     const currentVote = props.CurrentVote
 
     var submittedData_informal  = props.submissionData;
@@ -54,12 +54,13 @@ function StrawPoll(props) {
 
     const submissionInfo = getSubmittedFeaturesAndBonuses();
 
-    window.features=features
+    
 
     const selectedFeatureNames = submittedData_informal ? Object.keys(submittedData_informal.decisions).join(", ") : "No features selected";
 
 
-    const desiredFeaturesForRole = features
+    const desiredFeaturesForRole = features === undefined ? undefined : 
+        features
         .filter(feature => feature.bonus[playerRole] === 1)
         .map(feature => feature.name)
         .join(", ");

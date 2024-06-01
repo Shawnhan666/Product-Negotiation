@@ -17,7 +17,7 @@ function Calculator(props) {
     //const [features, setFeatures] = useState([]);
     //const [productName, setProductName] = useState([]);
 
-    const features = props.featureData.features;
+    const features = props.featureData === undefined ? props.featureData : props.featureData.features;
     //const productName = props.featureData.productName;
     
 
