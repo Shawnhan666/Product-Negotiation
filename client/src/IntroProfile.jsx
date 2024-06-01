@@ -45,14 +45,31 @@ export function IntroProfile(props) {
         className="task-brief-modal"
         style={{
           position: "fixed",
+          margin: 0,
+          top: 1,//"20%",
+          right: 1,
+          left: 1,
+          bottom: 1,//"5%",
+          padding: 0,//"10px",
+          //borderRadius: "10px",
+          boxShadow: "0 0 10px rgba(0,0,0,0.5)",
+          zIndex: 100,
+          backgroundColor: "rgb(220, 243, 247,0.70)",
+        }}
+      >
+        <div
+        className="task-brief-modal"
+        style={{
+          position: "fixed",
           top: "20%",
-          right: "45%",
-          left: "5%",
-          padding: "10px",
+          right: "20%",
+          left: "20%",
+          bottom: "20%",
+          padding: "20px",
           borderRadius: "10px",
           boxShadow: "0 0 10px rgba(0,0,0,0.5)",
           zIndex: 100,
-          backgroundColor: "#f0f0f0",
+          backgroundColor: "#FFFFFF",
         }}
       >
         <div className="task-brief text-black">
@@ -83,7 +100,7 @@ export function IntroProfile(props) {
         >
           × {/* 这里是关闭图标 */}
         </div>
-      </div>
+      </div></div>
     );
   }
 
