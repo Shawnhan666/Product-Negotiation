@@ -26,7 +26,7 @@ const [showTaskBrief, setShowTaskBrief] = useState(stage.get("name")==="Discussi
 const handleShowTaskBrief = () => setShowTaskBrief(true);
 const handleCloseTaskBrief = () => setShowTaskBrief(false);
 const featureData = game.get("featureData")===undefined ? undefined : game.get("featureData")[treatment.scenario]
-console.log(featureData)
+
 function interpolateString(template, variables) {
   return template.replace(/{(\w+)}/g, (match, key) => {
       return typeof variables[key] !== 'undefined' ? variables[key] : match;

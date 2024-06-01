@@ -27,7 +27,7 @@ export function Stage() {
 
   const currentPhase = stage.get("name");
 
-  console.log(game.get("featureData"));
+  
   if(game.get("featureData")===undefined) return <Loading />;
 
   if (player.stage.get("submit")) {
