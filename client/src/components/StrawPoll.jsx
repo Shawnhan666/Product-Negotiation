@@ -9,21 +9,10 @@ function StrawPoll(props) {
     playerRole = props.playerRole,
     ...restProps } = props;
 
-    //const [features, setFeatures] = useState([]);
     const features = props.featureData.features;
-
-    //const featureUrl = props.featureUrl;
-
-
     const currentVote = props.CurrentVote
-    //console.log("current vite: "+currentVote)
 
     var submittedData_informal  = props.submissionData;
-    /*var submittedData_informal  = {
-        playerID: "Demo Player",
-        decisions: {"Fast Charging":999},
-        submitterRole: "Demo Player"
-    };*/
 
 
     const handleVoteSubmit = (vote) => {
@@ -31,18 +20,6 @@ function StrawPoll(props) {
         props.handleVoteSubmission(vote);
     };
      
-    /*
-    useEffect(() => {
-        fetch(featureUrl)
-            .then(response => response.json()) 
-            .then(data => {
-                setFeatures(data.features); 
-            })
-            .catch(error => console.error("Failed to load features:", error));
-            
-    }, []); 
-    */
-
 
 
     const getSubmittedFeaturesAndBonuses = () => {
