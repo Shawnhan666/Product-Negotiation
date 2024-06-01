@@ -15,7 +15,6 @@ import { isDevelopment } from "@empirica/core/player"
 
 
 
-
 export default function App() {
 
   const urlParams = new URLSearchParams(window.location.search);
@@ -23,6 +22,7 @@ export default function App() {
   const skipIntro = urlParams.get("skipIntro");
   const { protocol, host } = window.location;
   const url = `${protocol}//${host}/query`;
+
 
   function introSteps({ game, player }) {
     //if(isDevelopment) return [];

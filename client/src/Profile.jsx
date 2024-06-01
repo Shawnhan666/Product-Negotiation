@@ -22,16 +22,27 @@ export function Profile() {
 // 状态用于控制 TaskBriefModal 的显示和隐藏
 const [showTaskBrief, setShowTaskBrief] = useState(stage.get("name")==="Discussion and Informal Vote");
 
-console.log(stage.get("name"))
-
 // 函数用于打开和关闭模态框
 const handleShowTaskBrief = () => setShowTaskBrief(true);
 const handleCloseTaskBrief = () => setShowTaskBrief(false);
+const featureData = game.get("featureData")[treatment.scenario]
+
+function interpolateString(template, variables) {
+  return template.replace(/{(\w+)}/g, (match, key) => {
+      return typeof variables[key] !== 'undefined' ? variables[key] : match;
+  });
+}
 
 // 内嵌的 TaskBriefModal 组件
 function TaskBriefModal({ onClose }) {
-
-  const task_brief = featureData[treatment.scenario].task_brief;
+  //const task_brief = "hello"//featureData.task_brief === undefined ? undefined : featureData.task_brief.toString();
+    
+    const task_brief = featureData.task_brief
+    const parse_vars = {
+      roleName: player.get("name"),
+      productName: featureData.product_name
+    };
+    const task_brief_parsed = task_brief === undefined ? undefined : interpolateString(task_brief, parse_vars);
 
   return (
     <div
@@ -70,7 +81,7 @@ function TaskBriefModal({ onClose }) {
           <strong cstyle={{fontSize: "larger",textDecoration:"underline"}}>Task Brief</strong>
         </h2>
         <br />
-        <div dangerouslySetInnerHTML={{__html: task_brief}} />
+        <div className="task-brief-text" dangerouslySetInnerHTML={{__html: task_brief_parsed}} />
       </div>
 
       {/* 关闭按钮，使用绝对定位 */}

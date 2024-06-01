@@ -34,9 +34,10 @@ export function Choice() {
   
 
     // 添加一个状态来存储 features 数据
-  const [featureData, setFeatureData] = useState({});
-  const [features, setFeatures] = useState([]);
-  const [productName, setProductName] = useState([]);
+  const featureData = game.get("featureData")[treatment.scenario]
+  const features = featureData === undefined ? undefined : featureData.features
+  const productName = featureData === undefined ? undefined : featureData.product_name
+
 
 
   const generateUniqueId = () => `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
@@ -125,23 +126,6 @@ export function Choice() {
         </>
       
 
-
-  // load negotiation scenario features
-  
-    useEffect(() => {
-
-      if(loading){
-        fetch(featureUrl, {cache: "no-store"})
-          .then(response => response.json()) // 将响应转换为 JSON
-          .then(data => {
-            setFeatureData(data[treatment.scenario]); // 更新特性
-            setFeatures(data[treatment.scenario].features)
-            setProductName(data[treatment.scenario].product_name); // 存储产品名称
-            setLoading(false);
-          })
-          .catch(error => console.error("Failed to load features:", error)); // 处理可能的错误
-      }
-    }, []); 
   
   
   
@@ -257,7 +241,7 @@ export function Choice() {
  
 
   
-  if(loading) return("Loading..")
+  //if(loading) return("Loading..")
   
   
   return (
@@ -307,8 +291,8 @@ export function Choice() {
                 <Button handleClick={() => player.stage.set("submit", true)}>
                   Continue
                 </Button>
-                <Button handleClick={() => {} }>
-                  Message Click
+                <Button handleClick={() => {round.set("watchValue", round.get("watchValue")+1);console.log(round.get("watchValue"))} }>
+                  Click Me
                 </Button>
               </>
             )}

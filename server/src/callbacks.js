@@ -5,10 +5,21 @@ export const Empirica = new ClassicListenersCollector();
 
 Empirica.onGameStart(({ game }) => {
   const treatment = game.get("treatment");
-  const { role1, role2, role3, numRounds, informalSubmitDuration, formalSubmitDuration, formalVoteDuration, resultDuration } = treatment;
+  const { role1, role2, role3, numRounds, informalSubmitDuration, formalSubmitDuration, formalVoteDuration, resultDuration, featureUrl } = treatment;
+  
   console.log("Original roles value:", role1 ,role2, role3);
  
   console.log("Number of players in the game:", game.players.length);
+
+
+  console.log("setting feature data...")
+  fetch(featureUrl, {cache: "no-store"})
+          .then(response => response.json()) // 将响应转换为 JSON
+          .then(data => {
+            game.set("featureData", data)
+          })
+          .catch(error => console.error("Failed to load features:", error)); // 处理可能的错误
+console.log("...done")
 
   // for (let i = 0; i < numRounds; i++) {
   //   const round = game.addRound({
@@ -35,24 +46,25 @@ Empirica.onGameStart(({ game }) => {
   }
 
 
-    // 定义角色及其对应名称
-    const roles = [{ key: "role1", name: role1 }, { key: "role2", name: role2 }, { key: "role3", name: role3 }];
-  
-    // 随机分配角色
-    const shuffledRoles = roles.sort(() => Math.random() - 0.5); // 使用随机排序方法来打乱角色数组
-  
-    game.players.forEach((player, index) => {
-      const roleIndex = index % shuffledRoles.length; // 确保即使玩家数量超过角色数量，也能循环分配
-      const role = shuffledRoles[roleIndex];
-      player.set("role", role.key); // 存储角色键
-      player.set("name", role.name); // 存储角色名称
-    });
+  // 定义角色及其对应名称
+  const roles = [{ key: "role1", name: role1 }, { key: "role2", name: role2 }, { key: "role3", name: role3 }];
+
+  // 随机分配角色
+  const shuffledRoles = roles.sort(() => Math.random() - 0.5); // 使用随机排序方法来打乱角色数组
+
+  game.players.forEach((player, index) => {
+    const roleIndex = index % shuffledRoles.length; // 确保即使玩家数量超过角色数量，也能循环分配
+    const role = shuffledRoles[roleIndex];
+    player.set("role", role.key); // 存储角色键
+    player.set("name", role.name); // 存储角色名称
+  });
   game.set("submitCount", 0);
   game.set("submissions", []);
   game.set("roundResults", []);
 });
-Empirica.onRoundStart(({ round }) => { 
 
+
+Empirica.onRoundStart(({ round }) => { 
   round.set("systemMessages", []);
   round.set("proposalHistory", [])
   const startTime = Date.now();
@@ -191,19 +203,8 @@ Empirica.onGameEnded(({ game }) => {});
   });
 
 
- Empirica.on("player", "my_value", (ctx, { player, my_value }) => {
+ Empirica.on("round", "watchValue", (ctx, { round, watchValue }) => {
 
-  const text = "This is a server side message";
-  console.log(my_value)
+  
 
-  /*
-  player.currentRound.append("chat", {
-    text,
-    sender: {
-      id: Date.now(), 
-      name: "Notification",
-      role: "Notification", 
-    },
-  });
-  */
 });
