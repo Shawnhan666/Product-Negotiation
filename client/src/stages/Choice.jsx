@@ -32,7 +32,7 @@ export function Choice() {
   
 
     // 添加一个状态来存储 features 数据
-  const featureData = game.get("featureData")[treatment.scenario]
+  const featureData = game.get("featureData")===undefined ? undefined : game.get("featureData")[treatment.scenario]
   const features = featureData === undefined ? undefined : featureData.features
   const productName = featureData === undefined ? undefined : featureData.product_name
 
