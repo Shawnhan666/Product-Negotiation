@@ -9,11 +9,8 @@ Empirica.onGameStart(({ game }) => {
   const treatment = game.get("treatment");
   const { role1, role2, role3, numRounds, informalSubmitDuration, formalSubmitDuration, formalVoteDuration, resultDuration, featureUrl } = treatment;
   
-  console.log("Original roles value:", role1 ,role2, role3);
- 
-  console.log("Number of players in the game:", game.players.length);
-
-
+  
+  /*
   console.log("setting feature data...")
   
   console.log(new Date())
@@ -30,6 +27,7 @@ Empirica.onGameStart(({ game }) => {
   
   console.log("...done")
   console.log(new Date())
+  */
 
   // for (let i = 0; i < numRounds; i++) {
   //   const round = game.addRound({
@@ -231,6 +229,6 @@ Empirica.onGameEnded(({ game }) => {});
 
  Empirica.on("round", "watchValue", (ctx, { round, watchValue }) => {
 
-  
+  console.log("hello")
 
 });

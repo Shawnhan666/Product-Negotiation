@@ -254,11 +254,7 @@ export function Choice() {
         
         <div className="informal-text-brief-2">
           <h6>Submit as many informal proposals as you want below.</h6>
-          <h6><br/>The calculator shows what proposal is worth.</h6>
-        </div>
-        <br />
-        <div className="informal-text-brief-1">
-          <h6>{ 'role1' === player.get("role") ? "As "+role1+", you" : "At the end, "+role1 } will submit a final proposal { 'role1' === player.get("role") ? "at the end." : "" }</h6>
+          <h6><br/>{ 'role1' === player.get("role") ? "As "+role1+", you" : "At the end, "+role1 } will submit a final proposal { 'role1' === player.get("role") ? "at the end." : "" }</h6>
           <h6><br/><strong>You ALL must agree for the final proposal to pass!</strong></h6>
         </div>
       </div>

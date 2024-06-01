@@ -3,21 +3,23 @@ import Chat from "./Chat"; // 导入你的Chat组件，假设它和Game.jsx在�
 import React from "react";
 import { Profile } from "./Profile";
 import { Stage } from "./Stage";
-import { useState, useEffect } from 'react';
+import { useEffect} from 'react';
 
 export function Game() {
   const game = useGame();
   const round = useRound();
-  const { playerCount } = game.get("treatment");
-  const [myState, setMyState] = useState(0);
+  const { playerCount, featureUrl } = game.get("treatment");
 
-  if(game.get("featureData")===undefined) {
-    console.log("triggering re-render..")
-    useEffect(() => { 
-      const timer = setTimeout(() => setMyState(myState+1), 3000); 
-      return () => clearTimeout(timer); 
-    }, []);
-  }
+  
+  useEffect(() => {
+    if(game.get("featureData")===undefined) {
+    fetch(featureUrl)
+      .then(response => response.json()) // 将响应转换为 JSON
+      .then(data => { game.set("featureData",data) })
+      .catch(error => console.error("Failed to load features:", error)); // 处理可能的错误
+    }
+  }, []);
+  
 
   return (
     <div className="h-full w-full flex">
