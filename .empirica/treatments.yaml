@@ -37,21 +37,11 @@ factors:
       values:
         - value: Technical Lead
         - value: Technical Specialist
-    - name: formalVoteDuration
-      desc: Duration of the Formal Submit stage in seconds
+    - name: scenario
       values:
-        - value: 60
-        - value: 600
-        - value: 60000
-        - value: 609
-    - name: informalSubmitDuration
-      desc: Duration of the Informal Submit stage in seconds
-      values:
-        - value: 60
-        - value: 300
-        - value: 30000
-        - value: 600
-        - value: 6000
+        - value: pilot_complex
+        - value: pilot_simple
+        - value: pilot_complex_z17
     - name: formalSubmitDuration
       desc: Duration of the Formal Submit stage in seconds
       values:
@@ -60,11 +50,24 @@ factors:
         - value: 60000
         - value: 3000
         - value: 60
-    - name: scenario
+        - value: 6000
+    - name: formalVoteDuration
+      desc: Duration of the Formal Submit stage in seconds
       values:
-        - value: pilot_complex
-        - value: pilot_simple
-        - value: pilot_complex_z17
+        - value: 60
+        - value: 600
+        - value: 60000
+        - value: 609
+        - value: 6000
+    - name: informalSubmitDuration
+      desc: Duration of the Informal Submit stage in seconds
+      values:
+        - value: 60
+        - value: 300
+        - value: 30000
+        - value: 600
+        - value: 6000
+        - value: 3000
 treatments:
     - name: pilot 5 min
       desc: pilot test
@@ -99,3 +102,12 @@ treatments:
         numRounds: 1
         playerCount: 3
         scenario: pilot_complex_z17
+    - name: long
+      factors:
+        featureUrl: https://raw.githubusercontent.com/joshua-a-becker/RTools/master/testscoresheet.json
+        formalSubmitDuration: 6000
+        formalVoteDuration: 6000
+        informalSubmitDuration: 3000
+        numRounds: 1
+        playerCount: 3
+        scenario: pilot_simple

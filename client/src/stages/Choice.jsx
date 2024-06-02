@@ -72,6 +72,7 @@ export function Choice() {
   const forVotersCount = players.filter(p => p.get("vote") === "For").length;
   const againstVotersCount = players.filter(p => p.get("vote") === "Against").length;
   
+  const [showInstructionsModal, setShownInstructionsModel] = useState(true);
   
   // set the proposal status data from the round variable
   // or set to a blank proposal, if the round variable is undefined
@@ -162,6 +163,9 @@ export function Choice() {
     }
   }, [remainingSeconds, appendSystemMessage]); // 在依赖数组中添加 appendSystemMessage
 
+  const handleInstructionsModal = function() {
+    setShownInstructionsModel(!showInstructionsModal)   
+  }
 
 
 
@@ -242,21 +246,39 @@ export function Choice() {
 
  
 
+  const header = 
+    <>
+        <div className="informal-text-brief-1" style={{position: "relative", marginBottom:"50px", marginTop:"50px"}}>
+
+         <div
+          className="modal-closer"
+          onClick={handleInstructionsModal}
+        >
+          {showInstructionsModal ? <b>X</b> : "▼" } 
+        </div>
+        <h6><strong>INSTRUCTIONS</strong></h6>
+          {showInstructionsModal&&(<>
+            
+            <br/>
+          <h6>Submit as many informal proposals as you want below.</h6>
+          <h6><br/>The calculator shows what proposal is worth.</h6>
+        
+          <br />
+        
+          <h6>{ 'role1' === player.get("role") ? "As "+role1+", you" : "At the end, "+role1 } will submit a final proposal { 'role1' === player.get("role") ? "at the end." : "" }</h6>
+          <h6><br/><strong>You ALL must agree for the final proposal to pass!</strong></h6>
+        
+          </>)}      
+        </div>   
+    </>
   
-  //if(loading) return("Loading..")
   
   
   return (
-    <div className="container">
-
-
-      <div className="informal-text-brief-wrapper">
-        
-        <div className="informal-text-brief-2">
-          <h6>Submit as many informal proposals as you want below.</h6>
-          <h6><br/>{ 'role1' === player.get("role") ? "As "+role1+", you" : "At the end, "+role1 } will submit a final proposal { 'role1' === player.get("role") ? "at the end." : "" }</h6>
-          <h6><br/><strong>You ALL must agree for the final proposal to pass!</strong></h6>
-        </div>
+    <div className="h-full w-full flex">
+    <div className="h-full w-full flex flex-col">
+      <div className="informal-text-brief-wrapper" style={{position:"relative"}}>
+        {header}
       </div>
       <br />
       <br />
@@ -294,6 +316,6 @@ export function Choice() {
                 </Button>
               </>
             )}
-    </div>
+    </div></div>
   );  
 }

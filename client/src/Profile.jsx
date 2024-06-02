@@ -103,7 +103,7 @@ function TaskBriefModal({ onClose }) {
         }}
         onClick={onClose}
       >
-        × {/* 这里是关闭图标 */}
+        <b>X</b>
       </div>
     </div></div>
   );

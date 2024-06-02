@@ -111,7 +111,7 @@ export function IntroProfile(props) {
           }}
           onClick={onClose}
         >
-          × {/* 这里是关闭图标 */}
+          <b>X</b> {/* 这里是关闭图标 */}
         </div>
       </div></div>
     );

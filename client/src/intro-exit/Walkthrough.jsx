@@ -17,6 +17,8 @@ export function Walkthrough({ next }) {
   const {instructionPage} = treatment;
   const { appendSystemMessage } = useChat();
 
+  const [showInstructionsModal, setShownInstructionsModel] = useState(true);
+
   //const walkThroughFeatures = featureData["walkthrough_features"];
   //window.features=featureData
 
@@ -119,37 +121,53 @@ export function Walkthrough({ next }) {
 
   onLoad();
 
+  const handleInstructionsModal = function() {
+    setShownInstructionsModel(!showInstructionsModal)   
+  }
+
   const header = 
     <>
 
-      <div className="informal-text-brief-wrapper">
-        {/*<div className="next-button-container">
-        player.get("currentVote")&&(
-            <button onClick={next} className="next-button wiggle">
-              <strong>Next (Continue to Game)</strong>
-            </button>
-        }
-      </div>*/}
         
-        <div className="informal-text-brief-1">
-          <h6><strong>THIS IS A DEMO.</strong></h6>
-          <h6><br/>This platform will help your group agree on a plan for lunch.  Try out proposals using the informal vote, to find out how people feel</h6>
-          <h6><br/>Use the chat to discuss the proposals as you proceed.</h6>
-          <h6><br/>This calculator shows your bonus different options and let's you make informal proposals.  They don't count, though!  Only the final vote counts.</h6>
+        <div className="informal-text-brief-1" style={{position: "relative", marginBottom:"50px", marginTop:"50px"}}>
+
+         <div
+          className="modal-closer"
+          onClick={handleInstructionsModal}
+        >
+          {showInstructionsModal ? <b>X</b> : "▼" } 
         </div>
-        <br/>
-        <div className="informal-text-brief-1">          
-          <h6>In the game, when time is up, {role1} will submit a final proposal.</h6>
-          <h6><br/><strong>You ALL must agree for the final proposal to pass!</strong></h6>
+        <h6><strong>THIS IS A DEMO.</strong></h6>
+          {showInstructionsModal&&(<>
+            
+            <h6><br/>This platform will help your group agree on a plan for lunch.  Try out proposals using the informal vote, to find out how people feel</h6>
+            <h6><br/>Use the chat to discuss the proposals as you proceed.</h6>
+            <h6><br/>This calculator shows your bonus different options and let's you make informal proposals.  They don't count, though!  Only the final vote counts.</h6>
+            <br/>
+                  
+            <h6>In the game, when time is up, {role1} will submit a final proposal.</h6>
+            <h6><br/><strong>You ALL must agree for the final proposal to pass!</strong></h6>
+          
+          </>)}      
         </div>
-      </div>
+      
     </>
   
 
-  const walkThroughContent = 
-  <>
-    <div className="flex-container walkthrough-content">    
-      <div className="flex-child">
+  
+
+
+  
+
+  return (
+    <div className="h-full w-full flex">
+      <div className="h-full w-full flex flex-col">
+      <IntroProfile featureData={walkThroughFeatures} showNextButton={player.get("currentVote")!==undefined} onNext={next} roleName={"Lunch Attendee"} />
+        <div className="informal-text-brief-wrapper" style={{position:"relative"}}>
+          {header}
+        </div>
+        <div className="table-container" >
+              
         <StrawPoll 
           featureData = {walkThroughFeatures}
           submissionData = {submissionData}
@@ -158,9 +176,7 @@ export function Walkthrough({ next }) {
           CurrentVote = {player.get("currentVote")}
           playerRole = "role1"
         />
-      </div>
-
-      <div className="flex-child">
+      
         <Calculator 
           featureData = {walkThroughFeatures}
           handleProposalSubmission={handleProposalSubmission}
@@ -171,21 +187,7 @@ export function Walkthrough({ next }) {
           propSelectedFeatures = {player.get("selectedFeatures") ? player.get("selectedFeatures") : {} }
           handleOptionChange = {handleCalcOptionChange}
         />
-      </div>
-    </div>
-  </>
-
-  
-
-  return (
-    <div className="h-full w-full flex">
-      <div className="h-full w-full flex flex-col">
-      <IntroProfile featureData={walkThroughFeatures} showNextButton={showNextButton} onNext={next} roleName={"Lunch Attendee"} />
-        <div className="h-full flex items-center justify-center">
-          {header}
-        </div>
-        <div className="h-full flex items-center justify-center">
-          {walkThroughContent}
+     
         </div>
       </div>
       <div className="h-full w-256 border-l flex justify-center items-center">
