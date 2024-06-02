@@ -206,6 +206,11 @@ export function Choice() {
   const handleSubmitProposal = (submission_data) => {
 
     console.log("setting status line 357")
+
+    const ph = round.get("proposalHistory")
+    ph.push(submission_data)
+    round.set("proposalHistory", ph)
+
     round.set("proposalStatus", {
       status: true,
       content: {

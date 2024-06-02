@@ -88,9 +88,9 @@ Empirica.onRoundStart(({ round }) => {
     .catch(error => console.error("Failed to load features:", error)); // 处理可能的错误
   }
   
-  
-  round.set("systemMessages", []);
+  round.set("proposalVoteHistory", [])
   round.set("proposalHistory", [])
+  round.set("systemMessages", []);
   const startTime = Date.now();
   round.set("roundStartTime", startTime);
   console.log(`Round ${round.get("index")} Start: Round start time set at ${new Date(startTime).toISOString()}`);
@@ -177,58 +177,72 @@ Empirica.onGameEnded(({ game }) => {});
  
 
 
-  Empirica.on("round", "proposalStatus", (ctx, {round, proposalStatus}) => {
-    
-    
-    playerCount=round.currentGame.get("treatment").playerCount
+Empirica.on("round", "proposalStatus", (ctx, {round, proposalStatus}) => {
+  
+  
+  playerCount=round.currentGame.get("treatment").playerCount
 
-    if(proposalStatus.status && proposalStatus.content.proposal.vote){
-      countVotes = proposalStatus.content.proposal.vote.length
-      if(countVotes>=playerCount) {
-        
-       
-        const resultingProposal = proposalStatus.content.proposal
+  if(proposalStatus.status && proposalStatus.content.proposal.vote){
+    countVotes = proposalStatus.content.proposal.vote.length
+    if(countVotes>=playerCount) {
+      
+      
+      const resultingProposal = proposalStatus.content.proposal
 
-        
-        const votes_for = resultingProposal.vote.filter(v=>Object.values(v)==1).length
-        const votes_against = resultingProposal.vote.filter(v=>Object.values(v)==0).length
+      
+      const votes_for = resultingProposal.vote.filter(v=>Object.values(v)==1).length
+      const votes_against = resultingProposal.vote.filter(v=>Object.values(v)==0).length
 
-        resultingProposal.result = {for: votes_for, against: votes_against}
-        
-        const  proposalItems = Object.keys(proposalStatus.content.proposal.decisions).join(", ")
-        
+      resultingProposal.result = {for: votes_for, against: votes_against}
+      
+      const  proposalItems = Object.keys(proposalStatus.content.proposal.decisions).join(", ")
+      
+      // reset vote status 
+      round.set("proposalStatus", {
+        status: false, 
+        content: {
+          message: "this is a message", 
+          proposal: resultingProposal
+        }
+      })
 
-        round.set("proposalStatus", {
-          status: false, 
-          content: {
-            message: "this is a message", 
-            proposal: resultingProposal
-          }
-        })
+      // save proposal and vote to history
+      //const ph = round.get("proposalHistory")
+      //ph.push(resultingProposal)
+      //round.append("proposalHistory", "resultingProposal")
+      const ph = round.get("proposalVoteHistory")
+      ph.push(resultingProposal)
+      round.set("proposalVoteHistory", ph)
+  
 
+      const passtext = votes_for >= playerCount ? "Proposal passed." : "Proposal rejected with " + votes_for + " yes votes."
+      const text = passtext + " Items included: " + proposalItems
+      round.append("chat", {
+        text,
+        sender: {
+          id: Date.now(), 
+          name: "Notification",
+          role: "Notification", 
+        },
+      });
+      
 
-
-        const passtext = votes_for >= playerCount ? "Proposal passed." : "Proposal rejected with " + votes_for + " yes votes."
-        const text = passtext + " Items included: " + proposalItems
-        round.append("chat", {
-          text,
-          sender: {
-            id: Date.now(), 
-            name: "Notification",
-            role: "Notification", 
-          },
-        });
-        
-
-      }
-    } else {
-      console.log("resetting vote")
     }
-  });
+  } else {
+    console.log("resetting vote")
+  }
+});
 
 
  Empirica.on("round", "watchValue", (ctx, { round, watchValue }) => {
 
-  console.log("hello")
+   console.log("proposal")
+   console.log(round.get("proposalHistory"))
+
+   console.log("proposal with vote")
+   console.log(round.get("proposalVoteHistory"))
+
+  //round.set("proposalHistory",[])
+  //round.set("proposalVoteHistory",[])
 
 });
