@@ -29,7 +29,7 @@ export default function App() {
     
     if(skipIntro) return [];
     //return [Walkthrough, WaitingPage];
-    return [MyConsent, Introduction, Walkthrough, WaitingPage];
+    return [MyConsent, Introduction, Walkthrough];
     
   }
 

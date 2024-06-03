@@ -22,7 +22,7 @@ export function Summary({next}) {
     const totalRounds = roundPointsHistory ? roundPointsHistory.length / 3 : 0;
     const currentPlayerRoundPoints = roundPointsHistory.filter(({ role }) => role === roleIdentifier);
     const roundScores = currentPlayerRoundPoints.map(({ totalPoints }) => totalPoints).join(" + ");
-     
+
     useEffect(() => {
         // 假设游戏状态中保存的属性名为RoundPointsHistory
         const roundPointsHistory = game.get("RoundPointsHistory");

@@ -20,15 +20,6 @@ factors:
       desc: Role configuration for the second player.
       values:
         - value: Design Lead
-    - name: basicpay
-      desc: basic payment.
-      values:
-        - value: 2.5
-    - name: featureUrl
-      desc: URL of the pay off matrix
-      values:
-        - value: https://raw.githubusercontent.com/joshua-a-becker/RTools/master/testscoresheet.json
-        - value: http://139.59.181.178:5000/json/feature_data.json
     - name: resultDuration
       values:
         - value: 60
@@ -37,11 +28,6 @@ factors:
       values:
         - value: Technical Lead
         - value: Technical Specialist
-    - name: scenario
-      values:
-        - value: pilot_complex
-        - value: pilot_simple
-        - value: pilot_complex_z17
     - name: formalSubmitDuration
       desc: Duration of the Formal Submit stage in seconds
       values:
@@ -68,6 +54,29 @@ factors:
         - value: 600
         - value: 6000
         - value: 3000
+    - name: basePay
+      values:
+        - value: 1
+    - name: basic
+      values:
+        - value: 1
+    - name: basicpay
+      desc: basic payment.
+      values:
+        - value: 2.5
+        - value: 1
+    - name: featureUrl
+      desc: URL of the pay off matrix
+      values:
+        - value: https://raw.githubusercontent.com/joshua-a-becker/RTools/master/testscoresheet.json
+        - value: http://139.59.181.178:5000/json/feature_data.json
+        - value: https://corsproxy.io/?https%3A%2F%2Fpastebin.com%2Fraw%2FvQhu5ucU
+    - name: scenario
+      values:
+        - value: pilot_complex
+        - value: pilot_simple
+        - value: pilot_complex_z17
+        - value: pilot_complex_15
 treatments:
     - name: pilot 5 min
       desc: pilot test
@@ -86,6 +95,7 @@ treatments:
         scenario: pilot_complex
     - name: pilot_simple
       factors:
+        basicpay: 2.5
         featureUrl: https://raw.githubusercontent.com/joshua-a-becker/RTools/master/testscoresheet.json
         formalSubmitDuration: 60
         formalVoteDuration: 60
@@ -93,8 +103,19 @@ treatments:
         numRounds: 1
         playerCount: 3
         scenario: pilot_simple
+    - name: pilot_complex_15
+      factors:
+        basicpay: 2.5
+        featureUrl: https://raw.githubusercontent.com/joshua-a-becker/RTools/master/testscoresheet.json
+        formalSubmitDuration: 60
+        formalVoteDuration: 60
+        informalSubmitDuration: 300
+        numRounds: 1
+        playerCount: 3
+        scenario: pilot_complex_15
     - name: pilot_complex_z17
       factors:
+        basicpay: 2.5
         featureUrl: https://raw.githubusercontent.com/joshua-a-becker/RTools/master/testscoresheet.json
         formalSubmitDuration: 60
         formalVoteDuration: 60
@@ -104,10 +125,11 @@ treatments:
         scenario: pilot_complex_z17
     - name: long
       factors:
+        basicpay: 1
         featureUrl: https://raw.githubusercontent.com/joshua-a-becker/RTools/master/testscoresheet.json
-        formalSubmitDuration: 6000
-        formalVoteDuration: 6000
-        informalSubmitDuration: 3000
+        formalSubmitDuration: 60
+        formalVoteDuration: 60
+        informalSubmitDuration: 300
         numRounds: 1
         playerCount: 3
         scenario: pilot_simple
