@@ -31,11 +31,11 @@
   
    
   .container {
-    max-height: 90vh; /* 限制最大高度为视口高度的90% */
-    height: auto; /* 高度根据内容自动调整 */
+    max-height: 90vh;  
+    height: auto;  
     max-width: 1000px;
     width: 90%;
-    overflow-y: auto; /* 当内容超过视口高度90%时显示滚动条 */
+    /* overflow-y: auto;  */
     margin: 0 auto;
     padding: 20px;
     box-sizing: border-box;

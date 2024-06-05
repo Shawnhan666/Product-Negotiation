@@ -31,7 +31,7 @@ export function Choice() {
   const treatment = game.get("treatment");
   
 
-    // 添加一个状态来存储 features 数据
+  
   const featureData = game.get("featureData")===undefined ? undefined : game.get("featureData")[treatment.scenario]
   const features = featureData === undefined ? undefined : featureData.features
   const productName = featureData === undefined ? undefined : featureData.product_name
@@ -66,7 +66,6 @@ export function Choice() {
   const [selectedFeatures, setSelectedFeatures] = useState({});
 
   const allVoted = players.every(player => player.get("vote"));
-  // 获取投了 'For' 和 'Against' 的玩家名单
   const forVoters = players.filter(p => p.get("vote") === "For").map(p => p.get("role")).join(", ");
   const againstVoters = players.filter(p => p.get("vote") === "Against").map(p => p.get("role")).join(", ");
   const forVotersCount = players.filter(p => p.get("vote") === "For").length;

@@ -29,8 +29,11 @@
     const againstVotes = players.filter(p => p.get("vote") === "Against").length;
     const formalresultText = `Formal Voting Results: ${forVotes+1} Accept, ${againstVotes} Reject. ` + (pass ? "The proposal has been accepted." : "The proposal has not been accepted.");
     const treatment = game.get("treatment");
-    const {role1} = treatment;
     
+    
+   
+
+
     const featureData = game.get("featureData")[treatment.scenario]
      
     const features = featureData===undefined ? undefined : featureData.features
@@ -43,10 +46,10 @@
 
     const currentPlayerRole = player.get("role"); 
   
-
+    const role1 = featureData === undefined ? "" :
+    featureData.roleNames === undefined ? "" : 
+      featureData.roleNames['role1']
       
-  
-    // 在组件加载时获取提案数据和投票状态
     useEffect(() => {
       const dataFormal = round.get("submittedData_formal");
       if (dataFormal) {

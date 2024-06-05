@@ -27,7 +27,7 @@ export function FormalSubmit() {
   const timer = useStageTimer();
   let remainingSeconds = timer?.remaining ? Math.round(timer.remaining / 1000) : null;
   const treatment = game.get("treatment");
-  const {role1} = treatment;
+ 
  
   const treatmentFeatureData = game.get("featureData")[treatment.scenario]
   const features = treatmentFeatureData.features
@@ -37,7 +37,9 @@ export function FormalSubmit() {
     .map(feature => feature.name)
     .join(", ");
 
-
+  const role1 = featureData === undefined ? "" :
+    featureData.roleNames === undefined ? "" : 
+      featureData.roleNames['role1']
 
   useEffect(() => {
    
@@ -55,7 +57,7 @@ export function FormalSubmit() {
         }
       });
     }
-    // 处理 1 分钟警告
+   
     if (remainingSeconds === 10) {
       appendSystemMessage({
         id: `warning-${remainingSeconds}`,
@@ -68,7 +70,7 @@ export function FormalSubmit() {
         }
       });
     }
-  }, [remainingSeconds, appendSystemMessage]); // 在依赖数组中添加 appendSystemMessage
+  }, [remainingSeconds, appendSystemMessage]); 
 
 
 

@@ -1,24 +1,4 @@
 
-// //ChatContext.jsx
-// import React, { createContext, useContext, useState } from 'react';
-
-// const ChatContext = createContext();
-
-// export const useChat = () => useContext(ChatContext);
-
-// export const ChatProvider = ({ children }) => {
-//   const [systemMessages, setSystemMessages] = useState([]);
-//   const appendSystemMessage = (message) => {
-//     setSystemMessages((currentMessages) => [...currentMessages, message]);
-//   };
-//   return (
-//     <ChatContext.Provider value={{ systemMessages, appendSystemMessage }}>
-//       {children}
-//     </ChatContext.Provider>
-//   );
-// };
- 
-// systerm message
 
 import React, { createContext, useContext, useState } from 'react';
 

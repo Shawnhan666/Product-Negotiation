@@ -127,9 +127,9 @@ treatments:
       factors:
         basicpay: 1
         featureUrl: https://raw.githubusercontent.com/joshua-a-becker/RTools/master/testscoresheet.json
-        formalSubmitDuration: 60
-        formalVoteDuration: 60
-        informalSubmitDuration: 300
+        formalSubmitDuration: 6000
+        formalVoteDuration: 6000
+        informalSubmitDuration: 30000
         numRounds: 1
         playerCount: 3
         scenario: pilot_simple
