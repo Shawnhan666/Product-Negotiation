@@ -6,6 +6,7 @@ import { Game } from "./Game";
 import { ExitSurvey } from "./intro-exit/ExitSurvey";
 import { Summary } from "./intro-exit/Summary";
 import { Introduction } from "./intro-exit/Introduction";
+import { Introduction2 } from "./intro-exit/Introduction2";
 import { WaitingPage } from "./intro-exit/WaitingPage";
 import { Walkthrough } from "./intro-exit/Walkthrough";
 import { ChatProvider } from "./ChatContext";  
@@ -29,7 +30,7 @@ export default function App() {
     
     if(skipIntro) return [];
     //return [Walkthrough, WaitingPage];
-    return [MyConsent, Introduction, Walkthrough];
+    return [MyConsent, Introduction, Introduction2, Walkthrough];
     
   }
 

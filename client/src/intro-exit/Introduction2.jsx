@@ -3,7 +3,7 @@ import { Button } from "../components/Button";
 import { Profile } from "../Profile";
 import { usePlayer, useGame } from "@empirica/core/player/classic/react";
 
-export function Introduction({ next }) {
+export function Introduction2({ next }) {
 
 
   const [boxCount, setBoxCount] = useState(0);
@@ -13,22 +13,17 @@ export function Introduction({ next }) {
   const treatment = game.get("treatment");
 
   const instructions =  [
-      'In this game, you will be paired with '+(treatment.playerCount-1)+' other players to reach agreement on a project design. '
-    , 'You will all have a list of features to include or exclude. You task is reach agreement with the other players on which features to include.'
-    , 'Some features earn you money, others lose you money.  You each will be assigned different roles that determine your bonus.'
-    , 'We will provide you a platform to help you reach agreement!'
-    , 'You will have 10 minutes to chat while sharing unofficial, nonbinding votes.'
-    , 'After 10 minutes, the project lead will make a final, official proposal.  '
-    , 'You all must agree for the final proposal to pass.  Only the final proposal counts.'
+      'On the next page, you will be shown a simple demo walkthrough of the app.'
+    , 'No other people are here yet.  This is just a demonstration.'
+    , 'After you complete this demo, you can enter a waiting room to be paired with other people.'
+    , 'The game will open at exactly {startTime}'
   ]
 
 
   return (
     <>
       <div className="intro-container">
-       
-
-        <br/><br/>
+      <br/><br/>
 
         {((boxCount)>=(instructions.length))&&(
           <><br/><br/>

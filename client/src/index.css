@@ -95,3 +95,33 @@ animation: none;
   justify-content: center;
   cursor: pointer;
 }
+
+.introduction-box {
+  
+}
+
+/* Container */
+.intro-container {
+  /*background: rgba(0, 0, 0, 0.5); /* Translucent black background */
+  padding: 20px; /* Space between the boxes and the edges of the container */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center the boxes horizontally */
+  height: 100vh; /* Full height of the viewport */
+    width: 100vw;
+}
+
+/* Box */
+.introduction-box {
+  background: rgba(193, 235, 250, 0.5);
+  border-radius: 10px; /* Rounded corners */
+  width: 40%; /* Adjust the width as needed */
+  margin-bottom: 20px; /* Space between the boxes */
+  padding: 20px; /* Padding inside each box */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 01); /* Optional: subtle shadow for better appearance */
+}
+
+/* Remove bottom margin from the last box */
+.introduction-box:last-child {
+  margin-bottom: 0;
+}

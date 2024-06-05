@@ -125,7 +125,7 @@ export function IntroProfile(props) {
           {stage ? stage.get("name") : ""}
         </div>
         <div className="text-empirica-500 font-medium">
-            {showNextButton&&(
+            {false&&(
               <button onClick={props.onNext} className="next-button wiggle">
                 <strong>Next (Continue to Game)</strong>
               </button>

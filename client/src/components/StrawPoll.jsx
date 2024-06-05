@@ -5,6 +5,8 @@ import { Button } from "../components/Button";
 function StrawPoll(props) {
 
 
+    window.spcv = props.CurrentVote;
+    
     const { WaitingMessage = 'Waiting for other players.',
     playerRole = props.playerRole,
     ...restProps } = props;

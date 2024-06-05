@@ -27,6 +27,7 @@ export function Walkthrough({ next }) {
   const [voteButtonActive, setVoteButtonActive] = useState(true); 
   const [showNextButton, setShowNextButton] = useState(false); 
 
+ 
   const [playerMessage, setPlayerMessage] = useState("")
 
   useEffect(() => {
@@ -69,7 +70,7 @@ export function Walkthrough({ next }) {
     setShowNextButton(true);
     player.set("currentVote", vote)
     setPlayerMessage(
-      <>If this were a real game, you'd be waiting for other players to vote.<br/><br/>Note: this vote doesn't count!  Only the final vote counts.</>
+      <>Waiting for other votes.</>
     )
     return(0);
   }
@@ -119,11 +120,32 @@ export function Walkthrough({ next }) {
     }
   }
 
-  onLoad();
+  const repeatWalkthrough = function() {
+
+    console.log("go")
+    //setPlayerMessage("")
+    player.set("selectedFeatures", undefined)
+    player.set("submissionData", undefined)
+    player.set("chat",[])
+    player.set("currentVote", undefined)
+    console.log(player.get("currentVote"))
+    if(player.get("currentVote")){
+      console.log("ok")
+    }
+    setVoteButtonActive(false)
+    setShowNextButton(false)
+    setSubmissionData(undefined)
+    
+  }
 
   const handleInstructionsModal = function() {
     setShownInstructionsModel(!showInstructionsModal)   
   }
+
+
+
+  onLoad();
+
 
   const header = 
     <>
@@ -155,14 +177,68 @@ export function Walkthrough({ next }) {
   
 
   
-
-
+  // if they're done the walkthrough
   
+  const completedWalkthroughModal = 
+      <>
+        <div
+          className="task-brief-modal"
+          style={{
+            position: "fixed",
+            margin: 0,
+            top: 1,//"20%",
+            right: 1,
+            left: 1,
+            bottom: 1,//"5%",
+            padding: 0,//"10px",
+            //borderRadius: "10px",
+            boxShadow: "0 0 10px rgba(0,0,0,0.5)",
+            zIndex: 100,
+            backgroundColor: "rgb(20, 20, 20,0.80)",
+          }}
+        >
+        <div
+        className="task-brief-modal"
+        style={{
+          position: "fixed",
+          top: "30%",
+          right: "30%",
+          left: "30%",
+          bottom: "30%",
+          padding: "20px",
+          borderRadius: "10px",
+          boxShadow: "0 0 10px rgba(0,0,0,0.5)",
+          zIndex: 100,
+          backgroundColor: "#FFFFFF",
+        }}
+  >
+        <div className="h-full w-full flex items-center justify-center">
+        <div className=" items-center justify-center">
 
+        If this were a real game, you'd be waiting for other players to vote.<br/><br/>
+        <strong>Remember: informal votes don't count - only the final vote will count!</strong>
+          <br/><br/><br/>
+          <center>
+          <button onClick={next} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            <strong>Next (Continue to Game)</strong>
+          </button>
+          <br/><br/><br/>
+          <button onClick={repeatWalkthrough} className="bg-gray hover:bg-black text-white font-bold py-2 px-4 rounded">
+            <strong>Repeat Walkthrough</strong>
+          </button>
+          </center>
+        </div></div>
+        </div></div>
+      </>
+   
+  
+  const walkthroughCompleted = !(player.get("currentVote")===undefined || player.get("currentVote") ===null)
+  
   return (
     <div className="h-full w-full flex">
       <div className="h-full w-full flex flex-col">
-      <IntroProfile featureData={walkThroughFeatures} showNextButton={player.get("currentVote")!==undefined} onNext={next} roleName={"Lunch Attendee"} />
+      <IntroProfile featureData={walkThroughFeatures} showNextButton={false} onNext={next} roleName={"Lunch Attendee"} />
+      {walkthroughCompleted ? completedWalkthroughModal : ""}
         <div className="informal-text-brief-wrapper" style={{position:"relative"}}>
           {header}
         </div>
@@ -173,7 +249,7 @@ export function Walkthrough({ next }) {
           submissionData = {submissionData}
           handleVoteSubmission = {handleVoteSubmission}
           message = {playerMessage}
-          CurrentVote = {player.get("currentVote")}
+          CurrentVote = {(player.get("currentVote")===null || player.get("currentVote")===undefined) ? undefined : player.get("currentVote")}
           playerRole = "role1"
         />
       
