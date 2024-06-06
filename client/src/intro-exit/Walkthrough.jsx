@@ -32,7 +32,7 @@ export function Walkthrough({ next }) {
 
   useEffect(() => {
     fetch(treatment.featureUrl)
-      .then(response => response.json()) // 将响应转换为 JSON
+      .then(response => response.json()) 
       .then(data => { setWalkThroughFeatures(data["walkthrough_features"]) })
       .catch(error => console.error("Failed to load features:", error)); // 处理可能的错误
   }, []); 

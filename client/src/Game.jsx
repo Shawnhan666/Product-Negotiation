@@ -16,20 +16,8 @@ export function Game() {
   useEffect(() => {
     if(game.get("featureData")===undefined) {
       fetch(featureUrl)
-        .then(response => { 
-          responseClone = response.clone(); // 2
-          return response.json();
-        })
+        .then(response => response.json()) 
         .then(data => { game.set("featureData",data) })
-        .then(function (data) {
-          // Do something with data
-      }, function (rejectionReason) { // 3
-          console.log('Error parsing JSON from response:', rejectionReason, responseClone); // 4
-          responseClone.text() // 5
-          .then(function (bodyText) {
-              console.log('Received the following instead of valid JSON:', bodyText); // 6
-          });
-      })    
         .catch(error => console.error("Failed to load features:", error)); 
     }
   }, []);

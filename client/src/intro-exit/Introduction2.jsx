@@ -33,45 +33,49 @@ export function Introduction2({ next }) {
 
   useEffect(() => {
     if(game.get("featureData")===undefined) {
-      /*fetch(treatment.featureUrl)
-        .then(response => { 
-          console.log(data[treatment.scenario])
-          setRole1(data[treatment.scenario].roleNames.role1)
-        })
-        .then(data => { game.set("featureData",data) })
-        .catch(error => console.error("Failed to load features:", error)); */
-    } else {
-      console.log("defined")
-      setRole1(game.get("featureData")[treatment.scenario].roleNames.role1)
-    }
+      console.log("is undefined")
+      fetch(treatment.featureUrl)
+        .then(response => response.json()) 
+        .then(data => { setRole1(data[treatment.scenario].roleNames.role1) })
+        .catch(error => console.error("Failed to load features:", error));
+        
+      } else {
+        console.log("defined")
+        setRole1(game.get("featureData")[treatment.scenario].roleNames.role1)
+      }
+      
   }, []);
 
   return (
     <>
-      <div className="intro-container">
       <br/><br/>
+      <div className="big-container"> 
+        <div className="grid-column">&nbsp;</div>
 
-        {((boxCount)>=(instructions.length))&&(
-          <><br/><br/>
-          <Button handleClick={next} autoFocus >
-            <p>Next</p>
-          </Button><br/><br/></>
-        )}
-        {instructions.slice(0, boxCount+1).reverse().map((element, index) => (
-          <>
-          <div className="introduction-box">
-           {element}
-          {(index==0 && boxCount<instructions.length)&&(
+      
+        <div className="intro-container grid-column">
+          {((boxCount)>=(instructions.length))&&(
             <><br/><br/>
-              <center><Button handleClick={()=>{setBoxCount(boxCount+1)}} autoFocus >
-                <p>Ok</p>
-              </Button></center>
-            </>
-          )}
-  </div>
-  </>
-        ))}
-       
+            <Button handleClick={next} autoFocus >
+            <p>Proceed to Demo</p>
+            </Button><br/><br/></>
+            )}
+            {instructions.slice(0, boxCount+1).reverse().map((element, index) => (
+              <>
+                <div className="introduction-box">
+                {element}          
+                </div>
+              </>
+            ))}    
+        </div>
+
+        <div className="grid-column left-justified next-item">
+        {((boxCount)<(instructions.length))&&(
+          <Button handleClick={()=>{setBoxCount(boxCount+1)}} autoFocus >
+            <p>Next</p>
+          </Button>
+        )}
+        </div>       
       </div>
     </>
   );

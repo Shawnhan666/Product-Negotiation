@@ -6,7 +6,7 @@ import {useState, useEffect } from "react";
 import { Game } from "./Game";
 import { ExitSurvey } from "./intro-exit/ExitSurvey";
 import { Summary } from "./intro-exit/Summary";
-import { Introduction } from "./intro-exit/Introduction";
+import { Introduction1 } from "./intro-exit/Introduction1";
 import { Introduction2 } from "./intro-exit/Introduction2";
 import { WaitingPage } from "./intro-exit/WaitingPage";
 import { Walkthrough } from "./intro-exit/Walkthrough";
@@ -35,7 +35,7 @@ export default function App() {
   }, []); 
 
   function introSteps({ game, player }) {
-    //if(isDevelopment) return [];
+    if(isDevelopment) return [Introduction1, Introduction2];
     
     if(skipIntro) return [];
     //return [Walkthrough, WaitingPage];

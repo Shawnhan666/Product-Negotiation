@@ -101,21 +101,35 @@ animation: none;
 }
 
 /* Container */
+
+.grid-column {
+  padding: 10px;
+  /*border: 1px solid black; /**/
+}
+
+.left-justified {
+  color: red;
+  align-items: center;
+  /*text-align: left;/**/
+  /*text-align: left; /* Left justify text in the right column */
+}
+
 .intro-container {
   /*background: rgba(0, 0, 0, 0.5); /* Translucent black background */
-  padding: 20px; /* Space between the boxes and the edges of the container */
+  /*padding: 20px; /* Space between the boxes and the edges of the container */
   display: flex;
   flex-direction: column;
   align-items: center; /* Center the boxes horizontally */
-  height: 100vh; /* Full height of the viewport */
-    width: 100vw;
+  /*height: 100vh;
+    width: 100vw;*/
+  /*  border: thin black solid; /**/
 }
 
 /* Box */
 .introduction-box {
   background: rgba(193, 235, 250, 0.5);
   border-radius: 10px; /* Rounded corners */
-  width: 40%; /* Adjust the width as needed */
+  width: 30em; /* Adjust the width as needed */
   margin-bottom: 20px; /* Space between the boxes */
   padding: 20px; /* Padding inside each box */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 01); /* Optional: subtle shadow for better appearance */
@@ -124,4 +138,15 @@ animation: none;
 /* Remove bottom margin from the last box */
 .introduction-box:last-child {
   margin-bottom: 0;
+}
+
+.big-container    {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr; /* Flexible outer columns and auto-sized middle column */
+  width: 100%; /* Full width of the container */
+  gap: 10px; /* Optional: space between columns */
+}
+
+.next-item {
+  padding-top:2em;
 }
