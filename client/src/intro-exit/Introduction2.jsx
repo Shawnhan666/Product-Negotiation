@@ -48,34 +48,33 @@ export function Introduction2({ next }) {
 
   return (
     <>
-      <br/><br/>
       <div className="big-container"> 
-        <div className="grid-column">&nbsp;</div>
-
-      
-        <div className="intro-container grid-column">
-          {((boxCount)>=(instructions.length))&&(
-            <><br/><br/>
-            <Button handleClick={next} autoFocus >
-            <p>Proceed to Demo</p>
-            </Button><br/><br/></>
-            )}
-            {instructions.slice(0, boxCount+1).reverse().map((element, index) => (
-              <>
-                <div className="introduction-box">
-                {element}          
-                </div>
-              </>
-            ))}    
+        <div className="scroller">
+          <div className="scroller-content">
+            <div className="box-content">
+              {instructions.slice(0, boxCount+1).reverse().map((element, index) => (
+                <>
+                  <div className="introduction-box item">
+                    {element}          
+                  </div>
+                </>
+              ))}    
+            </div>
+            <div class="next-button-container">
+              {((boxCount)<(instructions.length))&&(
+                <Button class="next-button" handleClick={()=>{setBoxCount(boxCount+1)}} autoFocus >
+                  <p>Ok</p>
+                </Button>
+              )}
+              {((boxCount)>=(instructions.length))&&(
+                <Button handleClick={next} autoFocus >
+                  <p>Next Page</p>
+                </Button>
+              )}
+            </div>
+          </div>
         </div>
-
-        <div className="grid-column left-justified next-item">
-        {((boxCount)<(instructions.length))&&(
-          <Button handleClick={()=>{setBoxCount(boxCount+1)}} autoFocus >
-            <p>Next</p>
-          </Button>
-        )}
-        </div>       
+        
       </div>
     </>
   );
