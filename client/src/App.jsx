@@ -40,7 +40,7 @@ export default function App() {
     if(skipIntro) return [];
     //return [Walkthrough, WaitingPage];
     if(startTime!=="NA") return [MyConsent, Introduction1, Introduction2, Walkthrough, WaitingPage];
-    return [MyConsent, Introduction, Introduction2, Walkthrough];
+    return [MyConsent, Introduction1, Introduction2, Walkthrough];
     
   }
 
