@@ -8,6 +8,7 @@ export function Introduction2({ next }) {
 
   const [boxCount, setBoxCount] = useState(0);
   const [startTime, setStartTime] = useState("");
+  const [role1, setRole1] = useState("the project leader");
 
   const game = useGame(); 
   //const player = usePlayer();
@@ -15,8 +16,10 @@ export function Introduction2({ next }) {
 
   const instructions =  [
       'On the next page, you will be shown a simple demo walkthrough of the app.'
-    , 'No other people are here yet.  This is just a demonstration.'
+    , 'Once you enter the game, you will be randomly assigned a role, possibly ' + role1 + "."
+    , 'This demo doesn\'t have any other people, and uses a lunch plan as an example of the platform.'
     , 'After you complete this demo, you can enter a waiting room to be paired with other people.'
+    
   ]
 
   if(startTime!=="NA") instructions.push('The game will open at exactly '+startTime+'.')
@@ -27,6 +30,21 @@ export function Introduction2({ next }) {
       .then(data => { setStartTime(data["startTime"]) })
       .catch(error => console.error("Failed to load features:", error)); // 处理可能的错误
   }, []); 
+
+  useEffect(() => {
+    if(game.get("featureData")===undefined) {
+      /*fetch(treatment.featureUrl)
+        .then(response => { 
+          console.log(data[treatment.scenario])
+          setRole1(data[treatment.scenario].roleNames.role1)
+        })
+        .then(data => { game.set("featureData",data) })
+        .catch(error => console.error("Failed to load features:", error)); */
+    } else {
+      console.log("defined")
+      setRole1(game.get("featureData")[treatment.scenario].roleNames.role1)
+    }
+  }, []);
 
   return (
     <>
