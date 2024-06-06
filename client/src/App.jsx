@@ -2,6 +2,7 @@ import { EmpiricaClassic } from "@empirica/core/player/classic";
 import { EmpiricaContext } from "@empirica/core/player/classic/react";
 import { EmpiricaMenu, EmpiricaParticipant } from "@empirica/core/player/react";
 import React from "react";
+import {useState, useEffect } from "react";
 import { Game } from "./Game";
 import { ExitSurvey } from "./intro-exit/ExitSurvey";
 import { Summary } from "./intro-exit/Summary";
@@ -23,13 +24,22 @@ export default function App() {
   const skipIntro = urlParams.get("skipIntro");
   const { protocol, host } = window.location;
   const url = `${protocol}//${host}/query`;
+  
+  const [startTime, setStartTime] = useState("");
 
+  useEffect(() => {
+    fetch("https://decide.empirica.app/data/json/settings.json")
+      .then(response => response.json()) // 将响应转换为 JSON
+      .then(data => { setStartTime(data["startTime"]) })
+      .catch(error => console.error("Failed to load features:", error)); // 处理可能的错误
+  }, []); 
 
   function introSteps({ game, player }) {
     //if(isDevelopment) return [];
     
     if(skipIntro) return [];
     //return [Walkthrough, WaitingPage];
+    if(startTime!=="NA") return [MyConsent, Introduction, Introduction2, Walkthrough, WaitingPage];
     return [MyConsent, Introduction, Introduction2, Walkthrough];
     
   }
