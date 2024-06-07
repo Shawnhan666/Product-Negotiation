@@ -125,13 +125,24 @@ animation: none;
 
 /* Box */
 .introduction-box {
-  background: rgba(170, 190, 200, 0.2);
+  
   border-radius: 10px; /* Rounded corners */
   width: 30em; /* Adjust the width as needed */
   margin: 20px; /* Space between the boxes */
   margin-top:0;
   padding: 20px; /* Padding inside each box */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 01); /* Optional: subtle shadow for better appearance */
+  background: white;
+  /*box-shadow: 0 2px 4px rgba(0, 0, 0, 01); /* Optional: subtle shadow for better appearance */
+}
+
+.box-not-active {
+  
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.box-active {
+  background: white;
+  border: 1px rgba(200, 200, 255, 0.5) solid;
 }
 
 /* Remove bottom margin from the last box */
@@ -166,7 +177,7 @@ animation: none;
 .box-content {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 1); /* Optional: adds a subtle shadow */
   overflow-y: scroll;
-
+  background: rgba(193, 235, 250, 0.5);
   border-radius: 10px; /* This creates the smooth edges */
   margin-bottom:20px;
   /*padding: 20px;/**/

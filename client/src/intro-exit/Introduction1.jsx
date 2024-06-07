@@ -48,7 +48,7 @@ export function Introduction1({ next }) {
             <div className="box-content">
               {instructions.slice(0, boxCount+1).reverse().map((element, index) => (
                 <>
-                  <div className="introduction-box item" style={(index===(0) ? {background: "rgba(193, 235, 250, 0.5)"} : {})}>
+                  <div className={'introduction-box item ' + (index===0?' box-active':' box-not-active')}>
                     {element}          
                   </div>
                 </>
