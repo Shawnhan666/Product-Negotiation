@@ -19,7 +19,7 @@ export function MyConsent({ next }) {
       .then(data => {
         
         setCloseTime(data["closeTime"]);
-        if(isDevelopment) setCloseTime("19:40")
+        if(isDevelopment) setCloseTime("NA")
         setLoadedStartTime(true)
       })
       .catch(error => console.error("Failed to load features:", error)); // 处理可能的错误
@@ -27,7 +27,7 @@ export function MyConsent({ next }) {
   }, []);
 
 
-  if(loadedStartTime && closeTime!="NA"){
+  if(loadedStartTime){
     let secondsUntilClose = (target => (new Date(new Date().setHours(...target.split(':')) - Date.now()) / 1000))(closeTime);
     console.log(secondsUntilClose)
     if(secondsUntilClose<=0) {return(

@@ -38,9 +38,9 @@ export function WaitingPage({ next }) {
   setTimeout(()=>{setNow(Date.now())}, 1000)
   
   if(startTime!="NA") {
-    
-    let secondsUntilTarget = (target => (new Date(new Date().setHours(...target.split(':')) - Date.now()) / 1000))(startTime);
-    let secondsUntilClose = (target => (new Date(new Date().setHours(...target.split(':')) - Date.now()) / 1000))(closeTime);
+    new Date().setHours(startTime.split(':')[0],startTime.split(':')[1], 0)
+    let secondsUntilTarget = (new Date().setHours(startTime.split(':')[0],startTime.split(':')[1], 0) - Date.now())/1000;
+    let secondsUntilClose =  (new Date().setHours(closeTime.split(':')[0],closeTime.split(':')[1], 0) - Date.now())/1000;
     
     if (secondsUntilTarget!==timeToStart) {
       setTimeToStart(secondsUntilTarget)
@@ -54,7 +54,7 @@ export function WaitingPage({ next }) {
       .then(data => {
         setStartTime(data["startTime"]);
         setCloseTime(data["closeTime"]);
-        if(isDevelopment) setStartTime("12:30")
+        if(isDevelopment) setStartTime("19:49")
         if(isDevelopment) setCloseTime("NA")
         setLoaded(true)
       })
@@ -86,6 +86,8 @@ export function WaitingPage({ next }) {
   </>
   : 
   <>Sorry, game closed!</>
+
+  console.log("TTS: "+timeToStart)
   
   return (
     <>
