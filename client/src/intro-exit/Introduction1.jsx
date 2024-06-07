@@ -1,3 +1,4 @@
+import { isDevelopment } from "@empirica/core/player"
 import React, { useState, useEffect } from "react";
 import { Button } from "../components/Button";
 import { Profile } from "../Profile";
@@ -7,27 +8,14 @@ export function Introduction1({ next }) {
 
 
   const [boxCount, setBoxCount] = useState(0);
-
+  const [loadedStartTime, setLoadedStartTime] = useState(true);
   const game = useGame(); 
   //const player = usePlayer();
   const treatment = game.get("treatment");
 
   const [role1, setRole1] = useState("the project head")
 
-  useEffect(() => {
-    if(game.get("featureData")===undefined) {
-      console.log("is undefined")
-      fetch(treatment.featureUrl)
-        .then(response => response.json()) 
-        .then(data => { setRole1(data[treatment.scenario].roleNames.role1) })
-        .catch(error => console.error("Failed to load features:", error));
-        
-      } else {
-        console.log("defined")
-        setRole1(game.get("featureData")[treatment.scenario].roleNames.role1)
-      }
-      
-  }, []);
+
 
   const instructions =  [
       'In this game, you will be paired with '+(treatment.playerCount-1)+' other players to reach agreement on a project design. '

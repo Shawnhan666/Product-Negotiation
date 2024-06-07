@@ -29,7 +29,10 @@ export function WaitingPage({ next }) {
   const secs = Math.floor(((target-now)/1000) % 60)
 
   if(loaded) {
-    if(startTime==="NA") next(); 
+    if(startTime==="NA") {
+      console.log("start time is NA")
+      next(); 
+    }
   }
   
   setTimeout(()=>{setNow(Date.now())}, 1000)
