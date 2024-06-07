@@ -51,7 +51,7 @@ export function WaitingPage({ next }) {
       .then(data => {
         setStartTime(data["startTime"]);
         setCloseTime(data["closeTime"]);
-        if(isDevelopment) setStartTime("0:45")
+        if(isDevelopment) setStartTime("12:30")
         if(isDevelopment) setCloseTime("NA")
         setLoaded(true)
       })
