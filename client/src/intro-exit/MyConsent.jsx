@@ -1,9 +1,54 @@
 import { Consent } from "@empirica/core/player/react";
-import React from "react";
+import { isDevelopment } from "@empirica/core/player"
+import React, {useEffect, useState} from "react";
 import { Button } from "../components/Button";
 import "./Introduction.css";
 
+
 export function MyConsent({ next }) {
+
+  const [closeTime, setCloseTime] = useState("NA");
+  const [loadedStartTime, setLoadedStartTime] = useState(false);
+
+
+
+  useEffect(() => {
+
+    fetch("https://decide.empirica.app/data/json/settings.json")
+      .then(response => response.json()) // 将响应转换为 JSON
+      .then(data => {
+        
+        setCloseTime(data["closeTime"]);
+        if(isDevelopment) setCloseTime("19:40")
+        setLoadedStartTime(true)
+      })
+      .catch(error => console.error("Failed to load features:", error)); // 处理可能的错误
+
+  }, []);
+
+
+  if(loadedStartTime && closeTime!="NA"){
+    let secondsUntilClose = (target => (new Date(new Date().setHours(...target.split(':')) - Date.now()) / 1000))(closeTime);
+    console.log(secondsUntilClose)
+    if(secondsUntilClose<=0) {return(
+      <div style={{width:"100vw",height:"100vh",verticalAlign:"middle",display:"flex"}}> 
+        <div style={{margin:"auto",fontSize:"larger",fontWeight:"400"}}>
+          Sorry, you are too late for this activity!  
+          <br/><br/>Please keep an eye out for future activities.
+          <br/><br/>Email joshua.becker@ucl.ac.uk with any questions.
+        </div>
+      </div>
+    )} 
+
+  } else {
+    return(
+      <div style={{width:"100vw",height:"100vh",verticalAlign:"middle",display:"flex"}}> 
+        <div style={{margin:"auto",fontSize:"larger",fontWeight:"400"}}>
+          Loading...
+        </div>
+      </div> 
+    )
+  }
 
   return (
     <div className="introduction-wrapper"> 
