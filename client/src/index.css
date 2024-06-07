@@ -125,7 +125,7 @@ animation: none;
 
 /* Box */
 .introduction-box {
-  background: rgba(193, 235, 250, 0.5);
+  background: rgba(170, 190, 200, 0.2);
   border-radius: 10px; /* Rounded corners */
   width: 30em; /* Adjust the width as needed */
   margin: 20px; /* Space between the boxes */

@@ -54,7 +54,7 @@ export function Introduction2({ next }) {
             <div className="box-content">
               {instructions.slice(0, boxCount+1).reverse().map((element, index) => (
                 <>
-                  <div className="introduction-box item">
+                  <div className="introduction-box item" style={(index===(0) ? {background: "rgba(193, 235, 250, 0.5)"} : {})}>
                     {element}          
                   </div>
                 </>

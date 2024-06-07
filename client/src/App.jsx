@@ -35,7 +35,7 @@ export default function App() {
   }, []); 
 
   function introSteps({ game, player }) {
-    //if(isDevelopment) return [Introduction1, Introduction2];
+    if(isDevelopment) return [Introduction1, Introduction2, WaitingPage];
     
     if(skipIntro) return [];
     //return [Walkthrough, WaitingPage];
