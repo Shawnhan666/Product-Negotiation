@@ -39,7 +39,7 @@ export default function App() {
   }
 
   function exitSteps({ game, player }) {
-    if(player.get("ended")=="game failed") {
+    if(player.get("ended")==="game failed" || player.get("ended")==="game terminated") {
       return [Sorry, ExitSurvey];  
     }
     return [Summary, ExitSurvey];
