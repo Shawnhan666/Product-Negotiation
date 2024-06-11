@@ -243,7 +243,8 @@ export function FormalSubmit() {
         <div className="flex-child">  
         <div className="informal-text-brief-wrapper">
           <div className="informal-text-brief-1">
-          <b>Your role:</b> {player.get("name")}
+          <b>Your role:</b> {player.get("name")}.  
+          <br/><br/>Please wait while {role1} submits a final proposal for an official, binding vote. 
           </div><br/><br/><br/>
         </div>
         <Calculator 
