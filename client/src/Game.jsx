@@ -12,12 +12,12 @@ export function Game() {
 
   
   
-  var responseClone;
+  
   useEffect(() => {
     if(game.get("featureData")===undefined) {
-      fetch(featureUrl)
+      fetch(featureUrl, {cache: "reload"})
         .then(response => response.json()) 
-        .then(data => { game.set("featureData",data) })
+        .then(data => { game.set("featureData",data); window.gameDataVar=data })
         .catch(error => console.error("Failed to load features:", error)); 
     }
   }, []);
