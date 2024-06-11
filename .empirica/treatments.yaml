@@ -7,59 +7,10 @@ factors:
       desc: How many times participants will make a choice
       values:
         - value: 1
-    - name: instructionPage
-      desc: 1st sentence, Instructions displayed before the CandyCount game starts.
-      values:
-        - value: You will take part in <strong>five</strong> product design deliberations, each lasting 10 minutes and focusing on a different product from a technology company's portfolio. At the start of each deliberation, you will learn which features are your <strong>"desired features"</strong> for that product.           <br /><br />           <ul>         <li>Including a desired product feature nets you $1.</li>         <li>Including an undesired product feature costs you $0.50.</li>         <li>Excluding any feature has no impact on earnings.</li>         <li>To maximize earnings, you should persuade others to include your desired features and exclude undesired ones. A payoff calculator is provided for your convenience.</li>         <li>The total earnings you make across all design discussions equal your “bonus.”</li>         <li>If you finish all five, you earn a fixed $10 plus your accumulated “bonus” earnings.</li>       </ul>       <br />           In each deliberation, there will be two department heads and one CEO. You are randomly assigned one of these roles each time, which means your role can change from one deliberation to another. Anyone can suggest an <strong>unofficial vote</strong> to gauge each other's interest in including or excluding product features. After 10 minutes, an <strong>official vote</strong> will be conducted where the CEO will propose a set of product features and the two department heads will vote “YES” or “NO” to them. Only official vote results will affect earnings.           <br />           <br />           You can see your role and priority features at the bottom of the main negotiations page.
-        - value: 'You will be randomly assigned a role in a product design discussion lasting 10 minutes.   <br/> </br>You will be given a list of priorities for feature inclusion, and the bonus that you earn (or lose) for each feature. <br/> <br/><b>How you earn a bonus</b>: <br/>• Desired features earn you money. <br/>• Undesired features costs you money. <br/>• Excluding features has no impact on earnings. <br/>• A calculator is provided to assess tradeoffs. <br/> <br/>Try to earn as much as you can!   Use the chat to persuade others to include your desired features. <br/> <br/><b>How it works</b>: <br/>• Any player may propose an <strong>unofficial vote</strong> at any time.  <br/>• One player is randomly assigned project leader.   <br/>• After 10 minutes, this project leader will propose a final, <strong>official vote</strong>.  <br/>• Only the final vote will determine your earnings.'
-    - name: role1
-      desc: Role configuration for the first player.
-      values:
-        - value: Head of Product
-    - name: role2
-      desc: Role configuration for the second player.
-      values:
-        - value: Design Lead
-    - name: resultDuration
-      values:
-        - value: 60
-    - name: role3
-      desc: Role configuration for the third player.
-      values:
-        - value: Technical Lead
-        - value: Technical Specialist
-    - name: formalSubmitDuration
-      desc: Duration of the Formal Submit stage in seconds
-      values:
-        - value: 300
-        - value: 600
-        - value: 60000
-        - value: 3000
-        - value: 60
-        - value: 6000
-    - name: formalVoteDuration
-      desc: Duration of the Formal Submit stage in seconds
-      values:
-        - value: 60
-        - value: 600
-        - value: 60000
-        - value: 609
-        - value: 6000
     - name: informalSubmitDuration
       desc: Duration of the Informal Submit stage in seconds
       values:
         - value: 60
-        - value: 300
-        - value: 30000
-        - value: 600
-        - value: 6000
-        - value: 3000
-    - name: basePay
-      values:
-        - value: 1
-    - name: basic
-      values:
-        - value: 1
     - name: basicpay
       desc: basic payment.
       values:
@@ -79,59 +30,34 @@ factors:
         - value: pilot_complex_z17
         - value: pilot_complex_15
         - value: pilot_simple_scaled
+    - name: formalSubmitDuration
+      desc: Duration of the Formal Submit stage in seconds
+      values:
+        - value: 60
+        - value: 600
+    - name: formalVoteDuration
+      desc: Duration of the Formal Submit stage in seconds
+      values:
+        - value: 60
+        - value: 600
 treatments:
-    - name: pilot 5 min
-      desc: pilot test
-      factors:
-        basicpay: 2.5
-        featureUrl: https://raw.githubusercontent.com/joshua-a-becker/RTools/master/testscoresheet.json
-        formalSubmitDuration: 3000
-        formalVoteDuration: 609
-        informalSubmitDuration: 6000
-        numRounds: 1
-        playerCount: 3
-        resultDuration: 60
-        role1: Head of Product
-        role2: Design Lead
-        role3: Technical Specialist
-        scenario: pilot_complex
-    - name: pilot_complex_15
-      factors:
-        basicpay: 2.5
-        featureUrl: https://raw.githubusercontent.com/joshua-a-becker/RTools/master/testscoresheet.json
-        formalSubmitDuration: 60
-        formalVoteDuration: 60
-        informalSubmitDuration: 300
-        numRounds: 1
-        playerCount: 3
-        scenario: pilot_complex_15
-    - name: pilot_complex_z17
-      factors:
-        basicpay: 2.5
-        featureUrl: https://raw.githubusercontent.com/joshua-a-becker/RTools/master/testscoresheet.json
-        formalSubmitDuration: 60
-        formalVoteDuration: 60
-        informalSubmitDuration: 300
-        numRounds: 1
-        playerCount: 3
-        scenario: pilot_complex_z17
-    - name: long
-      factors:
-        basicpay: 1
-        featureUrl: https://raw.githubusercontent.com/joshua-a-becker/RTools/master/testscoresheet.json
-        formalSubmitDuration: 6000
-        formalVoteDuration: 6000
-        informalSubmitDuration: 30000
-        numRounds: 1
-        playerCount: 3
-        scenario: pilot_simple
     - name: pilot_simple_scaled
       factors:
         basicpay: 2.5
         featureUrl: https://decide.empirica.app/data/json/feature_data.json
         formalSubmitDuration: 60
         formalVoteDuration: 60
-        informalSubmitDuration: 300
+        informalSubmitDuration: 600
+        numRounds: 1
+        playerCount: 3
+        scenario: pilot_simple_scaled
+    - name: short
+      factors:
+        basicpay: 2.5
+        featureUrl: https://decide.empirica.app/data/json/feature_data.json
+        formalSubmitDuration: 600
+        formalVoteDuration: 600
+        informalSubmitDuration: 60
         numRounds: 1
         playerCount: 3
         scenario: pilot_simple_scaled

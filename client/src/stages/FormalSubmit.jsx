@@ -247,6 +247,7 @@ export function FormalSubmit() {
           <br/><br/>Please wait while {role1} submits a final proposal for an official, binding vote. 
           </div><br/><br/><br/>
         </div>
+        <div className="table-container">
         <Calculator 
             featureData = {treatmentFeatureData}
             showVoteButton={true}
@@ -255,6 +256,7 @@ export function FormalSubmit() {
             displaySubmit = {false}
             propSelectedFeatures = { {} }
           />
+      </div>
       </div>
     </div>
     );
