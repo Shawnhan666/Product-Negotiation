@@ -73,6 +73,7 @@ export function Summary({next}) {
           { game.get("missingProposal") ? <>No proposal was submitted in time.<br/><br/></> : <></>}
           { game.get("pass")  ? "" : <>The proposal did not pass.<br/><br/></> }
           {returnText}
+          <br/><br/><strong>Please enter the code "completed" to indicate that you have completed the task.</strong>
           <br />
           <br/><p>Please press "OK" to acknowledge and continue.</p>
         </h4>

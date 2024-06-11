@@ -1,12 +1,5 @@
 lobbies:
-    - name: Default shared ignore
+    - name: Default 90s fail
       kind: shared
-      duration: 5m0s
-      strategy: ignore
-    - name: Default individual
-      kind: individual
-      duration: 5m0s
-    - name: TEST ONLY 5s fail
-      kind: shared
-      duration: 5s
+      duration: 1m30s
       strategy: fail

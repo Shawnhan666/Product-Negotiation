@@ -26,7 +26,10 @@ export function ExitSurvey({ next }) {
             You have completed the study!
           </p>
           <p className="mt-1 text-sm text-gray-500">
-            Now, please provide any feedback you wish to share with us.
+            <br/><strong>Please enter the code "completed" to indicate that you have completed the task.</strong>
+          </p>
+          <p className="mt-1 text-sm text-gray-500">
+          <br/>First, please provide any feedback you wish to share with us.  This is a new task and we value your comments.
           </p>
           <div className="mt-6">
             <textarea
