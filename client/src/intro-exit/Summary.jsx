@@ -10,6 +10,10 @@ export function Summary({next}) {
     const game = useGame();
     const round = useRound();
     const players = usePlayers();
+
+    window.player = player;
+    window.playerExit=player.get("exitStatus");
+    window.playerExit=player.get("playerId");
   
     const treatment = game.get("treatment");
   

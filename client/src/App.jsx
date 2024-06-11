@@ -6,6 +6,7 @@ import {useState, useEffect } from "react";
 import { Game } from "./Game";
 import { ExitSurvey } from "./intro-exit/ExitSurvey";
 import { Summary } from "./intro-exit/Summary";
+import { Sorry } from "./intro-exit/Sorry";
 import { IntroductionScreener } from "./intro-exit/IntroductionScreener";
 import { Introduction1 } from "./intro-exit/Introduction1";
 import { Introduction2 } from "./intro-exit/Introduction2";
@@ -38,6 +39,9 @@ export default function App() {
   }
 
   function exitSteps({ game, player }) {
+    if(player.get("ended")=="game failed") {
+      return [Sorry, ExitSurvey];  
+    }
     return [Summary, ExitSurvey];
   }
 
