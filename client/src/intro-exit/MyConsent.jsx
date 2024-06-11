@@ -14,7 +14,7 @@ export function MyConsent({ next }) {
 
   useEffect(() => {
 
-    fetch("https://decide.empirica.app/data/json/settings.json")
+    fetch("https://decide.empirica.app/data/json/settings.json", {cache: "reload"}))
       .then(response => response.json()) // 将响应转换为 JSON
       .then(data => {
         
