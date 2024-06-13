@@ -31,7 +31,7 @@ export default function App() {
   function introSteps({ game, player }) {
     if(skipIntro) return [];
 
-    if(isDevelopment) return [MyConsent, WaitingPage];
+    if(isDevelopment) return [WaitingPage];
     
     //return [Walkthrough, WaitingPage];
     return [MyConsent, Introduction1, Introduction2, Walkthrough, WaitingPage];
@@ -39,7 +39,7 @@ export default function App() {
   }
 
   function exitSteps({ game, player }) {
-    if(player.get("ended")==="game failed" || player.get("ended")==="game terminated") {
+    if(player.get("ended")==="game failed" || player.get("ended")==="game terminated" || player.get("ended")==="no more games") {
       return [Sorry, ExitSurvey];  
     }
     return [Summary, ExitSurvey];
