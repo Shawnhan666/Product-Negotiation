@@ -7,10 +7,6 @@ factors:
       desc: How many times participants will make a choice
       values:
         - value: 1
-    - name: informalSubmitDuration
-      desc: Duration of the Informal Submit stage in seconds
-      values:
-        - value: 600
     - name: basicpay
       desc: basic payment.
       values:
@@ -23,25 +19,22 @@ factors:
     - name: scenario
       values:
         - value: pilot_simple_scaled
+    - name: informalSubmitDuration
+      desc: Duration of the Informal Submit stage in seconds
+      values:
+        - value: 600
+        - value: 600333
     - name: formalSubmitDuration
       desc: Duration of the Formal Submit stage in seconds
       values:
         - value: 60
+        - value: 603333
     - name: formalVoteDuration
       desc: Duration of the Formal Submit stage in seconds
       values:
         - value: 60
+        - value: 222222
 treatments:
-    - name: pilot_simple_scaled
-      factors:
-        basicpay: 2.5
-        featureUrl: https://decide.empirica.app/data/json/feature_data.json
-        formalSubmitDuration: 60
-        formalVoteDuration: 60
-        informalSubmitDuration: 600
-        numRounds: 1
-        playerCount: 3
-        scenario: pilot_simple_scaled
     - name: short
       factors:
         basicpay: 2.5
@@ -49,6 +42,16 @@ treatments:
         formalSubmitDuration: 600
         formalVoteDuration: 600
         informalSubmitDuration: 60
+        numRounds: 1
+        playerCount: 3
+        scenario: pilot_simple_scaled
+    - name: pilot_simple_scaled
+      factors:
+        basicpay: 2.5
+        featureUrl: https://decide.empirica.app/data/json/feature_data.json
+        formalSubmitDuration: 603333
+        formalVoteDuration: 222222
+        informalSubmitDuration: 600333
         numRounds: 1
         playerCount: 3
         scenario: pilot_simple_scaled

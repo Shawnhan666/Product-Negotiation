@@ -31,10 +31,11 @@ export default function App() {
   function introSteps({ game, player }) {
     if(skipIntro) return [];
 
-    if(isDevelopment) return [WaitingPage];
+    //if(isDevelopment) return [WaitingPage];
     
     //return [Walkthrough, WaitingPage];
-    return [MyConsent, Introduction1, Introduction2, Walkthrough, WaitingPage];
+    return [MyConsent];
+    // return [MyConsent, Introduction1, Introduction2, Walkthrough, WaitingPage];
     
   }
 

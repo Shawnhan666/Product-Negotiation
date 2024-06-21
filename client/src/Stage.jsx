@@ -44,7 +44,6 @@ export function Stage() {
   }
 
 
-
       switch (stage.get("name")) {
         case "Discussion and Informal Vote":
           return <Choice />;
@@ -52,34 +51,16 @@ export function Stage() {
 
 
     case "Submit Formal Vote":
-      // if (player.stage.get("submit")) {
-      //   return <FormalVote />;
-      // }
-      // if (round.get("isSubmitted")) {
-      //   return <FormalVote />;
-      // } else {
-      //   return <FormalSubmit />;
-      // }
+    
         return <FormalSubmit />
 
       case "Formal Vote":
-      //   if (player.stage.get("submit")) {
-      //   return <Result />;
-      // }
-      // if (round.get("isSubmitted")) {
-      //   return <FormalVote />;
-      // } else {
-      //   return <FormalVote />;
-      // }
+  
       return <FormalVote />;
 
 
     case "Result":
-      // if (player.stage.get("submit")) {
-      //   return <FormalVote />;
-      // } else {
-      //   return <Result />;
-      // }
+    
       return <Result />;
 
     default:

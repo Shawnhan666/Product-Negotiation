@@ -12,7 +12,6 @@ import { isDevelopment } from "@empirica/core/player"
 import Calculator from "../components/Calculator"
 import StrawPoll from "../components/StrawPoll"
 
-
 export function Choice() {
   const player = usePlayer();
   const players = usePlayers();
@@ -37,21 +36,8 @@ export function Choice() {
   const productName = featureData === undefined ? undefined : featureData.product_name
 
 
-
   const generateUniqueId = () => `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
 
-  const [totalPoints, setTotalPoints] = useState(0);
-
-  const [proposalSubmitted, setProposalSubmitted] = useState(false);
-  const [votes, setVotes] = useState({});
-  const anySubmitted = round.get("anySubmitted");
-  
-  const submittedData_informal = round.get("submittedData_informal");
-  const nextClicked = round.get("nextClicked");
-  const votingCompleted = round.get("votingCompleted");
-  const submittedInformalVote = round.get("submittedInformalVote")
-
-  const [loading, setLoading] = useState(true);
 
   window.featureData = featureData
   
@@ -63,16 +49,116 @@ export function Choice() {
   const role1 = featureData === undefined ? "" :
     featureData.roleNames === undefined ? "" : 
       featureData.roleNames['role1']
-  const [selectedFeatures, setSelectedFeatures] = useState({});
 
-  const allVoted = players.every(player => player.get("vote"));
-  const forVoters = players.filter(p => p.get("vote") === "For").map(p => p.get("role")).join(", ");
-  const againstVoters = players.filter(p => p.get("vote") === "Against").map(p => p.get("role")).join(", ");
-  const forVotersCount = players.filter(p => p.get("vote") === "For").length;
-  const againstVotersCount = players.filter(p => p.get("vote") === "Against").length;
   
   const [showInstructionsModal, setShownInstructionsModel] = useState(true);
   
+
+  //-----------------------------------------------------------------------------------------------------------------------
+
+//reset， only for test
+const resetVotes = () => {
+  const resetVotes = {role1: null, role2: null, role3: null};
+
+  round.set("votesFormal", resetVotes);
+
+  round.set("proposalOutcome", null);
+
+  setLocalProposalStatus(null);
+
+  console.log("All votes and proposal outcomes have been reset");
+};
+
+//before starting
+
+if (round.get("proposalOutcome") === undefined) {
+  round.set("proposalOutcome", null); 
+}
+
+const [localProposalStatus, setLocalProposalStatus] = useState(null);
+
+const handleMakeOfficial = () => {
+  const playerRole = player.get("role");
+  const currentVotes = round.get("votesFormal") || {role1: null, role2: null, role3: null};
+  console.log(`Before updating, ${playerRole} votes:`, currentVotes);
+
+  const updatedVotes = {...currentVotes, [playerRole]: true};
+  round.set("votesFormal", updatedVotes);
+
+  console.log(`After updating, ${playerRole} votes:`, updatedVotes);
+  checkAllVotes(updatedVotes);
+};
+
+const handleRejectOfficial = () => {
+  const playerRole = player.get("role");
+  const currentVotes = round.get("votesFormal") || {role1: null, role2: null, role3: null};
+  console.log(`Before updating, ${playerRole} votes:`, currentVotes);
+
+  const updatedVotes = {...currentVotes, [playerRole]: false};
+  round.set("votesFormal", updatedVotes);
+
+  console.log(`After updating, ${playerRole} votes:`, updatedVotes);
+  checkAllVotes(updatedVotes);
+
+};
+
+const checkAllVotes = (votes) => {
+  const allVoted = Object.values(votes).every(vote => vote !== null);
+  if (allVoted) {
+    const anyRejected = Object.values(votes).some(vote => vote === false);
+    if (anyRejected) {
+      console.log("The official proposal did not pass.");
+
+      round.set("proposalOutcome", "failed");
+      setLocalProposalStatus("failed");
+
+      appendSystemMessage({
+        id: `vote-failure-${Date.now()}`,
+        text: "Sorry, this official proposal did not pass.",
+        sender: {
+          id: "system",
+          name: "System",
+          avatar: "",
+          role: "System",
+        }
+      });
+     
+    } else {
+      console.log("The official proposal passed.");
+
+      round.set("proposalOutcome", "passed");
+      setLocalProposalStatus("passed");
+
+      appendSystemMessage({
+        id: `vote-success-${Date.now()}`,
+        text: "Congratulations, every participant agrees to put the latest proposal forward for an official vote.",
+        sender: {
+          id: "system",
+          name: "System",
+          avatar: "",
+          role: "System",
+        }
+      });
+      
+    }
+  }
+};
+
+const handleContinue_goend = () => {
+  // 设置 goBackTriggered 状态为 true，表示需要跳转到前一个阶段
+  round.set("goendTriggered", true);
+  console.log("Go end triggered, preparing to move.");
+  
+
+};
+  
+//------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
   // set the proposal status data from the round variable
   // or set to a blank proposal, if the round variable is undefined
   const proposalStatusData = round.get("proposalStatus")===undefined ? 
@@ -103,6 +189,8 @@ export function Choice() {
 
   // set message shown in straw poll component 
   // depending on proposal status and content
+  const votesFormal = round.get("votesFormal") ||  {role1: null, role2: null, role3: null};
+
   const strawPollMessage = proposalStatusData === undefined ? 
     undefined
   :
@@ -120,15 +208,46 @@ export function Choice() {
       :  
         "Please cast an informal vote."
     : 
-      proposalStatusData.content.proposal===undefined ? 
-        "status false undefined" 
-      : <>
-          PROPOSAL {proposalStatusData.content.proposal.result.for===treatment.playerCount ? "PASSED (unofficial)" : "REJECTED"}
-          <br/>Yes: {proposalStatusData.content.proposal.result.for} &nbsp;&nbsp;&nbsp;&nbsp; No: {proposalStatusData.content.proposal.result.against}
-        </>
-      
+ //IF the proposal passed… add text that says “Would you like to make this official? (with Yes/No buttons)
 
-  
+ <div className="container">
+ {round.get("proposalOutcome") === "failed" ? (
+   <>
+     <div>Sorry, you did not agree to make this proposal official, please continue submit informal proposal.</div>
+   </>
+ ) : round.get("proposalOutcome") === "passed" ? (
+   <>
+     <div>Go to End. Logic Needed.</div>
+     <Button className="continue-button" handleClick={() => handleContinue_goend()}>Continue</Button>
+   </>
+ ) : votesFormal[player.get("role")] !== null ? (
+  //  <div className="waiting-section">
+<div>
+     <div className="loader"></div>
+     <div>Other parties are still voting. Once votes are in and tallied, the results will be shown.</div>
+   </div>
+ ) : (
+   <>
+     {proposalStatusData.content.proposal === undefined ? 
+       "status false undefined" 
+     : <>
+         PROPOSAL {proposalStatusData.content.proposal.result.for === treatment.playerCount ? (
+           <>
+             "PASSED (unofficial)"
+             <br/>
+             "Would you like to make this official?"
+             <div className="voting-buttons-container">
+               <Button className="vote-button" handleClick={handleMakeOfficial}>Yes</Button>
+               <Button className="vote-button" handleClick={handleRejectOfficial}>No</Button>
+             </div>
+           </>
+         ) : "REJECTED"}
+         <br/>Yes: {proposalStatusData.content.proposal.result.for} &nbsp;&nbsp;&nbsp;&nbsp; No: {proposalStatusData.content.proposal.result.against}
+       </>
+     }
+   </>
+ )}
+</div>
   
   
   // code for handling countdown reminder notifications
@@ -167,7 +286,6 @@ export function Choice() {
   }
 
 
-
   // handle a vote click from the StrawPoll component
   const handleVoteSubmit = (vote) => {
     
@@ -201,7 +319,6 @@ export function Choice() {
     
   };
 
-
   const handleSubmitProposal = (submission_data) => {
 
     console.log("setting status line 357")
@@ -232,7 +349,6 @@ export function Choice() {
 
     const messageText = `${submission_data.submitterRole} initiated an Informal Vote.`;
 
-
     appendSystemMessage({
       id: generateUniqueId(), 
       text: messageText,
@@ -244,9 +360,7 @@ export function Choice() {
       }
     });
 
-
   };
-
 
  
 
@@ -312,6 +426,8 @@ export function Choice() {
       <br />
       {isDevelopment&&(
               <>
+              <Button className="reset-button" handleClick={resetVotes}>Reset Votes</Button>
+
                 <Button handleClick={() => player.stage.set("submit", true)}>
                   Continue
                 </Button>
@@ -323,3 +439,4 @@ export function Choice() {
     </div></div>
   );  
 }
+

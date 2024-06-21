@@ -19,12 +19,14 @@ const game = useGame();
   const round = useRound();
 
 
-  const roundStartTime = scope.get("roundStartTime")//round.get("roundStartTime"); // 从回合状态获取开始时间
+  const roundStartTime = scope.get("roundStartTime")
 
   const startTimeRef = useRef(Date.now());
 
 
+  const ukTime = new Date().toLocaleString("en-GB", { timeZone: "Europe/London" });
 
+  
 
 
   const [firstLoadTime, setFirstLoadTime] = useState(null);
@@ -39,6 +41,7 @@ const game = useGame();
     scope.append(attribute, {
       text,
       sender: {
+        Time: ukTime,
         id: Date.now(), 
         name: "Notification",
         role: "Notification", 
@@ -77,6 +80,7 @@ const game = useGame();
     const newMessage = {
       text,
       sender: {
+        Time: ukTime,
         id: player.id,
         name: player.get("name") || "Participant",
         avatar: player.get("avatar"),
