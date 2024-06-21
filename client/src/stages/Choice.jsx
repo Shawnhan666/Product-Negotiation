@@ -145,7 +145,7 @@ const checkAllVotes = (votes) => {
 };
 
 const handleContinue_goend = () => {
-  // 设置 goBackTriggered 状态为 true，表示需要跳转到前一个阶段
+  
   round.set("goendTriggered", true);
   console.log("Go end triggered, preparing to move.");
   
