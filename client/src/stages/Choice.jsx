@@ -146,7 +146,7 @@ const checkAllVotes = (votes) => {
 
 const handleContinue_goend = () => {
   
-  round.set("goendTriggered", true);
+  round.set("goendTriggered");
   console.log("Go end triggered, preparing to move.");
   
 
@@ -218,7 +218,12 @@ const handleContinue_goend = () => {
  ) : round.get("proposalOutcome") === "passed" ? (
    <>
      <div>Go to End. Logic Needed.</div>
-     <Button className="continue-button" handleClick={() => handleContinue_goend()}>Continue</Button>
+     <Button className="continue-button" handleClick={() => {round.set("goendTriggered", true); console.log("Go end triggered, preparing to move.")}}>Continue</Button>
+     
+     
+     
+
+
    </>
  ) : votesFormal[player.get("role")] !== null ? (
   //  <div className="waiting-section">

@@ -72,7 +72,7 @@ const isLastRound = roundIndex === numRounds;
       return "The CEO failed to provide a proposal in time. You earned $0 from this round.";
     } else if (!allVoted) {
       const nonVotersList = nonVoters.join(", ");
-      return `${nonVotersList} failed to vote the formal proposal in time.`; // 使用模板字符串正确展示名字
+      return `${nonVotersList} failed to vote the formal proposal in time.`; 
     
     } else {
       return `Formal Voting Results: ${forVotes+1} Accept, ${againstVotes} Reject. ` + 
